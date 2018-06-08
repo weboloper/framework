@@ -276,7 +276,6 @@ return [
         Components\Clarity\View\ViewServiceProvider::class,
 
         # register your providers below.
-        App\Main\Providers\RouterServiceProvider::class,
         App\Oauth\Providers\RouterServiceProvider::class,
         App\Blog\Providers\RouterServiceProvider::class,
 

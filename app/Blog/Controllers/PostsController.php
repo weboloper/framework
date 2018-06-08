@@ -13,11 +13,11 @@ class PostsController extends Controller
      */
     public function index()
     {   
-        $post = Posts::findFirst(1);
+        // $post = Posts::findFirst(1);
 
-        $post->setTitle( rand(5, 15) );
+        // $post->setTitle( rand(5, 15) );
 
-        $post->save();
+        // $post->save();
 
         // list($itemBuilder, $totalBuilder) =
                 // Model::prepareQueriesPosts( false , false, 5);
@@ -26,7 +26,7 @@ class PostsController extends Controller
 
         // $posts = $itemBuilder->getQuery()->execute();
 
-        $posts = [];
+        $posts = Posts::find();
 
         return view('posts.index')
               ->with('posts', $posts);;

@@ -142,11 +142,11 @@ class OauthController extends Controller
      */
     public function showLoginForm()
     {      
-        if(auth()->check())
-        {   
-            // auth()->destroy();
-            return redirect()->to(url()->to('/'));
-        }
+        // if(auth()->check())
+        // {   
+        //     // auth()->destroy();
+        //     return redirect()->to(url()->to('/'));
+        // }
         return view('auth.showLoginForm');
     }
 

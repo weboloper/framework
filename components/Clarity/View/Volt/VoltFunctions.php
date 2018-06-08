@@ -32,7 +32,7 @@ class VoltFunctions
         }
 
         $property = $name;
-        $class = '\Components\Library\Volt\ZFunction';
+        $class = '\Components\Clarity\View\Volt\ZFunction';
         if (method_exists($class, $property)) {
             return $class . '::' . $property . '(' . $arguments . ')';
         }
