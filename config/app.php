@@ -245,7 +245,7 @@ return [
         # This must be on top to log things to
         # all supporting providers
         Components\Clarity\Providers\Log::class,
-
+        Components\Providers\Acl::class,
         Components\Clarity\Providers\Aliaser::class,
         Components\Providers\Application::class,
         Components\Clarity\Providers\Auth::class,
@@ -253,7 +253,8 @@ return [
         Components\Clarity\Providers\CollectionManager::class,
         Components\Clarity\Providers\Console::class,
         Components\Clarity\Providers\Crypt::class,
-        Components\Clarity\Providers\DB::class,
+        // Components\Clarity\Providers\DB::class,
+        Components\Providers\DB::class,
         Components\Providers\Dispatcher::class,
         Components\Clarity\Providers\ErrorHandler::class,
         Components\Clarity\Providers\Filter::class,
@@ -277,9 +278,11 @@ return [
         # register your providers below.
         App\Main\Providers\RouterServiceProvider::class,
         App\Oauth\Providers\RouterServiceProvider::class,
+        App\Blog\Providers\RouterServiceProvider::class,
 
         # register your sandbox providers below.
         // Acme\Acme\AcmeServiceProvider::class,
+        
     ],
 
     /*
@@ -315,6 +318,9 @@ return [
         'Tag'         => Components\Clarity\Facades\Tag::class,
         'URL'         => Components\Clarity\Facades\URL::class,
         'View'        => Components\Clarity\Facades\View::class,
+
+        # register your sandbox providers below.
+        'Acl'         => Components\Library\Acl\Manager::class,
     ],
 
     /*
@@ -330,6 +336,7 @@ return [
     'middlewares' => [
         'auth' => Components\Middleware\Auth::class,
         'csrf' => Components\Middleware\CSRF::class,
+        'permission'  => Components\Middleware\Permission::class,
     ],
 
 ]; # end of return

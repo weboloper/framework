@@ -9,6 +9,10 @@ use Components\Model\Access;
 use Components\Model\Roles;
 use Components\Model\Posts;
 
+
+use Phalcon\Mvc\Model\Behavior\Blameable;
+use Components\Model\Audit;
+
 class Users extends Model
 {
     use Timestampable;
@@ -124,7 +128,16 @@ class Users extends Model
     }
 
      public function initialize()
-     {
+     {  
+        $this->keepSnapshots(true);
+        $this->addBehavior(
+            new Blameable(
+                [
+                    'auditClass'       => Audit::class,
+                ]
+            )
+        );
+
          $this->hasManyToMany(
             'id',
             RolesUsers::class,

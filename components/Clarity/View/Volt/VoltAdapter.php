@@ -59,5 +59,6 @@ class VoltAdapter extends Volt
         foreach ($this->functions as $func) {
             $this->getCompiler()->addFunction($func, $func);
         }
+        $this->getCompiler()->addExtension(new VoltFunctions());
     }
 }

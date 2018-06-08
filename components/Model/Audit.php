@@ -1,87 +1,48 @@
 <?php
 namespace Components\Model;
 
-use Components\Model\Traits\Timestampable;
-use Components\Model\Traits\SoftDeletable;
+// This is extending incubator\blameble
+// session kullanıcı adı ve ip adresi orjinalde çalışmıyordu. user_name user id ile değiştirildi
 
-class Audit extends Model
+use Phalcon\Mvc\Model\Behavior\Blameable\Audit as BaseAudit;
+
+class Audit extends BaseAudit
 {
-    use Timestampable;
-    use SoftDeletable;
+    public $user_id;
 
-    public function getSource()
+     /**
+     * Executes code to set audits all needed data, like ipaddress, username, created_at etc
+     */
+    public function beforeValidation()
     {
-        return 'audit';
-    }
-
-    public function initialize()
-    {
-        $this->hasMany('id', AuditDetail::class, 'audit_id', ['alias' => 'details', 'reusable' => true]);
-    }
-
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-    public function setUserId($user_id)
-    {
-        $this->user_id = $user_id;
-        return $this;
-    }
-
-    public function getUserId()
-    {
-        return $this->user_id;
-    }
-
-    public function setIpaddress($ipaddress)
-    {
-        $this->ipaddress = $ipaddress;
-        return $this;
-    }
-
-    public function getIpaddress()
-    {
-        return $this->ipaddress;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-        return $this;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setCreatedAt($created_at)
-    {
-        $this->created_at = $created_at;
-        return $this;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    public function setModelName($model_name)
-    {
-        $this->model_name = $model_name;
-        return $this;
-    }
-
-    public function getModelName()
-    {
-        return $this->model_name;
+        if (empty($this->userCallback)) {
+            //Get the username from session
+            $this->user_id = auth()->getUserId();
+        } else {
+            $userCallback = $this->userCallback;
+            $this->user_id = $userCallback($this->getDI());
+        }
+        //The model who performed the action
+        $this->model_name = get_class($this->model);
+        /** @var Request $request */
+        $request = $this->getDI()->get('request');
+        //The client IP address
+        $this->ipaddress = ip2long(request()->getClientAddress());
+        //Current time
+        $this->created_at = date('Y-m-d H:i:s');
+        $primaryKeys = $this->getModelsMetaData()->getPrimaryKeyAttributes($this->model);
+        $columnMap = $this->getModelsMetaData()->getColumnMap($this->model);
+        $primaryValues = [];
+        if (!empty($columnMap)) {
+            foreach ($primaryKeys as $primaryKey) {
+                $primaryValues[] = $this->model->readAttribute($columnMap[$primaryKey]);
+            }
+        } else {
+            foreach ($primaryKeys as $primaryKey) {
+                $primaryValues[] = $this->model->readAttribute($primaryKey);
+            }
+        }
+        $this->primary_key = json_encode($primaryValues);
     }
 
 }

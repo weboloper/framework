@@ -144,4 +144,21 @@ class Auth
 
         return true;
     }
+
+
+    #customs
+    public function isAuthorizedVisitor()
+    {
+        return $this->check();
+    }
+    
+    public function getUserId()
+    {
+        if (!$this->isAuthorizedVisitor()) {
+            return null;
+        }
+
+        return (int)$this->user()->id;
+ 
+    }
 }

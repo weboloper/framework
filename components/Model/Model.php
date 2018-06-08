@@ -5,17 +5,9 @@ namespace Components\Model;
 use Phalcon\Db\RawValue;
 use Phalcon\Mvc\Model as BaseModel;
 use Phalcon\Tools\ZFunction;
-use Components\Model\Behavior\Blameable as ModelBlameable;
-
 
 class Model extends BaseModel
 {   
-    // public function initialize()
-    // {           
-    //     $this->addBehavior(new ModelBlameable());
-    //     $this->keepSnapshots(true);
-    // }
-
     /**
      * {@inheritdoc}
      */
