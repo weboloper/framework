@@ -1,0 +1,27 @@
+{
+    "name": "clarity/contracts",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-clarity/contracts",
+    "support": {
+        "issues": "https://github.com/ps-clarity/contracts/issues",
+        "source": "https://github.com/ps-clarity/contracts"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Clarity\\Contracts\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

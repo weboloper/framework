@@ -1,0 +1,31 @@
+<?php
+
+namespace Components\Providers;
+
+use Phalcon\Events\Manager as EventsManager;
+use Components\Events\DispatcherEventListener;
+use Components\Clarity\Providers\Dispatcher as BaseDispatcher;
+
+class Dispatcher extends BaseDispatcher
+{
+    public function boot()
+    {
+        $dispatcher = di()->get('dispatcher');
+
+        $event_manager = new EventsManager;
+
+        $event_manager->attach('dispatch', new DispatcherEventListener);
+
+        $dispatcher->setEventsManager($event_manager);
+    }
+
+    /**
+     * Override the default action suffix from 'Action' to ``.
+     *
+     * @return string
+     */
+    public function getActionSuffix()
+    {
+        return '';
+    }
+}

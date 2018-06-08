@@ -1,0 +1,31 @@
+{
+    "name": "Components\Clarity/exceptions",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-Components\Clarity/exceptions",
+    "support": {
+        "issues": "https://github.com/ps-Components\Clarity/exceptions/issues",
+        "source": "https://github.com/ps-Components\Clarity/exceptions"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^1.15",
+        "symfony/debug": "^2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Components\Clarity\\Exceptions\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

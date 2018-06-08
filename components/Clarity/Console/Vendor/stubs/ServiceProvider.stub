@@ -1,0 +1,15 @@
+<?php
+namespace {namespace};
+
+use Components\Clarity\Providers\ServiceProvider;
+
+class {serviceFile} extends ServiceProvider
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function register()
+    {
+        return $this;
+    }
+}

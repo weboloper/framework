@@ -1,0 +1,37 @@
+{
+    "name": "Components/larity/console",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-Components/larity/console",
+    "support": {
+        "issues": "https://github.com/ps-Components/larity/console/issues",
+        "source": "https://github.com/ps-Components/larity/console"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "require": {
+        "Components/larity/support": "1.4.*",
+        "league/flysystem": "^1.0",
+        "symfony/console": "^2.7",
+        "symfony/process": "^2.7",
+        "tijsverkoyen/css-to-inline-styles": "^1.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Components/larity\/onsole\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "vendor-dir": "packages"
+    }
+}

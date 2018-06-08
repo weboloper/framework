@@ -1,0 +1,51 @@
+{
+    "name": "phalconslayer/slayer",
+    "keywords": [
+        "skeleton",
+        "boilerplate",
+        "framework",
+        "phalcon",
+        "slayer",
+        "bootstrap"
+    ],
+    "description": "Bootstrapped Phalcon Framework",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.5.9",
+        "vlucas/phpdotenv": "^2.0",
+        "phalconslayer/framework": "1.4.*",
+        "phalconslayer/acme": "*"
+    },
+    "require-dev": {
+        "behat/mink": "^1.7",
+        "behat/mink-goutte-driver": "^1.2",
+        "phpunit/phpunit": "^4.8",
+        "mockery/mockery": "^0.9",
+        "fzaninotto/faker": "^1.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Components\\": "components/"
+        }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"copy('.env.example', '.env');\""
+        ],
+        "post-update-cmd": [
+            "rm -f storage/slayer/compiled.php"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": {
+        "sandbox/acme": {
+            "type": "path",
+            "url": "sandbox/acme"
+        }
+    }
+}

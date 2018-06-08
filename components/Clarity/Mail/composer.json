@@ -1,0 +1,28 @@
+{
+    "name": "Components\Clarity/mail",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-Components\Clarity/mail",
+    "support": {
+        "issues": "https://github.com/ps-Components\Clarity/mail/issues",
+        "source": "https://github.com/ps-Components\Clarity/mail"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Components\Clarity\\Mail\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

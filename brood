@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+$kernel = require_once __DIR__.'/bootstrap/autoload.php';
+
+$services = config('app.services')->toArray();
+
+# load the services
+$kernel->loadServices($after_module = false, $services);
+
+# load the modules
+$kernel->modules();
+
+# lazy load the services
+$kernel->loadServices($after_module = true, $services);
+
+di()->get('console')->run();

@@ -1,0 +1,27 @@
+{
+    "name": "Components\Clarity/services",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-Components\Clarity/services",
+    "support": {
+        "issues": "https://github.com/ps-Components\Clarity/services/issues",
+        "source": "https://github.com/ps-Components\Clarity/services"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Components\Clarity\\Services\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,33 @@
+{
+    "name": "Components\Clarity/kernel",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-Components\Clarity/kernel",
+    "support": {
+        "issues": "https://github.com/ps-Components\Clarity/kernel/issues",
+        "source": "https://github.com/ps-Components\Clarity/kernel"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "require": {
+        "Components\Clarity/support": "1.4.*",
+        "symfony/console": "^2.7",
+        "league/flysystem": "^1.0",
+        "monolog/monolog": "^1.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Components\Clarity\\Kernel\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,29 @@
+{
+    "name": "Components\Clarity/lang",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-Components\Clarity/lang",
+    "support": {
+        "issues": "https://github.com/ps-Components\Clarity/lang/issues",
+        "source": "https://github.com/ps-Components\Clarity/lang"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Components\Clarity\\Lang\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,27 @@
+{
+    "name": "Components\Clarity/providers",
+    "description": "",
+    "license": "MIT",
+    "homepage": "http://github.com/ps-Components\Clarity/providers",
+    "support": {
+        "issues": "https://github.com/ps-Components\Clarity/providers/issues",
+        "source": "https://github.com/ps-Components\Clarity/providers"
+    },
+    "authors": [
+        {
+            "name": "Daison Carino",
+            "email": "daison12006013@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Components\Clarity\\Providers\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}
