@@ -13,7 +13,7 @@ class PostsRoutes extends RouteGroup
         $this->setPrefix('/posts');
 
         # url as posts/index
-        $this->addGet('/index', [
+        $this->addGet('', [
             'action' => 'index'
         ]);
 

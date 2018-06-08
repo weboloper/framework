@@ -19,7 +19,8 @@ use Phalcon\Mvc\Controller as BaseController;
 class Controller extends BaseController
 {   
     public function onConstruct()
-    {
+    {   
+        $this->tag->setTitle( $this->config->app->app->name );
         $this->view->setVars([
             'auth'          => auth()->user() ,
             'app'           => $this->config->app->app,

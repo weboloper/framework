@@ -6,7 +6,7 @@
 
 {% block content %}
     
-    {{ partial('partials/list-posts')}}
+    {{ partial('partials/post', ['single': true, 'post' : post ])}}
 	
 {% endblock %}
 

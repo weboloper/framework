@@ -23,8 +23,8 @@ class HomeController extends Controller
      * @return mixed
      */
     public function index()
-    {
-
+    {   
+        $this->tag->prependTitle("Home - ");
         return view('welcome');
     }
 
