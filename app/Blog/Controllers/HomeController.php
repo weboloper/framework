@@ -23,11 +23,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        // die(var_dump($this->config->path->views));
-        // die(var_dump(resources_path("views/page/")));
-        // return (file_exists(resources_path("views/page/page.volt")));
-        
-      
         $router = $this->dispatcher->getParam('router');
         if (empty($router)) {
             $router = 'page';

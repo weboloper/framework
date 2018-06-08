@@ -24,13 +24,15 @@ class Posts extends Model
     public function initialize()
     {  
         $this->keepSnapshots(true);
-        $this->addBehavior(
-            new Blameable(
-                [
-                    'auditClass'       => Audit::class,
-                ]
-            )
-        );
+        if (auth()->isAuthorizedVisitor()) {
+           $this->addBehavior(
+                new Blameable(
+                    [
+                        'auditClass'       => Audit::class,
+                    ]
+                )
+            );
+        }
 
         $this->hasManyToMany(
             'id',

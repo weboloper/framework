@@ -186,7 +186,7 @@ class OauthController extends Controller
                 return $redirect;
             }
 
-            return redirect()->to(url()->to('newsfeed'));
+            return redirect()->to(url()->to('logged'));
         }
 
         $user = $this->userService->getFirstByEmail($credentials['email']);

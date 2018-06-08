@@ -23,6 +23,7 @@ class Users extends Model
     public $token;
     protected $name;
     protected $activated;
+    protected $lastPasswdReset;
 
     /**
      * By every request, phalcon will always pull this function
@@ -127,16 +128,31 @@ class Users extends Model
         return (bool) $this->activated;
     }
 
+    public function setLastPasswdReset($lastPasswdReset)
+    {
+        $this->lastPasswdReset = $lastPasswdReset;
+        return $this;
+    }
+
+    public function getLastPasswdReset()
+    {
+        return $this->lastPasswdReset;
+    }
+
      public function initialize()
      {  
+        if (auth()->isAuthorizedVisitor()) {
+           $this->addBehavior(
+                new Blameable(
+                    [
+                        'auditClass'       => Audit::class,
+                    ]
+                )
+            );
+        }
+
         $this->keepSnapshots(true);
-        $this->addBehavior(
-            new Blameable(
-                [
-                    'auditClass'       => Audit::class,
-                ]
-            )
-        );
+        
 
          $this->hasManyToMany(
             'id',
@@ -150,4 +166,6 @@ class Users extends Model
         $this->hasMany('id', RolesUsers::class, 'user_id', ['alias' => 'rolesUsers', 'reusable' => true]);
         $this->hasMany('id', Posts::class, 'user_id', ['alias' => 'posts', 'reusable' => true]);
     }
+
+
 }

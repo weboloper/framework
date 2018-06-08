@@ -19,14 +19,23 @@ class PostsController extends Controller
 
         // $post->save();
 
-        // list($itemBuilder, $totalBuilder) =
-                // Model::prepareQueriesPosts( false , false, 5);
+        list($itemBuilder, $totalBuilder) =
+                Model::prepareQueriesPosts( false , false, 5);
 
-        // $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute();
+        $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute();
 
-        // $posts = $itemBuilder->getQuery()->execute();
+        $posts = $itemBuilder->getQuery()->execute();
 
-        $posts = Posts::find();
+        // $robot = new Posts;
+        // $columns = db()->describeColumns($robot->getSource());
+
+        // foreach ($columns as $column) {
+        //     print($column->getName());
+        // }
+
+         
+
+        // $posts = Posts::find();
 
         return view('posts.index')
               ->with('posts', $posts);;

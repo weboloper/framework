@@ -285,6 +285,7 @@ return [
 
         # register your sandbox providers below.
         // Acme\Acme\AcmeServiceProvider::class,
+        Components\Providers\ModelsManager::class,
         
     ],
 
