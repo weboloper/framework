@@ -1,19 +1,13 @@
 <?php
 Route::addGet('/', [
-    'controller' => 'Main',
+    'controller' => 'Home',
     'action' => 'index',
 ]);
 
-Route::addGet('/posts', [
-    'controller' => 'Posts',
-    'action' => 'index',
+Route::addGet('/logged', [
+    'controller' => 'Home',
+    'action' => 'logged',
 ]);
-
-Route::addGet('/Posts/create', [
-    'controller' => 'Posts',
-    'action' => 'create',
-]);
-
 
 /*
 +----------------------------------------------------------------+

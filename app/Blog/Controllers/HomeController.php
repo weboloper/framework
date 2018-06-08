@@ -2,14 +2,19 @@
 
 namespace App\Blog\Controllers;
 
-class MainController extends Controller
+class HomeController extends Controller
 {
     /**
      * {@inheritdoc}
      */
     public function initialize()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth', [
+            'only' => [
+                'logged',
+            ],
+        ]);
+
     }
 
     /**
@@ -20,7 +25,12 @@ class MainController extends Controller
     public function index()
     {
 
-        // die(var_dump(22));
-        return view('newsfeed.showLandingPage');
+        return view('welcome');
+    }
+
+    public function logged()
+    {
+
+        return view('logged');
     }
 }
