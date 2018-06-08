@@ -30,14 +30,16 @@ class Posts extends AbstractMigration
         $table = $this->table('posts');
 
         $table->addColumn('title', 'string')
-            ->addColumn('slug', 'string')
-            ->addColumn('type', 'string')
-            ->addColumn('body', 'text' , ['limit' => 'LONGTEXT'] )
+            ->addColumn('slug', 'string', ['default' => '' ])
+            ->addColumn('type', 'string' , ['default' => 'post' ])
+            ->addColumn('body', 'text' , ['limit' => 'LONGTEXT', 'null' => true] )
             ->addColumn('excerpt', 'text' ,  ['null' => true] )
             ->addColumn('user_id', 'integer')
-            ->addColumn('status', 'string')
+            ->addColumn('status', 'string', ['default' => 'publish' ])
             ->addColumn('comment_status', 'char', ['limit' => 1 , 'default' => 'Y'] )
             ->addColumn('comment_count', 'integer' , ['default' => 0 ] )
+            ->addColumn('parent', 'integer' , ['default' => 0 ] )
+            ->addColumn('mime_type', 'string', ['limit' => 100, 'default' => ''] )
             # indexes
             ->addIndex(['slug'])
             ->addIndex(['user_id'])
