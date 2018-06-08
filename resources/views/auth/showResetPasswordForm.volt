@@ -1,6 +1,6 @@
 {% extends 'layouts/main.volt' %}
 
-{% block title %}Slayer - Sample Registration Form{% endblock %}
+{% block title %}{{ app.name }}{% endblock %}
 
 {% block header %}
 {% endblock %}

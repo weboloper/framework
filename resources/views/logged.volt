@@ -1,6 +1,6 @@
 {% extends 'layouts/main.volt' %}
 
-{% block title %}Slayer - Newsfeed{% endblock %}
+{% block title %}{{ app.name }}{% endblock %}
 
 {% block header %}
 <style type="text/css">

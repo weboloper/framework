@@ -17,7 +17,18 @@ use Components\Clarity\Support\Phalcon\Http\Middleware;
 use Phalcon\Mvc\Controller as BaseController;
 
 class Controller extends BaseController
-{
+{   
+    public function onConstruct()
+    {
+        $this->view->setVars([
+            'auth'          => auth()->user() ,
+            'app'           => $this->config->app->app,
+            'action'        => di()->get('router')->getActionName(),
+            'controller'    => di()->get('router')->getControllerName(),
+            // 'googleAnalytic'=> $this->config->googleAnalytic
+        ]);
+    }
+
     public function middleware($alias, $options = [])
     {
         $middlewares = [];

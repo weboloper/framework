@@ -2,6 +2,10 @@
 
 return [
 
+    'app' => [
+        'name' => env('APP_NAME' , 'slayer') ,
+        'url' => env('APP_URL' , 'http://slayer.dev') 
+    ],
     /*
     +----------------------------------------------------------------+
     |\ Application Debugging                                        /|
@@ -337,5 +341,18 @@ return [
         'csrf' => Components\Middleware\CSRF::class,
         'permission'  => Components\Middleware\Permission::class,
     ],
+
+    /**
+     * Your client ID and client secret keys come from
+     *
+     * @link https://developers.facebook.com/
+     */
+
+    'facebook' => [
+        'clientId'     => env('FACEBOOK_CLIENT_ID'),
+        'clientSecret' => env('FACEBOOK_SECRET'),
+        'redirectUri'  => env('FACEBOOK_REDIRECT_URI')
+    ],
+    
 
 ]; # end of return
