@@ -3,15 +3,11 @@
 {% block title %}Slayer - Sample Login Form{% endblock %}
 
 {% block header %}
-<link rel="stylesheet" href="/css/main.css" media="bogus">
 {% endblock %}
 
 {% block content %}
-    <div class="marginTop"></div>
-
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            {# Info Message #}
+    <div class="row mt-5">
+        <div class="col-md-10 offset-md-1">
             {% if flash().session().has('info')  %}
                 <div class="alert alert-info">
                     {{ flash().session().output() }}
@@ -32,11 +28,8 @@
                 </div>
             {% endif %}
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4 col-md-offset-1">
-            <div class="well well-white">
+        <div class="col-md-4 offset-md-1">
+            <div class="border p-5">
                 <h4>Login Form</h4>
                 <hr>
                 <div class="alert alert-info">
@@ -52,7 +45,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="well well-white">
+            <div class="border p-5">
                 <form class="form-vertical" method="POST" action="{{ route('attemptToLogin') }}" autocomplete="off">
                     {{ csrf_field() }}
 
@@ -74,7 +67,7 @@
 
                             <a href="{{ route('showRegistrationForm') }}" class="btn btn-info">{{ lang.get('auth.button.register_button') }}</a>
 
-                            <a href="" class="disabled btn btn-danger">{{ lang.get('auth.button.forgot_button') }}</a>
+                            <a href="{{ route('showForgetPasswordForm') }}" class="btn btn-danger">{{ lang.get('auth.button.forgot_button') }}</a>
                         </div>
                     </div>
 
@@ -87,5 +80,4 @@
 {% endblock %}
 
 {% block footer %}
-<link rel="stylesheet" href="/css/main.css">
 {% endblock %}

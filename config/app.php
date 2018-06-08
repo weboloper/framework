@@ -276,6 +276,7 @@ return [
 
         # register your providers below.
         App\Main\Providers\RouterServiceProvider::class,
+        App\Oauth\Providers\RouterServiceProvider::class,
 
         # register your sandbox providers below.
         // Acme\Acme\AcmeServiceProvider::class,

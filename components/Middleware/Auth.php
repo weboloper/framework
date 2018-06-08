@@ -10,12 +10,8 @@ class Auth implements \League\Tactician\Middleware
             flash()->session()->error('Please login to access this page.');
 
             redirect(
-
                 url(
-                    route('showLoginForm'),
-                    [
-                        'ref' => url()->current(),
-                    ]
+                    'oauth/login'
                 )
             );
         }

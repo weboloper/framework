@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Main\Routes;
+namespace App\Oauth\Routes;
 
-class AuthRoutes extends RouteGroup
+class OauthRoutes extends RouteGroup
 {
     public function initialize()
     {
         $this->setPaths([
-            'controller' => 'Auth',
+            'controller' => 'Oauth',
         ]);
 
-        $this->setPrefix('/auth');
+        $this->setPrefix('/oauth');
 
         $this->addGet('/login/:params', [
             'action' => 'showLoginForm',
@@ -36,5 +36,26 @@ class AuthRoutes extends RouteGroup
         $this->addGet('/activation/{token}', [
             'action' => 'activateUser',
         ])->setName('activateUser');
+
+        $this->add('/forget-password', [
+            'action' => 'showForgetPasswordForm',
+        ])->setName('showForgetPasswordForm');
+
+        $this->add('/reset-password/{token}', [
+            'action' => 'showResetPasswordForm',
+        ])->setName('showResetPasswordForm');
+
+
+        // facebook
+        $this->add('/facebook/access_token', [
+            'action'     => 'tokenFacebook'
+        ]);
+
+        $this->addGet('/login/facebook',   [
+            'action'     => 'loginFacebook'
+        ])
+        ->setName('loginFacebook');
+
     }
+
 }

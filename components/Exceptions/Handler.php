@@ -23,6 +23,14 @@ class Handler extends BaseHandler
             return (new CsrfHandler)->handle($e);
         }
 
+        if ($e instanceof EntityNotFoundException) {
+            return (new FatalHandler)->handle($e);
+        }
+
+        if ($e instanceof EntityException) {
+            return (new FatalHandler)->handle($e);
+        }
+
         if ($e instanceof ControllerNotFoundException) {
             if (config()->app->debug) {
                 return parent::render($e, PageNotFoundHandler::STATUS_CODE);

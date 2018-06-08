@@ -30,13 +30,13 @@
         </div>
         <div class="col-md-4 offset-md-1">
             <div class="border p-5">
-                <h4>Registration Form</h4>
+                <h4>Reset Password Form</h4>
                 <hr>
                 <div class="alert alert-info">
                     <span class="glyphicon glyphicon-info-sign"></span> At first, you must run <code>php&nbsp;brood&nbsp;queue:worker</code> in your console. Check your mailer configuration if you can't send an email request.
                 </div>
                 <hr>
-                <h5>Registration Procedure:</h5>
+                <h5>Reset Password Procedure:</h5>
                 <ul>
                     <li>Type in your Email</li>
                     <li>Type in your Password</li>
@@ -48,12 +48,8 @@
 
         <div class="col-md-6">
             <div class="border p-5">
-                <form class="form-vertical" method="POST" action="{{ route('storeRegistrationForm') }}" autocomplete="off">
+                <form class="form-vertical" method="POST" action="" autocomplete="off">
                     <input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
-                    <div class="form-group">
-                        <label>{{ lang.get('auth.login.email_label') }}</label>
-                        {{ text_field('email', 'class': 'form-control') }}
-                    </div>
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.password_label') }}</label>
                         {{ password_field('password', 'class': 'form-control') }}
@@ -63,7 +59,7 @@
                         {{ password_field('repassword', 'class': 'form-control') }}
                     </div>
                     <div class="pull-right">
-                        <button id="register-btn" class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span> Register </button>
+                        <button id="register-btn" class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span> Reset Password </button>
                     </div>
                     <div class="clearfix"></div>
                     {{ partial('layouts/processingTime') }}

@@ -30,5 +30,4 @@ Route::addGet('/try-sample-forms', [
 |
 */
 
-Route::mount(new App\Main\Routes\AuthRoutes);
 Route::mount(new App\Main\Routes\NewsfeedRoutes);
