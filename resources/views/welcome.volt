@@ -19,11 +19,13 @@
             <div class="row h-100 d-flex">
               <div class="text-center my-auto mx-auto">
                 <h1>Welcome to {{ app.name }}</h1>
+
+                <p>{{ teaser( "asfafaasfafaasfafaasfafaasfafaasfafaasfafaasfafa", 2) }}</p>
                 <a href="/oauth/login" class="btn btn-primary">Login</a>
 
                 <p><a href="https://phalconslayer.readme.io/">Docs</a></p>
                 <h5>Todo</h5>
-                <p>...</p>
+                <p>volt functions teaser düzelt çalışmıyor</p>
                 {{  dump(app) }}
               </div>
             </div>
