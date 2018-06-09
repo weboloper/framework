@@ -132,9 +132,9 @@
                             {{ link_to(controller ~ '/edit/' ~ row['id'], '<i class="fa fa-edit"></i>', 'title' : t('Edit entry'), 'data-toggle' : 'tooltip', 'data-placement' : 'bottom') }}
                             &nbsp;
                         {% endif %#}
-                        {{ link_to(controller ~ '/edit/' ~ row['id'], '<i class="fa fa-edit"></i>', 'title' : 'Edit entry', 'data-toggle' : 'tooltip', 'data-placement' : 'bottom') }}
+                        {{ link_to(controller ~ '/edit/' ~ row['id'], '<i class="fas fa-edit"></i>', 'title' : 'Edit entry', 'data-toggle' : 'tooltip', 'data-placement' : 'bottom') }}
                             &nbsp;
-                        {{ link_to(controller ~ '/delete/' ~ row['id'], '<i class="fa fa-trash-o"></i>', 'title' : 'Delete entry', 'data-toggle' : 'tooltip', 'data-placement' : 'bottom', 'onclick' : "return confirm('Are you sure you want to delete this entry?')") }}
+                        {{ link_to(controller ~ '/delete/' ~ row['id'], '<i class="fas fa-trash-alt"></i>', 'title' : 'Delete entry', 'data-toggle' : 'tooltip', 'data-placement' : 'bottom', 'onclick' : "return confirm('Are you sure you want to delete this entry?')") }}
                     </td>
                 </tr>
             {% endfor %}

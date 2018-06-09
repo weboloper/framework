@@ -14,6 +14,7 @@
     <link href="/admin_assets/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
+    <link href="/admin_assets/css/fontawesome-all.min.css" rel="stylesheet">
     <link href="/admin_assets/custom.css" rel="stylesheet">
   </head>
 
@@ -92,6 +93,7 @@
     <script src="/admin_assets/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/admin_assets/ie10-viewport-bug-workaround.js"></script>
+    
   
 
 </body></html>

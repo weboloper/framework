@@ -22,6 +22,13 @@ class PostsController extends Controller
                     'order'  => true,
                     'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                 ] ,
+                'user_id' => [
+                    'title'  => 'User',
+                    'order'  => true,
+                    'orderKey'  => 'u.user_id',
+                    'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
+                    'filterKey'  => 'u.user_id',
+                ] ,
                 'status' => [
                     'title'  => 'Status',
                     'order'  => true,
@@ -29,14 +36,16 @@ class PostsController extends Controller
                     'filter' => ['type' => 'input', 'sanitize' => 'string', 'style' => ''],
                     'filterKey'  => 'a.status',
                 ] ,
+
                 'null'    => ['title' => 'Actions']
             ],
             'query' => [
                 'columns' => [
                     'a.id',
                     'a.title',
+                    'a.user_id',
                     'a.type',
-                     'a.status',
+                    'a.status',
                  ],
                 'joins' => [
                     [
