@@ -29,12 +29,14 @@ class Teaser
      */
     public static function create($text, $maxLen = 35, $saveWords = true, $endWith = ' &hellip;')
     {
+
         $string = s($text);
         $length = $string->length();
 
         if ($length <= $maxLen) {
             return $text;
         }
+
 
         $string->trimRight('. ');
 
@@ -43,7 +45,6 @@ class Teaser
                 $maxLen++;
             }
         }
-
         return $string->substr(0, $maxLen) . $endWith;
     }
 }

@@ -20,12 +20,11 @@
               <div class="text-center my-auto mx-auto">
                 <h1>Welcome to {{ app.name }}</h1>
 
-                <p>{{ teaser( "asfafaasfafaasfafaasfafaasfafaasfafaasfafaasfafa", 2) }}</p>
+                <p>{{ teaser( "welcome to solid layer teaser", 12 ) }}</p>
                 <a href="/oauth/login" class="btn btn-primary">Login</a>
 
                 <p><a href="https://phalconslayer.readme.io/">Docs</a></p>
                 <h5>Todo</h5>
-                <p>volt functions teaser düzelt çalışmıyor</p>
                 {{  dump(app) }}
               </div>
             </div>
