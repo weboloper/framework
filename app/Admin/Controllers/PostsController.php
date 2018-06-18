@@ -75,6 +75,7 @@ class PostsController extends Controller
 
         return view('admin.posts.edit')
             ->with('form', new PostsForm($object) )
+            ->with('post_metas', Posts::POST_METAS )
             ->withObject($object);
     }
 
@@ -108,6 +109,7 @@ class PostsController extends Controller
         return view('admin.posts.edit')
             ->with('id', $id)
             ->with('form', new PostsForm($object) )
+            ->with('post_metas', Posts::POST_METAS )
             ->withObject($object);
     }
 

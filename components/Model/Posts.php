@@ -40,6 +40,13 @@ class Posts extends Model
 
     ];
 
+    const POST_METAS = [
+
+        'test_key'      => "test_key",
+        'test_key_2'    => "test_key_2",
+
+    ];
+
 
 
 

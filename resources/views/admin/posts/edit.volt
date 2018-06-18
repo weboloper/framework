@@ -7,7 +7,7 @@
 {% block content %}
 	
     {{ form( 'admin/' ~   controller | lower ~  '/' ~  object.id  ~ '/update', 'class' : 'form-horizontal') }}
-    <div class="row">
+    <div class="row mb-5">
 	    <div class="col-sm-8">
 	   
         <div class="form-group">
@@ -29,6 +29,22 @@
             <strong>Excerpt</strong>
             {{ form.render('excerpt', ['class': 'form-control']) }}
         </div>
+
+        <div class="form-group">
+            <strong>Meta</strong>
+            <div class="row">
+            <div class="col-5">
+             	{{ select("meta_key", post_metas ,  'useEmpty': true ,  'class': 'form-control' ) }}
+         	</div>
+         	<div class="col-5">
+             	{{ text_field( 'meta_value' , 'class': 'form-control' ) }}
+         	</div>
+         	<div class="col-2">
+         		<a href="#" class="btn btn-light">save</a>
+         	</div>
+         	</div>
+        </div>
+
 
 	    {{ form.render('csrf', ['value': this.security.getToken()]) }}
  
