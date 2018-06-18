@@ -53,12 +53,12 @@
 
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.email_label') }}</label>
-                        {{ text_field('email', 'class': 'form-control') }}
+                        {{ text_field('email', 'class': 'form-control', 'value' :'mod@slayer.com') }}
                     </div>
 
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.password_label') }}</label>
-                        {{ password_field('password', 'class': 'form-control') }}
+                        {{ password_field('password', 'class': 'form-control' , 'value' :'123123123') }}
                     </div>
 
                     <div class="form-group">

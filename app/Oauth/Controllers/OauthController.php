@@ -183,6 +183,7 @@ class OauthController extends Controller
 
         if (auth()->attempt($credentials)) {
             if ($redirect = auth()->redirectIntended()) {
+                
                 return $redirect;
             }
 
@@ -198,7 +199,7 @@ class OauthController extends Controller
         ];
 
        try {
-            $this->failedLoginService->create($userData );;
+            $this->failedLoginService->create($userData ); 
         } catch (EntityException $e) {
 
         }

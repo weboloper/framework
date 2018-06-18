@@ -5,3 +5,5 @@ Route::addGet('/admin', [
     'action' => 'home',
 ]);
 Route::mount(new App\Admin\Routes\PostsRoutes);
+Route::mount(new App\Admin\Routes\PagesRoutes);
+Route::mount(new App\Admin\Routes\UsersRoutes);

@@ -16,8 +16,8 @@
             <tr>
                 <th>ID</th>
                 <th>Title</th>
-                <th>User</th>
                 <th>Status</th>
+                <th>Parent</th>
                 <th>Created At</th>
                 <th></th>
                 <th></th>
@@ -30,8 +30,8 @@
         	 	<tr>
         	 		<td>{{ object.id }}</td>
         	 		<td>{{ object.title | trim   ? object.title : '<i class="text-success ">auto draft</i>'}}</td>
-                    <td>{{ object.user_id }}</td>
-        	 		<td>{{ object.status }}</td>
+                    <td>{{ object.status }}</td>
+        	 		<td>{{ object.parent }}</td>
                     <td>{{ object.created_at }}</td>
                     <td><a href="/admin/{{ controller |lower }}/{{ object.id }}/edit" class="text-secondary"><i class="fas fa-edit"></i></a></td>
         	 		<td><a href="/admin/{{ controller |lower }}/{{ object.id }}/delete"  class="text-secondary delete-btn"  data-id="{{ object.id }}"><i class="fas fa-trash"></i></a></td>

@@ -2,15 +2,15 @@
 
 namespace App\Admin\Routes;
 
-class PostsRoutes extends RouteGroup
+class PagesRoutes extends RouteGroup
 {
     public function initialize()
     {
         $this->setPaths([
-            'controller' => 'Posts',
+            'controller' => 'Pages',
         ]);
 
-        $this->setPrefix('/admin/posts');
+        $this->setPrefix('/admin/pages');
 
         # url as posts/index
         $this->addGet('', [
@@ -42,16 +42,6 @@ class PostsRoutes extends RouteGroup
             'action' => 'delete'
         ]);
 
-
-        //  # url as posts/grid
-        // $this->add('/grid', [
-        //     'action' => 'gridAction'
-        // ]);
-
-        // # url as posts/index
-        // $this->addGet('/indexjquery', [
-        //     'action' => 'indexjquery'
-        // ]);
 
     }
 

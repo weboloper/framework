@@ -9,12 +9,14 @@ class User extends AbstractMigration
         $users = $this->table('users');
         $users
             # columns
+        
             ->addColumn('email', 'string')
             ->addColumn('password', 'string')
             ->addColumn('name', 'string', ['null' => true])
             ->addColumn('token', 'string')
             ->addColumn('activated', 'boolean', ['default' => false])
             ->addColumn('forgetpass', 'boolean', ['default' => false])
+            ->addColumn('status', 'integer' , ['limit' => 1 , 'default' => 1 ] )
 
             # indexes
             ->addIndex(['email'], ['unique' => true])

@@ -24,7 +24,8 @@ class Manager extends Injectable
 {
 
 
-	const ADMIN_AREA = 'AdminArea';
+    const ADMIN_AREA = 'AdminArea';
+	const ADMIN_TEST = 'AdminTest';
     const ADMIN_AREA_DESCRIPTION = 'Admin area';
 
     /**
@@ -64,7 +65,7 @@ class Manager extends Injectable
             $cache = di()->get('cache');
             $acl   = $cache->get('acl_data');
 
-            if (!$acl  ) {
+            if (!$acl) {
                 $save = !$acl  ;
 
                 /** @var \Phalcon\Acl\AdapterInterface $acl */
@@ -72,42 +73,19 @@ class Manager extends Injectable
                 $acl = new $adapter();
                 $acl->setDefaultAction(Acl::DENY);
 
-                /** @var Service\Role $rolesService */
-                // $rolesService = $this->getDI()->getShared(Service\Role::class);
-                // $roleNames = [];
-
-                // foreach ($rolesService->getList() as $role) {
-                //     $acl->addRole(new Acl\Role($role->name, $role->description));
-                //     $roleNames[$role->id] = $role->name;
-                // }
-
-                /** @var Service\Role $rolesService */
-                // $rolesService = $this->getDI()->getShared(Service\Role::class);
-                // $roleNames = [];
                 
                 foreach (Roles::find() as $role) {
                     $acl->addRole(new Acl\Role($role->name, $role->description));
                     $roleNames[$role->id] = $role->name;
                 }
 
-                // $roleNames = [ 1 => 'admin', 2=> 'moderator', 3 =>   'user'];
-                // foreach ($roleNames  as $key => $value ) {
-                //     $acl->addRole(new Acl\Role( $value , '$role->description'));
-                //     // $roleNames[$key] = $value;
-                // }
+                // $acl->addResource(new Acl\Resource(self::ADMIN_AREA), 'access');
+                // $acl->allow('admin', self::ADMIN_AREA, 'access');
 
-
-                $acl->addResource(new Acl\Resource(self::ADMIN_AREA), 'access');
-                // $acl->allow($rolesService->getOrCreateAdminRole()->getName(), self::ADMIN_AREA, 'access');
-                $acl->allow('admin', self::ADMIN_AREA, 'access');
-
- 
                 $objects = $this->addResources($acl);
-
- 
+                
                 foreach (Access::find() as $access) {
                     
-
                     /** @var Access $access */
                     if (!isset($objects[$access->getObject()])) {
                         continue;
@@ -195,6 +173,16 @@ class Manager extends Injectable
             'options'     => [],
             'path'        => null,
         ];
+
+        $objects[self::ADMIN_TEST] = (object) [
+            'name'        => self::ADMIN_TEST,
+            'shortName'   => self::ADMIN_TEST,
+            'actions'     => ['access'],
+            'description' => self::ADMIN_TEST,
+            'options'     => [],
+            'path'        => null,
+        ];
+
 
         foreach ($objects as $key => $object) {
             $resource = new Acl\Resource($key, $object->description);

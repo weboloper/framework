@@ -24,6 +24,27 @@ class Users extends Model
     protected $name;
     protected $activated;
     protected $lastPasswdReset;
+    public $status;
+
+    const STATUS_ACTIVE   = 1;
+    const STATUS_DISABLED = 2;
+    const STATUS_PENDING  = 3;
+    const STATUS_INACTIVE = 4;
+
+    const GENDER_UNKNOWN = 9;
+    const GENDER_MALE    = 1;
+    const GENDER_FEMALE  = 2;
+
+
+    const USER_STATUS = [
+
+        self::STATUS_ACTIVE     => "active",
+        self::STATUS_DISABLED   => "disabled",
+        self::STATUS_PENDING    => "pending",
+        self::STATUS_INACTIVE   => "inactive",
+
+
+    ];
 
     /**
      * By every request, phalcon will always pull this function

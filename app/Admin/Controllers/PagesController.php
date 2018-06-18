@@ -10,7 +10,7 @@ use Components\validation\PostsValidator;
 use Components\Utils\Slug;
 // use Phalcon\Filter;
 
-class PostsController extends Controller
+class PagesController extends Controller
 {   
 
  
@@ -39,16 +39,16 @@ class PostsController extends Controller
 
         if($status) {
             $objects = Posts::find([
-            'type = "post" AND status = :status:',
+            'type = "page" AND status = :status:',
             'bind' => [
                 'status' => $status 
                 ]
             ]);
         }else {
-            $objects = Posts::find("type = 'post' and status !='trash' ");
+            $objects = Posts::find("type = 'page' and status !='trash' ");
         }
 
-         return view('admin.posts.index')->withObjects( $objects );
+         return view('admin.pages.index')->withObjects( $objects );
     }
 
     /**
@@ -66,6 +66,7 @@ class PostsController extends Controller
         $object->setSlug(' ');
         $object->setBody(' ');
         $object->setExcerpt(' ');
+        $object->setType('page');
         $object->setUserId(auth()->getUserId());
         if ($object->save() === false) {
                 foreach ($object->getMessages() as $message) {
@@ -73,7 +74,7 @@ class PostsController extends Controller
                 }
             }
 
-        return view('admin.posts.edit')
+        return view('admin.pages.edit')
             ->with('form', new PostsForm($object) )
             ->withObject($object);
     }
@@ -105,7 +106,7 @@ class PostsController extends Controller
             return $this->currentRedirect();
         }
 
-        return view('admin.posts.edit')
+        return view('admin.pages.edit')
             ->with('id', $id)
             ->with('form', new PostsForm($object) )
             ->withObject($object);
@@ -167,7 +168,7 @@ class PostsController extends Controller
                     flash()->session()->error($message);
                 }
             } else {
-                return redirect()->to(url('admin/posts/'. $id. '/edit'))
+                return redirect()->to(url('admin/pages/'. $id. '/edit'))
                     ->withSuccess('Object updated successfully!');
             }
 

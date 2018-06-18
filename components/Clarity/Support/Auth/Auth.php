@@ -12,6 +12,8 @@
 namespace Components\Clarity\Support\Auth;
 
 use InvalidArgumentException;
+use Components\Exceptions\EntityException;
+
 
 class Auth
 {
@@ -77,11 +79,20 @@ class Auth
             return false;
         }
 
+        // Check if the user was flagged
+        if ( $records->status != 1 ) {
+            flash()->session()->warning(
+                'User is not active' 
+            );
+            return false;
+        }
+
         # now check if the password given is matched with the
         # existing password recorded.
-
+         
         if ($this->security->checkHash($password, $records->{$password_field})) {
             $this->session->set('isAuthenticated', true);
+            $records->$password_field = null ;
             $this->session->set('user', $records);
 
             return true;

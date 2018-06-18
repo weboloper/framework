@@ -8,6 +8,12 @@
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         {% block header %}{% endblock %}
+        <script type="text/javascript">
+            var baseUri     = '/';
+            var controller  = '{{ controller | lower}}';
+            var action      = '{{ action }}';
+        </script>
+
     </head>
     <body>
         <div class="container">
