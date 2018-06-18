@@ -9,6 +9,7 @@ use Phalcon\Mvc\Model\Behavior\Blameable\Audit as BaseAudit;
 class Audit extends BaseAudit
 {
     public $user_id;
+    public $user_name;
 
      /**
      * Executes code to set audits all needed data, like ipaddress, username, created_at etc
@@ -17,10 +18,10 @@ class Audit extends BaseAudit
     {
         if (empty($this->userCallback)) {
             //Get the username from session
-            $this->user_id = auth()->getUserId();
+            $this->user_name = auth()->getUserId();
         } else {
             $userCallback = $this->userCallback;
-            $this->user_id = $userCallback($this->getDI());
+            $this->user_name = $userCallback($this->getDI());
         }
         //The model who performed the action
         $this->model_name = get_class($this->model);

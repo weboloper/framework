@@ -162,7 +162,7 @@ class Users extends Model
 
      public function initialize()
      {  
-        if (auth()->isAuthorizedVisitor()) {
+        // if (auth()->isAuthorizedVisitor()) {
            $this->addBehavior(
                 new Blameable(
                     [
@@ -170,7 +170,7 @@ class Users extends Model
                     ]
                 )
             );
-        }
+        // }
 
         $this->keepSnapshots(true);
         

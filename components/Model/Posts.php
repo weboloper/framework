@@ -51,7 +51,7 @@ class Posts extends Model
     public function initialize()
     {  
         $this->keepSnapshots(true);
-        if (auth()->isAuthorizedVisitor()) {
+        // if (auth()->isAuthorizedVisitor()) {
            $this->addBehavior(
                 new Blameable(
                     [
@@ -59,7 +59,7 @@ class Posts extends Model
                     ]
                 )
             );
-        }
+        // }
 
         $this->addBehavior(
             new SoftDelete(
@@ -81,7 +81,7 @@ class Posts extends Model
             ['alias' => 'terms']
         );
 
-        $this->hasMany('id', PostMeta::class, 'meta_id', ['alias' => 'meta', 'reusable' => true]);
+        $this->hasMany('id', PostMeta::class, 'post_id', ['alias' => 'meta', 'reusable' => true]);
         $this->belongsTo('user_id', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
     }
 
@@ -101,21 +101,31 @@ class Posts extends Model
 
     }
 
-    public function meta($meta_key)
+    public function get_post_meta($meta_key, $single = true)
     {
-        $value =  $this->getMeta(
+        $meta =  $this->getMeta(
             [
                 "meta_key = :meta_key:",
                 "bind" => [
                     "meta_key" => $meta_key
                 ]
             ]
-        )->getFirst();
+        );
 
-        if($value)
-        {
-            return $value->meta_value;
+        if($meta->count() > 0 ) {
+            if($single) {
+                $meta = $meta->getFirst();
+                return $meta->meta_value;
+            }
+
+            $array = [];
+            foreach ($meta as   $value) {
+                $array[] =  $value->meta_value;
+            }
+            return $array;
+
         }
+        
         
         return null;
         
