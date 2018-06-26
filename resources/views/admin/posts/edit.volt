@@ -12,12 +12,13 @@
 	   
         <div class="form-group">
             <strong>Title</strong>
-            {{ form.render('title', ['class': 'form-control']) }}
+            {{ form.render('title', ['class': 'form-control slug-in', 'autocomplete' : 'off']) }}
         </div>
 
         <div class="form-group">
-            <strong>Slug</strong>
-            {{ form.render('slug', ['class': 'form-control',  'disabled' : 'disabled']) }}
+          <strong>Slug</strong>
+           {{ form.render('slug', ['class': 'form-control slug-out' , 'autocomplete' : 'off']) }}
+           <span class="help">Alphanumeric characters and "-" only</span>
         </div>
 	 	
 	 	<div class="form-group">
@@ -62,7 +63,6 @@
 		            </ul>
 	        	</div>
         	</div> 
- 	        	 
   			{% for term in objectType['terms'] %}
   				{% if termTypes[term]['hierachical']  %}
   					<div class="card">

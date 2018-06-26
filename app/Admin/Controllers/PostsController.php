@@ -169,7 +169,7 @@ class PostsController extends Controller
         return view('admin.posts.edit')
             ->with('id', $id)
             ->with('form', new PostsForm($object) )
-            ->with( 'objectType', $this->objectType )
+            ->with( 'objectType', Posts::POST_TYPES[$object->getType()] )
             ->with( 'terms_array', $terms_array )
             ->withObject($object);
     }

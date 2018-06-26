@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <strong>Slug</strong>
-            {{ form.render('slug', ['class': 'form-control slug-out', 'autocomplete' : 'off' ]) }}
+            {{ form.render('slug', ['class': 'form-control slug-out', 'autocomplete' : 'off'  ]) }}
             <span class="help">Alphanumeric characters and "-" only</span>
         </div>
 	 	

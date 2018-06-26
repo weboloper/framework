@@ -106,23 +106,7 @@ class TermsController extends Controller
         }
     }
 
-    /**
-     * To show an output based on the requested ID
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function show($id)
-    {
-        return view('{path.to.resources.view}.show')
-            ->with('id', $id)
-            ->batch([
-                'var1' => true,
-                'var2' => 'this is another value for $var2',
-            ]);
-    }
-
+  
     /**
      * To update a record based on the requested ID
      *

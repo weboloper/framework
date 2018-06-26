@@ -21,7 +21,6 @@ class TermsForm extends Form
          }
         $name = new Text('name',
             array(
-            'placeholder' => "Name",
             'class'       => 'form-control',
             'required'    => true
             )
@@ -31,7 +30,6 @@ class TermsForm extends Form
 
         $slug = new Text('slug',
             array(
-            'placeholder' => "Slug",
             'class'       => 'form-control',
             'required'    => true 
             )
