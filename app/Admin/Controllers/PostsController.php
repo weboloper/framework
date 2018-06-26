@@ -159,6 +159,9 @@ class PostsController extends Controller
             return $this->currentRedirect();
         }
 
+        $terms = $this->request->getPost('terms', 'string', null);
+
+
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
             $terms  = Terms::find([   'taxonomy = :type: and parent = 0 ' , 'bind' => ['type' => $key ]]) ; 

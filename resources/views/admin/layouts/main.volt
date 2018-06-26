@@ -53,16 +53,10 @@
               <li class="nav-item d-md-down-none">
                   <a href="#">
                       <i class="fa fa-bell"></i>
-                      <span class="badge badge-pill badge-danger">1</span>
-                  </a>
+                   </a>
               </li>
 
-              <li class="nav-item d-md-down-none">
-                  <a href="#">
-                      <i class="fa fa-envelope-open"></i>
-                  </a>
-              </li>
-
+ 
               <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000" class="avatar avatar-sm" alt="logo">
