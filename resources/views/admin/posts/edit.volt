@@ -25,27 +25,13 @@
             {{ form.render('body', ['class': 'form-control']) }}
         </div>
 
+        {% if objectType['excerpt'] %}
         <div class="form-group">
             <strong>Excerpt</strong>
             {{ form.render('excerpt', ['class': 'form-control']) }}
         </div>
-
-        <div class="form-group">
-            <strong>Meta</strong>
-            <div class="row">
-            <div class="col-5">
-             	{{ select("meta_key", post_metas ,  'useEmpty': true ,  'class': 'form-control' ) }}
-         	</div>
-         	<div class="col-5">
-             	{{ text_field( 'meta_value' , 'class': 'form-control' ) }}
-         	</div>
-         	<div class="col-2">
-         		<a href="#" class="btn btn-light">save</a>
-         	</div>
-         	</div>
-        </div>
-
-
+        {% endif %}
+ 
 	    {{ form.render('csrf', ['value': this.security.getToken()]) }}
  
 		 </div>
@@ -75,11 +61,30 @@
 		         
 		            </ul>
 	        	</div>
-        	</div>
-		  
+        	</div> 
+ 	        	 
+  			{% for term in objectType['terms'] %}
+  				{% if termTypes[term]['hierachical']  %}
+  					<div class="card">
+						<div class="card-header bg-light">{{ termTypes[term]['name']}}</div>
+    						<div class="card-body">
+  								{% include "admin/partials/term_tree"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}
+  							</div>
+  						</div>
+  				{% else  %}
+  					{% include "admin/partials/term_select"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}
+  				{% endif  %}
+ 					
+ 			{% endfor %}
+     
   		 </div>
 		</div>
     {{ endform() }}
+    
+    {% if objectType['metas'] %}
+    	{% include "admin/partials/meta_forms.volt" %}
+    {% endif %}
+    
 
 {% endblock %}
 

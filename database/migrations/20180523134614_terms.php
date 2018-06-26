@@ -32,7 +32,7 @@ class Terms extends AbstractMigration
         $table->addColumn('name', 'string')
             ->addColumn('slug', 'string')
             ->addColumn('taxonomy', 'string')
-            ->addColumn('description', 'text', ['default' => null ])
+            ->addColumn('description', 'text', ['null' => true ])
             ->addColumn('count', 'integer', ['default' => 0 ] )
             ->addColumn('parent', 'integer' , ['default' => 0 ])
             ->create();

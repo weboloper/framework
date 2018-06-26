@@ -19,14 +19,39 @@ class Posts extends Model
     use Timestampable;
     use SoftDeletable;
 
+    public $type;
 
-    const STATUS_PRIVATE = 'private';
-    const STATUS_PUBLISH = 'publish';
-    const STATUS_PENDING = 'pending';
-    const STATUS_FUTURE  = 'future';
-    const STATUS_TRASH   = 'trash';
-    const STATUS_DRAFT   = 'draft';
-    const STATUS_AUTODRAFT   = 'auto-draft';
+    const TYPE_POST = [
+        'name' => 'Posts',
+        'slug'  => 'post',
+        'terms' => [ 'tag' , 'category', 'format'],
+        'metas' => [ 'test_key_1'  => 'test_key_1'  , 'test_key_2' => 'test_key_2'],
+        'excerpt' => true,
+        'icon' => "paper-plane",
+    ];
+
+    const TYPE_PAGE = [
+        'name' => 'Pages',
+        'slug' => 'page',
+        'terms' => [  ],
+        'metas' => [ ],
+        'excerpt' => false,
+        'icon' => "newspaper",
+    ];
+
+    #register post types
+    const POST_TYPES = [
+        self::TYPE_POST['slug'] =>  self::TYPE_POST,
+        self::TYPE_PAGE['slug'] =>  self::TYPE_PAGE,
+    ];
+
+
+    const STATUS_PRIVATE    = 'private';
+    const STATUS_PUBLISH    = 'publish';
+    const STATUS_PENDING    = 'pending';
+    const STATUS_FUTURE     = 'future';
+    const STATUS_TRASH      = 'trash';
+    const STATUS_DRAFT      = 'draft';
 
     const POST_STATUS = [
 
@@ -39,15 +64,6 @@ class Posts extends Model
  
 
     ];
-
-    const POST_METAS = [
-
-        'test_key'      => "test_key",
-        'test_key_2'    => "test_key_2",
-
-    ];
-
-
 
 
     public function getSource()
@@ -94,7 +110,7 @@ class Posts extends Model
 
     public function beforeValidationOnCreate()
     {
-        $this->status      = self::STATUS_AUTODRAFT;
+        $this->status      = self::STATUS_DRAFT;
 
     }
     /**
@@ -106,36 +122,6 @@ class Posts extends Model
     public function beforeCreate()
     {
 
-    }
-
-    public function get_post_meta($meta_key, $single = true)
-    {
-        $meta =  $this->getMeta(
-            [
-                "meta_key = :meta_key:",
-                "bind" => [
-                    "meta_key" => $meta_key
-                ]
-            ]
-        );
-
-        if($meta->count() > 0 ) {
-            if($single) {
-                $meta = $meta->getFirst();
-                return $meta->meta_value;
-            }
-
-            $array = [];
-            foreach ($meta as   $value) {
-                $array[] =  $value->meta_value;
-            }
-            return $array;
-
-        }
-        
-        
-        return null;
-        
     }
 
     public function setTitle($title)

@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Admin\Controllers;
+use Components\Model\Model;
 use Components\Model\Posts;
+use Components\Model\Terms;
 use Phalcon\Mvc\View;
 
 
@@ -10,10 +12,31 @@ use Components\validation\PostsValidator;
 use Components\Utils\Slug;
 // use Phalcon\Filter;
 
+
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
+
 class PostsController extends Controller
 {   
 
- 
+    public $type;
+    public $objectType;
+    
+    public function initialize()
+    {   
+
+        $type =  request()->getQuery('type',  ['striptags', 'trim' , 'alphanum']  , 'post');
+
+        if( !array_key_exists( $type , Posts::POST_TYPES)){
+            return view('admin.posts.error');
+        }
+
+        $this->view->tab = $type;        
+        $this->type = $type;
+        $this->objectType = Posts::POST_TYPES[$type];
+
+    }
     /**
      * View the starting index of this resource
      *
@@ -35,20 +58,53 @@ class PostsController extends Controller
      */
     public function index()
     {   
-        $status = request()->getQuery("status");
+        // $type = request()->getQuery('type');
+        $status = request()->getQuery("status", ['striptags', 'trim' , 'alphanum'] );
+        $meta_key = request()->getQuery("meta_key", ['striptags', 'trim' , 'alphanum'] );
+        $meta_value = request()->getQuery("meta_value", ['striptags', 'trim' ] );
 
-        if($status) {
-            $objects = Posts::find([
-            'type = "post" AND status = :status:',
-            'bind' => [
-                'status' => $status 
-                ]
-            ]);
-        }else {
-            $objects = Posts::find("type = 'post' and status !='trash' ");
+        if ($meta_key ||  $meta_value) {
+            $join = [
+                'type'  => 'join',
+                'model' => 'PostMeta',
+                'on'    => 'r.post_id = p.id',
+                'alias' => 'r'
+            ];
+            list($itemBuilder, $totalBuilder) =
+                Model::prepareQueriesPosts($join, false, 999999999999999);
+            $itemBuilder->groupBy(array('p.id'));
+
+        } else {
+            list($itemBuilder, $totalBuilder) =
+                Model::prepareQueriesPosts( false , false, 999999999999999999);
+        }
+ 
+        $params = [];
+        $params['type']  = $this->type ;
+        $typeConditions = 'p.type = :type:';
+        $itemBuilder->where($typeConditions);
+
+        if($meta_key){
+            $params['meta_key']  = $meta_key ;
+            $meta_keyConditions = 'r.meta_key = :meta_key:';
+            $itemBuilder->andWhere($meta_keyConditions);
         }
 
-         return view('admin.posts.index')->withObjects( $objects );
+        if($meta_value){
+            $params['meta_value']  = $meta_value ;
+            $meta_valueConditions = 'r.meta_value = :meta_value:';
+            $itemBuilder->andWhere($meta_valueConditions);
+        }
+
+        if($status) {
+            $params['status']  = $status ;
+            $statusConditions = 'p.status = :status:';
+            $itemBuilder->andWhere($statusConditions);
+        }
+
+        $objects = $itemBuilder->getQuery()->execute($params);
+
+        return view('admin.posts.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
     }
 
     /**
@@ -65,32 +121,29 @@ class PostsController extends Controller
         $object->setTitle(' ');
         $object->setSlug(' ');
         $object->setBody(' ');
+        $object->setType($this->type);
         $object->setExcerpt(' ');
         $object->setUserId(auth()->getUserId());
         if ($object->save() === false) {
-                foreach ($object->getMessages() as $message) {
-                    // die(var_dump($message));
-                }
+            foreach ($object->getMessages() as $message) {
+                // die(var_dump($message));
             }
+        }
+
+        $terms_array = [];
+        foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
+            $terms  = Terms::find([   'taxonomy = :type: and parent = 0 ' , 'bind' => ['type' => $key ]]) ; 
+            $terms_array[$key] = $terms ;
+
+        }
 
         return view('admin.posts.edit')
             ->with('form', new PostsForm($object) )
-            ->with('post_metas', Posts::POST_METAS )
+            ->with( 'objectType', $this->objectType )
+            ->with( 'terms_array', $terms_array )
             ->withObject($object);
     }
 
-
-    /**
-     * To store a new record
-     *
-     * @return void
-     */
-    public function store()
-    {
-        if (request()->isPost()) {
-            // do some stuff ...
-        }
-    }
 
     /**
      * To show an output based on the requested ID
@@ -106,10 +159,18 @@ class PostsController extends Controller
             return $this->currentRedirect();
         }
 
+        $terms_array = [];
+        foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
+            $terms  = Terms::find([   'taxonomy = :type: and parent = 0 ' , 'bind' => ['type' => $key ]]) ; 
+            $terms_array[$key] = $terms ;
+
+        }
+
         return view('admin.posts.edit')
             ->with('id', $id)
             ->with('form', new PostsForm($object) )
-            ->with('post_metas', Posts::POST_METAS )
+            ->with( 'objectType', $this->objectType )
+            ->with( 'terms_array', $terms_array )
             ->withObject($object);
     }
 
@@ -210,9 +271,6 @@ class PostsController extends Controller
                 'content' => 'Object has been deleted!'
             ];
             return $this->jsonMessages;
-
-            
-
              
 
         }

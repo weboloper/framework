@@ -12,6 +12,15 @@ class UsersController extends Controller
 {   
    
 
+    public $type;
+    
+    public function initialize()
+    {   
+
+        $this->view->tab = 'users';
+
+    }
+
     /**
      * View the starting index of this resource
      *

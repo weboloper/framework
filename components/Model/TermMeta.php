@@ -18,7 +18,7 @@ class TermMeta extends Model
 
     public function initialize()
     {
-        $this->belongsTo('term_id', Terms::class, 'term_id', ['alias' => 'term', 'reusable' => true]);
+        $this->hasOne('term_id', Terms::class, 'term_id', ['alias' => 'term', 'reusable' => true]);
     }
 
 }

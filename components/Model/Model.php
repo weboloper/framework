@@ -73,4 +73,41 @@ class Model extends BaseModel
 
         return array($itemBuilder, $totalBuilder);
     }
+
+
+    public function get_meta($meta_key = null, $single = true)
+    {   
+        if($meta_key) {
+            $meta =  $this->getMeta(
+                [
+                    "meta_key = :meta_key:",
+                    "bind" => [
+                        "meta_key" => $meta_key
+                    ]
+                ]
+            );
+        }else {
+            $meta =  $this->getMeta();
+            return $meta->toArray();
+        }
+        
+
+        if($meta->count() > 0 ) {
+            if($single) {
+                $meta = $meta->getFirst();
+                return $meta->meta_value;
+            }
+
+            $array = [];
+            foreach ($meta as   $value) {
+                $array[] =  $value->meta_value;
+            }
+            return $array;
+
+        }
+        
+        return null;
+        
+    }
+
 }

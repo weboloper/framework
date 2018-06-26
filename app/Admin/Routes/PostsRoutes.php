@@ -42,6 +42,9 @@ class PostsRoutes extends RouteGroup
             'action' => 'delete'
         ]);
 
+       
+
+
 
         //  # url as posts/grid
         // $this->add('/grid', [
