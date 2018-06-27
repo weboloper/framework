@@ -28,7 +28,10 @@
  
 
 	    {{ form.render('csrf', ['value': this.security.getToken()]) }}
- 
+ 		
+ 		<hr>
+   		<a href="{{ '/admin/users/' ~  object.id  ~ '/edit/password' }}" class="btn btn-secondary">Change password</a>
+
 		 </div>
 		 <div class="col-sm-4">
 		 	<div class="card bg-light">

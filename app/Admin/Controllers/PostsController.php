@@ -17,6 +17,8 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 
+use Components\Model\Services\Service\Term as termService;
+
 class PostsController extends Controller
 {   
 
@@ -35,6 +37,7 @@ class PostsController extends Controller
         $this->view->tab = $type;        
         $this->type = $type;
         $this->objectType = Posts::POST_TYPES[$type];
+        $this->termService = new termService;
 
     }
     /**
@@ -141,6 +144,7 @@ class PostsController extends Controller
             ->with('form', new PostsForm($object) )
             ->with( 'objectType', $this->objectType )
             ->with( 'terms_array', $terms_array )
+            ->with( 'post_terms', array() )
             ->withObject($object);
     }
 
@@ -159,9 +163,6 @@ class PostsController extends Controller
             return $this->currentRedirect();
         }
 
-        $terms = $this->request->getPost('terms', 'string', null);
-
-
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
             $terms  = Terms::find([   'taxonomy = :type: and parent = 0 ' , 'bind' => ['type' => $key ]]) ; 
@@ -169,11 +170,17 @@ class PostsController extends Controller
 
         }
 
+        $post_terms = [];
+        foreach ($object->getTerms()->toArray()  as $item ) {
+            $post_terms[] =  $item['term_id'];
+        }
+
         return view('admin.posts.edit')
             ->with('id', $id)
             ->with('form', new PostsForm($object) )
             ->with( 'objectType', Posts::POST_TYPES[$object->getType()] )
             ->with( 'terms_array', $terms_array )
+            ->with( 'post_terms', $post_terms )
             ->withObject($object);
     }
 
@@ -185,7 +192,8 @@ class PostsController extends Controller
      * @return void
      */
     public function update($id)
-    {
+    {   
+
         # process the post request
         if (request()->isPost()) {
             
@@ -213,6 +221,8 @@ class PostsController extends Controller
                 ]
             );
 
+
+
  
             if ( request()->getPost('savePost')) {
                 $object->setStatus( $inputs['status'] );
@@ -224,15 +234,24 @@ class PostsController extends Controller
                 $object->setStatus( Posts::STATUS_PUBLISH );
             }
 
+            $terms_array = [];
+            foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
+                $terms = $this->request->getPost('term_'.$key , null);
+
+                if(!is_null($terms) ) { $terms_array = array_merge($terms_array, $terms); }
+            }
  
             $object->setSlug(Slug::generate(  $inputs['title'] ));
 
-    
+        
             if ($object->save() === false) {
                 foreach ($object->getMessages() as $message) {
                     flash()->session()->error($message);
                 }
             } else {
+
+                $this->termService->saveTermsInPosts($terms_array, $object);
+
                 return redirect()->to(url('admin/posts/'. $id. '/edit'))
                     ->withSuccess('Object updated successfully!');
             }

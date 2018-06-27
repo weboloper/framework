@@ -6,8 +6,12 @@ use Components\Model\Users;
 
 use Components\Forms\UsersForm;
 use Components\validation\RegistrationValidator;
-use Components\validation\UsersEditValidator;
+use Components\validation\UsersEditValidator; 
+use Components\validation\ResetpassValidator; 
 use Phalcon\Mvc\Model\Transaction\Failed as TransactionFailed;
+
+use Components\Model\Services\Service\User as userService;
+
 class UsersController extends Controller
 {   
    
@@ -18,6 +22,7 @@ class UsersController extends Controller
     {   
 
         $this->view->tab = 'users';
+        $this->userService = new userService;
 
     }
 
@@ -194,6 +199,47 @@ class UsersController extends Controller
             return $this->jsonMessages;             
 
         }
+    }
+
+    /**
+     * To store a new record
+     *
+     * @return void
+     */
+    public function changepassword($id)
+    {
+
+        # process the post request
+        if (request()->isPost()) {
+            // ...
+            $inputs = request()->get();
+
+            $validator = new ResetpassValidator;
+            $validation = $validator->validate($inputs);
+
+            if (count($validation)) {
+                session()->set('input', $inputs);
+
+                return redirect()->to(url()->previous())
+                    ->withError(ResetpassValidator::toHtml($validation));
+            }
+
+            $user = Users::findFirstById($id);
+
+            try {
+                $this->userService->assignNewPassword($user, $inputs['password']);
+                return redirect()->to(url('admin/users/'. $id. '/edit'))
+                ->withSuccess(lang()->get('responses/forgetpass.reset_success'));
+
+                 
+            } catch (EntityException $e) {
+                 return redirect()->to(url()->previous())
+                ->withError(lang()->get('responses/forgetpass.unknown_error'));
+            }  
+
+        }
+      
+        return view('admin.users.changePassword');
     }
 
 }

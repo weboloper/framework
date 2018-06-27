@@ -63,6 +63,7 @@
 		            </ul>
 	        	</div>
         	</div> 
+  
   			{% for term in objectType['terms'] %}
   				{% if termTypes[term]['hierachical']  %}
   					<div class="card">

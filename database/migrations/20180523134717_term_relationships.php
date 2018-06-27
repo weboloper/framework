@@ -27,7 +27,7 @@ class TermRelationships extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('term_relationships', ['id' => false ]);
+        $table = $this->table('term_relationships');
             # columns
             $table->addColumn('post_id', 'integer')
             ->addColumn('term_id', 'integer')

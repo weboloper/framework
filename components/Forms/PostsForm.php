@@ -87,9 +87,6 @@ class PostsForm extends Form
             )
         ;
         $this->add($parent);
-
-
-
  
         $this->add(new Hidden('object'));
         $this->add(new Hidden('type'));

@@ -44,6 +44,11 @@ class UsersRoutes extends RouteGroup
             'action' => 'delete'
         ]);
 
+        # url as users/id/changepassword
+        $this->add('/{id}/edit/password', [
+            'action' => 'changepassword'
+        ]);
+
          # url as posts/grid
         $this->add('/grid', [
             'action' => 'gridAction'

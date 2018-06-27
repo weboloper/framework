@@ -35,7 +35,7 @@ class VoltAdapter extends Volt
         'base_uri',
 
         # php
-        'strtotime',
+        'strtotime', 'in_array'
     ];
 
     public function __construct(

@@ -24,6 +24,19 @@ class TermRelationships extends Model
 	    
 	}
 
+
+    public function setPost_id($post_id)
+    {
+        $this->post_id = $post_id;
+        return $this;
+    }
+
+    public function setTerm_id($term_id)
+    {
+        $this->term_id = $term_id;
+        return $this;
+    }
+
 }
 
 
