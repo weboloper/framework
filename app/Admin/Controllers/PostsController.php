@@ -27,11 +27,18 @@ class PostsController extends Controller
     
     public function initialize()
     {   
+        parent::initialize();
 
         $type =  request()->getQuery('type',  ['striptags', 'trim' , 'alphanum']  , 'post');
 
+
         if( !array_key_exists( $type , Posts::POST_TYPES)){
-            return view('admin.posts.error');
+            return redirect()
+            ->to(
+                url("admin/posts")
+            )
+            ->withError("Object type [" . $type ."] not found");
+
         }
 
         $this->view->tab = $type;        
@@ -47,9 +54,9 @@ class PostsController extends Controller
      */
     public function home()
     {
-        flash()->session()->success(
-                'Welcome to Admin section.'
-        );
+        // flash()->session()->success(
+        //         'Welcome to Admin section.'
+        // );
         return view('admin.home');
     }
 
@@ -139,12 +146,18 @@ class PostsController extends Controller
             $terms_array[$key] = $terms ;
 
         }
+        
+        // $text =  lang()->get('responses/alert.sure_to_leave')
+
+        // $this->assets->addInlineJs('$(window).bind("beforeunload",function(){return"Are you sure you want to leave?"});');
+        // $this->assets->addInlineJs('swal("Good job!", "You clicked the button!", "success");');
 
         return view('admin.posts.edit')
             ->with('form', new PostsForm($object) )
             ->with( 'objectType', $this->objectType )
             ->with( 'terms_array', $terms_array )
             ->with( 'post_terms', array() )
+            ->with( 'is_new', true )
             ->withObject($object);
     }
 
@@ -181,6 +194,7 @@ class PostsController extends Controller
             ->with( 'objectType', Posts::POST_TYPES[$object->getType()] )
             ->with( 'terms_array', $terms_array )
             ->with( 'post_terms', $post_terms )
+            ->with( 'is_new', false )
             ->withObject($object);
     }
 

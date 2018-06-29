@@ -18,6 +18,7 @@ class Users extends Model
     use Timestampable;
     use SoftDeletable;
 
+    public $id;
     public $email;
     public $password;
     public $token;

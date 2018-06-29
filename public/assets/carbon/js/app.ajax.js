@@ -8,21 +8,29 @@ $(document).ajaxComplete(function (event, xhr, settings) {
     if (xhr.hasOwnProperty('responseJSON') && xhr.responseJSON.hasOwnProperty('messages')) {
         for (var key in xhr.responseJSON.messages) {
              //$.growl[xhr.responseJSON.messages[key].type]({title: '', message: xhr.responseJSON.messages[key].content });
-            $.notify({
-                // options
-                message: xhr.responseJSON.messages[key].content 
-            },{
-                // settings
-                type:  xhr.responseJSON.messages[key].type,
-                // showProgressbar: true,
-                delay: 3000,
-                // icon_type: 'image',
-                // template: '<div class="alert alert-{0}" role="alert">' +
-                //     ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> ' +
-                //     '<span class="alert-heading">{1}</span>' +
-                //     '<span data-notify="message">{2} </span> ' +
-                // '</div>'
+
+            swal({
+              // title: xhr.responseJSON.messages[key].type,
+              text: xhr.responseJSON.messages[key].content ,
+              timer: 1000,
+              buttons: false,
             });
+
+            // $.notify({
+            //     // options
+            //     message: xhr.responseJSON.messages[key].content 
+            // },{
+            //     // settings
+            //     type:  xhr.responseJSON.messages[key].type,
+            //     // showProgressbar: true,
+            //     delay: 3000,
+            //     // icon_type: 'image',
+            //     // template: '<div class="alert alert-{0}" role="alert">' +
+            //     //     ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> ' +
+            //     //     '<span class="alert-heading">{1}</span>' +
+            //     //     '<span data-notify="message">{2} </span> ' +
+            //     // '</div>'
+            // });
         }
     }
 });

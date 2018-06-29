@@ -20,7 +20,7 @@ class UsersController extends Controller
     
     public function initialize()
     {   
-
+        parent::initialize();
         $this->view->tab = 'users';
         $this->userService = new userService;
 

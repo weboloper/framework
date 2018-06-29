@@ -6,7 +6,7 @@
 
 {% block content %}
 	
-    {{ form( 'admin/' ~   controller | lower ~  '/' ~  object.id  ~ '/update', 'class' : 'form-horizontal') }}
+    {{ form( 'admin/' ~   controller | lower ~  '/' ~  object.id  ~ '/update', 'class' : 'form-horizontal ') }}
     <div class="row mb-5">
 	    <div class="col-sm-8">
 	   
@@ -40,15 +40,17 @@
 		 	<div class="card bg-light">
 		 		<div class="card-body">
 				 	<div class="d-flex justify-content-between">
-					 	<button class="btn btn-primary mr-1" style="width:100%;" name="savePost" value="1">SAVE</button>
+					 	
 					 	<button class="btn btn-success" style="width:100%">PUBLISH</button>
 					 </div>
 
 				 	<hr>
-				 	<div class="form-group">
-			            <strong>Status</strong>
-			            {{ form.render('status', ['class': 'form-control']) }}
-			        </div>
+				 	<div class="form-group d-flex flex-row">
+ 			            {{ form.render('status', ['class': 'form-control']) }}
+                   <button class="btn btn-secondary ml-1"  name="savePost" value="1">SAVE</button>
+			     </div>
+
+          
 
 				 	<ul class="list-group mt-4">
 		                <li class="list-group-item list-group-item-light">
@@ -90,5 +92,34 @@
 {% endblock %}
 
 {% block footer %}
-<script type="text/javascript"></script>
+
+<script type="text/javascript">
+var ask_sure = false;
+
+$('.form-horizontal').on('keyup change paste', 'input, select, textarea', function(){
+    ask_sure = true;
+});
+</script>
+{% if is_new %}
+<script type="text/javascript">var ask_sure = true ;</script>
+{% endif %}
+<script type="text/javascript">
+console.log(ask_sure);
+ 
+    $(window).on("beforeunload", function() {
+      if(ask_sure){
+        return "Are you sure? You didn't finish the form!";
+      }
+    });
+
+    $(document).ready(function() {
+      $(".form-horizontal").on("submit", function(e) {
+     
+        $(window).off("beforeunload");
+        return true;
+      });
+    });
+ 
+</script>
+
 {% endblock %}

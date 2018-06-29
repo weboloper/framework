@@ -22,7 +22,7 @@ class Controller extends BaseController
     {   
         $this->tag->setTitle( $this->config->app->app->name );
         $this->view->setVars([
-            'auth'          => auth()->user() ,
+            'user'          => auth()->user() ,
             'app'           => $this->config->app->app,
             'action'        => di()->get('router')->getActionName(),
             'controller'    => di()->get('router')->getControllerName(),

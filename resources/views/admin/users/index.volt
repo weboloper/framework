@@ -34,8 +34,8 @@
                         {% endfor %}
                     </td>
                     <td>{{ object.activated }}</td>
-         	 		<td><a href="/admin/{{ controller |lower }}/{{ object.id }}/edit" class="text-secondary"><i class="fas fa-edit"></i></a></td>
-                    <td><a href="/admin/{{ controller |lower }}/{{ object.id }}/delete"  class="text-secondary delete-btn"  data-id="{{ object.id }}"><i class="fas fa-trash"></i></a></td>
+         	 		<td><a href="/admin/{{ controller |lower }}/{{ object.id }}/edit" class="text-success"><i class="fas fa-edit"></i></a></td>
+                    <td><a href="/admin/{{ controller |lower }}/{{ object.id }}/delete"  class="text-danger delete-btn"  data-id="{{ object.id }}"><i class="fas fa-trash"></i></a></td>
             	</tr>
         	{% endfor %}
 

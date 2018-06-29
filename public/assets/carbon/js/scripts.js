@@ -19,24 +19,46 @@
 $(document).on('click', '.delete-btn', function (e) {
     e.preventDefault();
     var row =  $(this).closest('tr');
-    $.ajax({
-        type: "POST",
-        url: baseUri + controller + '/' + $(this).data('id') + '/' + 'delete',
-        dataType: 'json',
-        // async: false,
-        XMLHttpRequest:  true,
-        success: function (data  ) {
-            row.addClass('table-danger');
-            setTimeout(function(){  row.remove() ; }, 500);
-            
-        },
-        error: function( xhr, status ) {
-            console.log(status);
-        },
-        complete: function( xhr, status ) {
-           console.log(xhr);
-        }
+
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this object!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+
+        $.ajax({
+            type: "POST",
+            url: baseUri + controller + '/' + $(this).data('id') + '/' + 'delete',
+            dataType: 'json',
+            // async: false,
+            XMLHttpRequest:  true,
+            success: function (data  ) {
+                row.addClass('table-danger');
+                setTimeout(function(){  row.remove() ; }, 500);
+                
+            },
+            error: function( xhr, status ) {
+                // console.log(status);
+            },
+            complete: function( xhr, status ) {
+               // console.log(xhr);
+            }
+        });
+
+        // swal("Poof! Your imaginary file has been deleted!", {
+        //   icon: "success",
+        //    timer: 1000
+        // });
+      } else {
+        // swal("Your imaginary file is safe!");
+      }
     });
+
+    
 });
 
 
@@ -105,7 +127,8 @@ $(document).on('submit', '#object-meta-form', function (e) {
     // DataTable
     var table = $('.dashboard-table ').DataTable( {
         colReorder: true,
-        "bLengthChange": false 
+        "bLengthChange": false ,
+        "order": [[ 0, "desc" ]]
     } );
     $( table.table().container() )
     .removeClass( 'container-fluid' );

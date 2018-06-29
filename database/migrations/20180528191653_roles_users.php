@@ -27,7 +27,7 @@ class RolesUsers extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('roles_users', ['id' => false ]);
+        $table = $this->table('roles_users');
 
         $table->addColumn('user_id', 'integer')
             ->addColumn('role_id', 'integer')

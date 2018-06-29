@@ -66,8 +66,8 @@
                   <div class="dropdown-menu dropdown-menu-right">
                       <div class="dropdown-header">Account</div>
 
-                      <a href="#" class="dropdown-item">
-                          <i class="fa fa-user"></i> Profile
+                      <a href="/admin/users/{{ user.id}}/edit/password" class="dropdown-item">
+                          <i class="fa fa-user"></i> Change Password
                       </a>
  
                       <a href="/oauth/logout" class="dropdown-item">
@@ -78,14 +78,12 @@
           </ul>
       </nav>
  
-    
-      
-
       <div class="main-container">
           {% include "admin/partials/sidebar.volt" %}
            <div class="content">
               <div class="container-fluid">
                 <div class="col-xs-12">
+
                   {% if flash().session().has('info')  %}
                       <div class="alert alert-info">
                           {{ flash().session().output() }}
@@ -140,9 +138,11 @@
     <script src="/assets/js/bootstrap-notify/bootstrap-notify.js?v=<?php echo rand(111111,999999);?>"></script>
     <script src="/assets/carbon/js/carbon.js?v=<?php echo rand(111111,999999);?>"></script>
     <script src="/assets/carbon/js/demo.js?v=<?php echo rand(111111,999999);?>"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <script src="/assets/carbon/js/app.ajax.js?v=<?php echo rand(111111,999999);?>"></script>
     <script src="/assets/carbon/js/scripts.js?v=<?php echo rand(111111,999999);?>"></script>
- 
+    {{ assets.outputInlineJs() }}
 
     {% block footer %} {% endblock %}
   

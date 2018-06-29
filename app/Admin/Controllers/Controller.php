@@ -32,9 +32,7 @@ class Controller extends BaseController
     	$this->request = request();
     	$this->response = response();
 
-      
-
-        // $this->middleware('permission');
+        $this->middleware('permission');
     }
 
 

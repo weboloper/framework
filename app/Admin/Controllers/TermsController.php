@@ -17,10 +17,16 @@ class TermsController extends Controller
 
     public function initialize()
     {   
+        parent::initialize();
+        
         $taxonomy =  request()->getQuery('taxonomy',  ['striptags', 'trim' , 'alphanum']  , 'tag');
 
         if( !array_key_exists( $taxonomy , Terms::TERM_TYPES)){
-            return view('admin.posts.error');
+            return redirect()
+            ->to(
+                url("admin/terms")
+            )
+            ->withError("Object type [" . $taxonomy ."] not found");
         }
 
         $this->taxonomy =  $taxonomy ;
