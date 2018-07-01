@@ -17,7 +17,6 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 
-use Components\Model\Services\Service\Term as termService;
 
 class PostsController extends Controller
 {   
@@ -35,7 +34,7 @@ class PostsController extends Controller
         if( !array_key_exists( $type , Posts::POST_TYPES)){
             return redirect()
             ->to(
-                url("admin/posts")
+                url("admin")
             )
             ->withError("Object type [" . $type ."] not found");
 
@@ -44,22 +43,9 @@ class PostsController extends Controller
         $this->view->tab = $type;        
         $this->type = $type;
         $this->objectType = Posts::POST_TYPES[$type];
-        $this->termService = new termService;
+        
 
     }
-    /**
-     * View the starting index of this resource
-     *
-     * @return mixed
-     */
-    public function home()
-    {
-        // flash()->session()->success(
-        //         'Welcome to Admin section.'
-        // );
-        return view('admin.home');
-    }
-
  
     /**
      * View the starting index of this resource
@@ -287,23 +273,21 @@ class PostsController extends Controller
     {
         # process the request which it must be post and ajax request
         if (request()->isPost()  && request()->isAjax()) {
-            
-            
+            $this->setJsonResponse();
             $object = Posts::findFirstById($id);
 
             if(!$object) {
+                $this->response->setStatusCode(404);
                 $this->jsonMessages['messages'][] = [
-                    'type'    => 'danger',
+                    'type'    => 'warning',
                     'content' => 'Object not found!'
                 ];
                 return $this->jsonMessages;
             }
             $object->delete();
 
-            $this->setJsonResponse();
-
             $this->jsonMessages['messages'][] = [
-                'type'    => 'danger',
+                'type'    => 'success',
                 'content' => 'Object has been deleted!'
             ];
             return $this->jsonMessages;

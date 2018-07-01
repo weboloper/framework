@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
 
-    <title>Projeksen Admin</title>
+    <title>Projeksen CMS</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/assets/carbon/css/carbon.css" rel="stylesheet">
@@ -16,6 +16,15 @@
     <!-- Custom styles for this template -->
     <link href="/core/select2/dist/css/select2.min.css" rel="stylesheet">
     <link href="/core/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
+
+
+    <!-- Include external CSS. Froala için-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
+ 
+    <!-- Include Editor style. -->
+    <link href="/core/froala/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+    <link href="/core/froala/css/froala_style.min.css" rel="stylesheet" type="text/css" />
+
     
     <script type="text/javascript">
         var baseUri     = '/admin/';
@@ -27,6 +36,13 @@
       .dataTables_filter {
         display: none; 
         }
+
+        a[href="https://froala.com/wysiwyg-editor"], a[href="https://www.froala.com/wysiwyg-editor?k=u"] {
+          display: none !important;
+          position: absolute;
+          top: -99999999px;
+        }
+
     </style>
 
     
@@ -42,7 +58,7 @@
           </a>
 
           <a class="navbar-brand" href="/admin#">
-              Admin
+              Projeksen CMS
           </a>
 
           <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
@@ -143,6 +159,24 @@
     <script src="/assets/carbon/js/app.ajax.js?v=<?php echo rand(111111,999999);?>"></script>
     <script src="/assets/carbon/js/scripts.js?v=<?php echo rand(111111,999999);?>"></script>
     {{ assets.outputInlineJs() }}
+
+
+
+     <!-- Include external JS libs. -->
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
+ 
+    <!-- Include Editor JS files. -->
+    <script type="text/javascript" src="/core/froala/js/froala_editor.pkgd.min.js"></script>
+ 
+    <!-- Initialize the editor. -->
+    <script> $(function() { $('textarea.text-editor').froalaEditor({
+       toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', '|',   'inlineStyle' , '|',  'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+      heightMin: 300,
+      iconsTemplate: 'font_awesome_5',
+      imageUploadURL: '/media/upload'
+    }) }); </script>
+
 
     {% block footer %} {% endblock %}
   

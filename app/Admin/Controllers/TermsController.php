@@ -24,7 +24,7 @@ class TermsController extends Controller
         if( !array_key_exists( $taxonomy , Terms::TERM_TYPES)){
             return redirect()
             ->to(
-                url("admin/terms")
+                url("admin")
             )
             ->withError("Object type [" . $taxonomy ."] not found");
         }
@@ -140,21 +140,24 @@ class TermsController extends Controller
         # process the request which it must be post and ajax request
         if (request()->isPost() && request()->isAjax()) {
 
+            $this->setJsonResponse();
+
             $object = Terms::findFirstByTerm_id($id);
 
             if(!$object) {
+                $this->response->setStatusCode(404);
                 $this->jsonMessages['messages'][] = [
-                    'type'    => 'danger',
+                    'type'    => 'error',
                     'content' => 'Object not found!'
                 ];
                 return $this->jsonMessages;
             }
             $object->delete();
 
-            $this->setJsonResponse();
+            
 
             $this->jsonMessages['messages'][] = [
-                'type'    => 'danger',
+                'type'    => 'success',
                 'content' => 'Object has been deleted!'
             ];
             return $this->jsonMessages;

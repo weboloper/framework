@@ -9,6 +9,11 @@ use Components\Model\PostMeta;
 use Components\Model\Posts;
 use Components\Model\Terms;
 
+use Components\Model\Services\Service\User as userService;
+use Components\Model\Services\Service\Post as postService;
+use Components\Model\Services\Service\Term as termService;
+
+
 class Controller extends BaseController
 {
 	protected $jsonResponse = false;
@@ -25,6 +30,10 @@ class Controller extends BaseController
             'postTypes'         => Posts::POST_TYPES ,
             'termTypes'         => Terms::TERM_TYPES ,
         ]);
+
+        $this->userService = new userService;
+        $this->termService = new termService;
+        $this->postService = new postService;
     }
 
     public function initialize()

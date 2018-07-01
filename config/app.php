@@ -283,6 +283,7 @@ return [
         App\Oauth\Providers\RouterServiceProvider::class,
         App\Blog\Providers\RouterServiceProvider::class,
         App\Admin\Providers\RouterServiceProvider::class,
+        App\Media\Providers\RouterServiceProvider::class,
 
         # register your sandbox providers below.
         // Acme\Acme\AcmeServiceProvider::class,

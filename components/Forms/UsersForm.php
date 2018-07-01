@@ -7,10 +7,12 @@ use Phalcon\Forms\Element\Radio;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Select;
+use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\Textarea;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Identical;
 use Components\Model\Users;
+use Components\Model\Roles;
 
 class UsersForm extends Form
 {
@@ -45,12 +47,26 @@ class UsersForm extends Form
         $status = new Select('status',
                 Users::USER_STATUS
             ,
-            [
+            [   
                 'useEmpty' => false,
                 'class' => 'form-control' 
             ]
         );
         $this->add($status);
+
+        $roles = new Select('roles[]',
+                Roles::find()
+            ,
+            [   
+                "using" => [
+                        "id",
+                        "description",
+                    ],
+                'useEmpty' => true,
+                'class' => 'form-control' 
+            ]
+        );
+        $this->add($roles);
 
 
  

@@ -30,7 +30,7 @@
                     <td>{{ object.name }}</td>
         	 		<td>
                         {% for role in object.roles %}
-                            {{ role.name }} </br>
+                            {{ role.description }} , 
                         {% endfor %}
                     </td>
                     <td>{{ object.activated }}</td>

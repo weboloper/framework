@@ -37,6 +37,7 @@ $(document).on('click', '.delete-btn', function (e) {
             // async: false,
             XMLHttpRequest:  true,
             success: function (data  ) {
+                // console.log(data);
                 row.addClass('table-danger');
                 setTimeout(function(){  row.remove() ; }, 500);
                 

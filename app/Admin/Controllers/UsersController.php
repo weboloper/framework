@@ -22,7 +22,7 @@ class UsersController extends Controller
     {   
         parent::initialize();
         $this->view->tab = 'users';
-        $this->userService = new userService;
+        
 
     }
 
@@ -111,9 +111,16 @@ class UsersController extends Controller
             return $this->currentRedirect();
         }
 
+        $user_roles = [];
+        foreach ($object->getRoles()->toArray()  as $item ) {
+            $user_roles[] =  $item['id'];
+        }
+
+
         return view('admin.users.edit')
             ->with('id', $id)
             ->with('form', new UsersForm($object) )
+            ->with('user_roles', $user_roles )
             ->withObject($object);
     }
 
@@ -154,11 +161,16 @@ class UsersController extends Controller
                 ]
             );
 
+            $roles_array = $this->request->getPost('roles' , null);
+
             if ($object->save() === false) {
                 foreach ($object->getMessages() as $message) {
                     flash()->session()->error($message);
                 }
             } else {
+
+                $this->userService->saveRolesInUsers($roles_array, $object);
+
                 return redirect()->to(url('admin/users/'. $id. '/edit'))
                     ->withSuccess('Object updated successfully!');
             }
@@ -174,26 +186,47 @@ class UsersController extends Controller
      * @return void
      */
     public function delete($id)
-    {
+    {   
         # process the request which it must be post and ajax request
         if (request()->isPost()  && request()->isAjax()) {
-            
-            
+            $this->setJsonResponse();
+           
+
+            if(auth()->getUserId() == $id){
+                $this->response->setStatusCode(401);
+                $this->jsonMessages['messages'][] = [
+                    'type'    => 'error',
+                    'content' => 'You can not delete yourself'
+                ];
+                return $this->jsonMessages;
+            }
+ 
             $object = Users::findFirstById($id);
 
             if(!$object) {
+                $this->response->setStatusCode(404);
                 $this->jsonMessages['messages'][] = [
-                    'type'    => 'danger',
+                    'type'    => 'error',
                     'content' => 'Object not found!'
+                ];
+                return $this->jsonMessages;
+            }
+
+            $userposts = $this->postService->findByUser_id($id);
+
+            if($userposts) {
+                $this->response->setStatusCode(404);
+                $this->jsonMessages['messages'][] = [
+                    'type'    => 'warning',
+                    'content' => 'Delete posts by user first!'
                 ];
                 return $this->jsonMessages;
             }
             $object->delete();
 
-            $this->setJsonResponse();
-
+ 
             $this->jsonMessages['messages'][] = [
-                'type'    => 'danger',
+                'type'    => 'success',
                 'content' => 'Object has been deleted!'
             ];
             return $this->jsonMessages;             

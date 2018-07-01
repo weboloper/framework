@@ -5,6 +5,7 @@ namespace Components\Model\Services\Service;
 use DateTime;
 use DateTimeZone;
 use Components\Model\Users;
+use Components\Model\RolesUsers;
 
 use Components\Exceptions\EntityNotFoundException;
 use Components\Exceptions\EntityException;
@@ -203,5 +204,63 @@ class User extends \Components\Model\Services\Service
             );
         }
     }
+
+    public function saveRolesInUsers($roles_array, $object)
+    {
+        $rolesId = [];
+        $user_id    = $object->getId();
+         
+        $userRoles = RolesUsers::find(
+            [
+                'user_id = ?0',
+                'bind' => [$user_id]
+            ]
+        );
+
+        foreach ($userRoles as $value) {
+            $rolesId[] = $value->role_id;
+        }
+
+        //Deleted tags
+        $rows2 = array_diff( $rolesId , $roles_array  );
+        $this->deletedRole($user_id, $rows2);
+
+        $rows = array_diff( $roles_array, $rolesId  );
+        foreach ($rows as $role_id) {
+            $userRole = new RolesUsers();
+            $userRole->setUser_id($user_id);
+            $userRole->setRole_id($role_id);
+
+            if (!$userRole->save()) {
+                return false;
+            }
+            //Update the total of posts related to a tags
+            // if ($object->getOperationMade() == \Phalcon\Mvc\Model::OP_CREATE) {
+            //     $tags    = Tags::findFirstById($tagId);
+            //     $number  = $tags->getNumberposts();
+            //     $tags->setNumberPosts($number + 1);
+            //     $tags->save();
+            // }
+        }
+
+        return true;
+    }
+
+    public function deletedRole($userId, $roleIds)
+    {
+        foreach ($roleIds as $id) {
+            $object = RolesUsers::find(
+                [
+                    'user_id = ?0 AND role_id =?1',
+                    'bind' => [$userId, $id]
+                ]
+            );
+
+            if ($object) {
+                $object->delete();
+            }
+        }
+    }
+
 
 }

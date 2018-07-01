@@ -60,7 +60,7 @@
                 </li>
             {% endfor %}
 
-            <li class="nav-title">More</li>
+            <li class="nav-title">Users</li>
             <li class="nav-item nav-dropdown {{ tab  == 'users' ? 'open' : '' }}">
                 <a href="#" class="nav-link nav-dropdown-toggle">
                     <i class="fas fa-user text-light"> </i> Users <i class="fas fa-caret-left"></i>
@@ -86,4 +86,6 @@
            
         </ul>
     </nav>
+
+    <a href="http://www.projeksen.com" target="_blank">Projeksen</a>
 </div>

@@ -55,6 +55,15 @@ class Post extends \Components\Model\Services\Service
         return $post->valid() ? $post->getFirst() : null; 
     }  
 
+    public function findByUser_id($id)
+    {
+        $post = Posts::query()
+            ->where('user_id = :id:', ['id' => $id])
+            ->limit(1)
+            ->execute();
+        return $post->valid() ? $post->getFirst() : null;
+    }
+
     public function getFirstBySlug($slug)
     {
         if (!$post = $this->findFirstBySlug($slug)) {

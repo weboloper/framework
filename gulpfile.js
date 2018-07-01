@@ -46,6 +46,16 @@ gulp.task('vendor', function() {
     ])
   .pipe(gulp.dest('./core'))
 
-   
+  // ckeditor4
+  gulp.src([
+      './vendor/ckeditor/**/*'
+    ])
+  .pipe(gulp.dest('./core'))
+
+   // ckeditor4
+  gulp.src([
+      './vendor/froala/wysiwyg-editor/**/*'
+    ])
+  .pipe(gulp.dest('./core/froala'))
 
 });
