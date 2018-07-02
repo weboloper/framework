@@ -52,10 +52,16 @@ gulp.task('vendor', function() {
     ])
   .pipe(gulp.dest('./core'))
 
-   // ckeditor4
+   // froala
   gulp.src([
       './vendor/froala/wysiwyg-editor/**/*'
     ])
   .pipe(gulp.dest('./core/froala'))
+
+  // tinymce
+  gulp.src([
+      './vendor/tinymce/**/*'
+    ])
+  .pipe(gulp.dest('./core'))
 
 });

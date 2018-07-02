@@ -2027,6 +2027,10 @@ var components = {
         {
             "name": "select2",
             "main": "select2-built.js"
+        },
+        {
+            "name": "tinymce",
+            "main": "tinymce-built.js"
         }
     ],
     "baseUrl": "components"

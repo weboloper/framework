@@ -23,7 +23,7 @@
 	 	
 	 	<div class="form-group">
             <strong>Content</strong>
-            {{ form.render('body', ['class': 'form-control text-editor']) }}
+            {{ form.render('body', ['class': 'form-control wysiwyg']) }}
         </div>
 
         {% if objectType['excerpt'] %}

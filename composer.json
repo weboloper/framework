@@ -21,6 +21,7 @@
         "select2/select2" : "^4.0.5",
         "ckeditor/ckeditor" : "^4.9.2",
         "froala/wysiwyg-editor-php-sdk" : "^2.3",
+        "tinymce/tinymce" : "^4.7",
         "swiftmailer/swiftmailer": "^5.4",
         "league/oauth2-client": "^0.10",
         "league/fractal": "^0.9",

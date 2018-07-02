@@ -17,14 +17,7 @@
     <link href="/core/select2/dist/css/select2.min.css" rel="stylesheet">
     <link href="/core/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
 
-
-    <!-- Include external CSS. Froala için-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
  
-    <!-- Include Editor style. -->
-    <link href="/core/froala/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-    <link href="/core/froala/css/froala_style.min.css" rel="stylesheet" type="text/css" />
-
     
     <script type="text/javascript">
         var baseUri     = '/admin/';
@@ -144,6 +137,7 @@
     <script src="/assets/carbon/js/popper.min.js"></script>
     <script src="/assets/carbon/js/bootstrap.min.js"></script>
     <script src="/core/select2/dist/js/select2.full.min.js"></script>
+    <script src="/core/tinymce/tinymce.min.js"></script>
      
 
  
@@ -160,23 +154,53 @@
     <script src="/assets/carbon/js/scripts.js?v=<?php echo rand(111111,999999);?>"></script>
     {{ assets.outputInlineJs() }}
 
+    <script type="text/javascript">
+      tinymce.init({
+        selector: '.wysiwyg',
+        plugins : 'code image media', 
+        toolbar : 'undo redo | image code',
+        // menubar: 'file edit insert view format table tools help',
+        // menubar: false,
 
 
-     <!-- Include external JS libs. -->
-     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
+        images_upload_url: '/media/upload',
+        
+        // override default upload handler to simulate successful upload
+        images_upload_handler: function (blobInfo, success, failure) {
+            var xhr, formData;
+          
+            xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+            xhr.open('POST', '/media/upload');
+          
+            xhr.onload = function() {
+                var json;
+            
+                if (xhr.status != 200) {
+                    failure('HTTP Error: ' + xhr.status);
+                    return;
+                }
+            
+                json = JSON.parse(xhr.responseText);
+            
+                if (!json || typeof json.location != 'string') {
+                    failure('Invalid JSON: ' + xhr.responseText);
+                    return;
+                }
+            
+                success(json.location);
+            };
+          
+            formData = new FormData();
+            formData.append('file', blobInfo.blob(), blobInfo.filename());
+          
+            xhr.send(formData);
+        },
+
+      });
+    </script>
+
  
-    <!-- Include Editor JS files. -->
-    <script type="text/javascript" src="/core/froala/js/froala_editor.pkgd.min.js"></script>
- 
-    <!-- Initialize the editor. -->
-    <script> $(function() { $('textarea.text-editor').froalaEditor({
-       toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', '|',   'inlineStyle' , '|',  'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'quote', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
-      heightMin: 300,
-      iconsTemplate: 'font_awesome_5',
-      imageUploadURL: '/media/upload'
-    }) }); </script>
-
 
     {% block footer %} {% endblock %}
   

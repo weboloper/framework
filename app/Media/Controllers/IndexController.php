@@ -3,25 +3,43 @@
 namespace App\Media\Controllers;
 
 // use FroalaEditor\FroalaEditor_Image;
+use Components\Model\Posts;
 
 class IndexController extends Controller
 {
     public function upload()
     {   
-        $base = config('path.root');
+      
 
-        // die(var_dump( realpath($base . '/.' ) ));
+        if ($this->request->hasFiles()) {
 
+ 
+            $media   = new Posts();
+            $uploads =  $this->request->getUploadedFiles();
+            $this->view->disable();
+            $uploaded = true;
 
-        require  realpath($base . '/.' ).'\vendor\froala\wysiwyg-editor-php-sdk\lib\froala_editor.php';
+            // $this->setJsonResponse();
 
-        # code...
-        try {
-          $response =  \FroalaEditor_Image::upload('/uploads/');
-          echo stripslashes(json_encode($response));
+            foreach ($uploads as $fileObj) {
+                
+               
+
+               $x = $media->initFile($fileObj);
+
+                echo json_encode(array('location' =>   $x ));
+
+            }
+            // if (!$uploaded) {
+            //     $error = implode("\n", $media->getError());
+            //     $this->response->setStatusCode(406, $error);
+            //     response()->setContent($error);
+            // } else {
+            //     $this->response->setStatusCode(200, t("Success"));
+            // }
+            // return $this->response->send();
         }
-        catch (Exception $e) {
-          http_response_code(404);
-        }
+
+
     }
 }

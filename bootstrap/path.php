@@ -17,7 +17,7 @@ return [
     'resources'     => $base_path.'/resources/',
     'views'         => $base_path.'/resources/views/',
     'lang'          => $base_path.'/resources/lang/',
-    'sandbox'       => $base_path.'/sandbox/',
+    'sandbox'       => $base_path.'/uploads/',
     'storage'       => $base_path.'/storage/',
 
 ]; # end of return

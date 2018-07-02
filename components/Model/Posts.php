@@ -14,6 +14,12 @@ use Phalcon\Mvc\Model\Behavior\SoftDelete;
 
 use Components\Model\Audit;
 
+
+
+use Phalcon\Http\Request\File;
+use Components\Library\Media\MediaFiles;
+use Components\Library\Media\MediaType;
+
 class Posts extends Model
 {
     use Timestampable;
@@ -73,6 +79,8 @@ class Posts extends Model
 
     public function initialize()
     {  
+        $this->fileSystem = new MediaFiles();
+
         $this->keepSnapshots(true);
         // if (auth()->isAuthorizedVisitor()) {
            $this->addBehavior(
@@ -204,6 +212,73 @@ class Posts extends Model
     public function getStatus()
     {
         return $this->status;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /// media
+    public function initFile(File $fileObj)
+    {   
+
+        $fileExt     = $fileObj->getRealType();
+        $mediaType   = new MediaType();
+ 
+        // Check if file extension's allowed
+        if (!$mediaType->checkExtension($fileExt)) {
+            return $this->setError(t("Can't upload because file type's not allowed"). ": ". $fileExt);
+        }
+
+      
+        // generate path of file
+        $key = date('Y/m/') .  $fileObj->getName();
+        $serverPath = sandbox_path('uploads/' . $key);
+        $localPath = $fileObj->getTempName();
+        
+
+
+        if (!file_exists($localPath)) {
+            return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
+        }
+
+        if ($this->fileSystem->checkFileExists($serverPath)) {
+            return $this->setError(
+                t(
+                    'An error(s) occurred when uploading file(s), ' .
+                    'Another file have same name with this file. Please change file name before upload'
+                )
+            );
+        }
+
+        if (!$this->fileSystem->uploadFile($localPath, 'uploads/'. $key, $fileObj->getExtension())) {
+            return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
+        }
+
+        $meta['type'] = null;
+        if ($mediaType->imageCheck($fileExt)) {
+            // $meta['type'] = self::IMAGE_TYPE;
+            //@TODO add thumbnail
+        }
+        $meta['title'] = $fileObj->getName();
+        $meta['file']  = $key;
+        // $uploadStatus = $this->saveToDB($meta);
+        // if (!$uploadStatus) {
+        //     return $this->setError(t("An error(s) occurred when uploading file(s). Please try again later"));
+        // }
+        return '/uploads/'. $key;
+
+        return true;
     }
 
 
