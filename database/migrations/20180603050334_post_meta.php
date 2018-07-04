@@ -32,7 +32,7 @@ class PostMeta extends AbstractMigration
 
         $table->addColumn('post_id', 'integer')
             ->addColumn('meta_key', 'string')
-            ->addColumn('meta_value', 'text', ['limit' => 'LONGTEXT'])
+            ->addColumn('meta_value', 'text', ['limit' => 'TEXT_LONG'])
             ->create();
    
     }

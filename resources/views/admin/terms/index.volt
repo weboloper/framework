@@ -29,7 +29,7 @@
         	 		<td>{{ object.name | trim   ? object.name : '<i class="text-success ">auto draft</i>'}}</td>
                     <td>{{ object.slug }}</td>
         	 		<td>{{ object.count }}</td>
-                    <td>{{ object.parent }}</td>
+                    <td>{{ object.parent_id }}</td>
                     <td><a href="/admin/{{ controller |lower }}/{{ object.term_id }}/edit?type={{ objectType['taxonomy'] }}" class="text-success"><i class="fas fa-edit"></i></a></td>
         	 		<td><a href="/admin/{{ controller |lower }}/{{ object.term_id }}/delete"  class="text-danger delete-btn"  data-id="{{ object.term_id }}"><i class="fas fa-trash"></i></a></td>
             	</tr>

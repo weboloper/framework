@@ -31,24 +31,34 @@ class Posts extends Model
         'name' => 'Posts',
         'slug'  => 'post',
         'terms' => [ 'tag' , 'category', 'format'],
-        'metas' => [ 'test_key_1'  => 'test_key_1'  , 'test_key_2' => 'test_key_2'],
-        'excerpt' => true,
+        'metas' => [ 'seo_title'  => 'seo_title'  , 'seo_desc' => 'seo_desc'],
+        'inputs' => ['title', 'body' , 'excerpt'],
         'icon' => "paper-plane",
     ];
 
     const TYPE_PAGE = [
         'name' => 'Pages',
         'slug' => 'page',
-        'terms' => [  ],
-        'metas' => [ ],
-        'excerpt' => false,
+        'terms' => [],
+        'metas' => [ 'seo_title'  => 'seo_title'  , 'seo_desc' => 'seo_desc'],
+        'inputs' => ['title', 'body' , 'excerpt'],
         'icon' => "newspaper",
+    ];
+
+    const TYPE_ATTACHMENT = [
+        'name' => 'Attachments',
+        'slug' => 'attachment',
+        'terms' => [],
+        'metas' => [],
+        'inputs' => ['title'],
+        'icon' => "image",
     ];
 
     #register post types
     const POST_TYPES = [
         self::TYPE_POST['slug'] =>  self::TYPE_POST,
         self::TYPE_PAGE['slug'] =>  self::TYPE_PAGE,
+        self::TYPE_ATTACHMENT['slug'] =>  self::TYPE_ATTACHMENT,
     ];
 
 
@@ -118,7 +128,7 @@ class Posts extends Model
 
     public function beforeValidationOnCreate()
     {
-        $this->status      = self::STATUS_DRAFT;
+        // $this->status      = self::STATUS_DRAFT;
 
     }
     /**
@@ -214,20 +224,19 @@ class Posts extends Model
         return $this->status;
     }
 
+    public function setParent_id($parent_id)
+    {
+        $this->parent_id = $parent_id;
+        return $this;
+    }
+
+    public function getParent_id()
+    {
+        return $this->parent_id;
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+ 
     /// media
     public function initFile(File $fileObj)
     {   
@@ -246,7 +255,6 @@ class Posts extends Model
         $serverPath = sandbox_path('uploads/' . $key);
         $localPath = $fileObj->getTempName();
         
-
 
         if (!file_exists($localPath)) {
             return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
@@ -271,13 +279,33 @@ class Posts extends Model
             //@TODO add thumbnail
         }
         $meta['title'] = $fileObj->getName();
-        $meta['file']  = $key;
-        // $uploadStatus = $this->saveToDB($meta);
-        // if (!$uploadStatus) {
-        //     return $this->setError(t("An error(s) occurred when uploading file(s). Please try again later"));
-        // }
+        $meta['key']  = $key;
+        $uploadStatus = $this->saveToDB($meta);
+        if (!$uploadStatus) {
+            return "error";
+        }
         return '/uploads/'. $key;
+ 
+    }
 
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function saveToDB($file)
+    {
+        $media = new Posts();
+        $media->setTitle($file['title']);
+        $media->setSlug('uploads/'.$file['key']);
+        $media->setType('attachment');
+        $media->setUserId(  auth()->getUserId()  );
+        $media->setStatus('inherit');
+        if (!$media->save()) {
+            return false;
+            foreach ($media->getMessages() as $message) {
+                return $message;
+            }
+        }
         return true;
     }
 

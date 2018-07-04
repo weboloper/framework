@@ -72,7 +72,8 @@ return [
     */
 
     'base_uri' => [
-        'main' => 'slayer.app',
+        'blog'  => "/",
+        'admin' => "/admin/",
     ],
 
     /*

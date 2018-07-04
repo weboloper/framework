@@ -1,6 +1,5 @@
 /vendor/
 /uploads/
-/core/
 /node_modules/
 .env
 .php_cs.cache

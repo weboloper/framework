@@ -10,12 +10,12 @@
     <title>Projeksen CMS</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/assets/carbon/css/carbon.css" rel="stylesheet">
-    <link href="/assets/carbon/css/custom.css" rel="stylesheet">
+    {{ stylesheet_link("assets/carbon/css/carbon.css")}}
+    {{ stylesheet_link("assets/carbon/css/custom.css")}}
 
     <!-- Custom styles for this template -->
-    <link href="/core/select2/dist/css/select2.min.css" rel="stylesheet">
-    <link href="/core/font-awesome/css/fontawesome-all.min.css" rel="stylesheet">
+    {{ stylesheet_link("core/select2/dist/css/select2.min.css")}}
+    {{ stylesheet_link("core/font-awesome/css/fontawesome-all.min.css")}}
 
  
     
@@ -51,7 +51,7 @@
           </a>
 
           <a class="navbar-brand" href="/admin#">
-              Projeksen CMS
+             <img src="{{ getImageSrc('projeksen')}}" style="height:30px"/> Projeksen CMS
           </a>
 
           <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
@@ -134,72 +134,25 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 
-    <script src="/assets/carbon/js/popper.min.js"></script>
-    <script src="/assets/carbon/js/bootstrap.min.js"></script>
-    <script src="/core/select2/dist/js/select2.full.min.js"></script>
-    <script src="/core/tinymce/tinymce.min.js"></script>
-     
+    {{ javascript_include('assets/carbon/js/popper.min.js') }}
+    {{ javascript_include('assets/carbon/js/bootstrap.min.js') }}
+    {{ javascript_include('core/select2/dist/js/select2.full.min.js') }}
+    {{ javascript_include('core/tinymce/tinymce.min.js') }}
+    
 
- 
+    {{ javascript_include('https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js') }}
+    {{ javascript_include('https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js') }}
+    
 
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    {{ javascript_include('assets/js/bootstrap-notify/bootstrap-notify.js') }}
+    {{ javascript_include('assets/carbon/js/carbon.js') }}
+    {{ javascript_include('assets/carbon/js/demo.js') }}
+    {{ javascript_include('https://unpkg.com/sweetalert/dist/sweetalert.min.js') }}
+   
+    {{ javascript_include('assets/carbon/js/app.ajax.js') }}
+    {{ javascript_include('assets/carbon/js/scripts.js') }}
 
-    <script src="/assets/js/bootstrap-notify/bootstrap-notify.js?v=<?php echo rand(111111,999999);?>"></script>
-    <script src="/assets/carbon/js/carbon.js?v=<?php echo rand(111111,999999);?>"></script>
-    <script src="/assets/carbon/js/demo.js?v=<?php echo rand(111111,999999);?>"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-    <script src="/assets/carbon/js/app.ajax.js?v=<?php echo rand(111111,999999);?>"></script>
-    <script src="/assets/carbon/js/scripts.js?v=<?php echo rand(111111,999999);?>"></script>
     {{ assets.outputInlineJs() }}
-
-    <script type="text/javascript">
-      tinymce.init({
-        selector: '.wysiwyg',
-        plugins : 'code image media', 
-        toolbar : 'undo redo | image code',
-        // menubar: 'file edit insert view format table tools help',
-        // menubar: false,
-
-
-        images_upload_url: '/media/upload',
-        
-        // override default upload handler to simulate successful upload
-        images_upload_handler: function (blobInfo, success, failure) {
-            var xhr, formData;
-          
-            xhr = new XMLHttpRequest();
-            xhr.withCredentials = false;
-            xhr.open('POST', '/media/upload');
-          
-            xhr.onload = function() {
-                var json;
-            
-                if (xhr.status != 200) {
-                    failure('HTTP Error: ' + xhr.status);
-                    return;
-                }
-            
-                json = JSON.parse(xhr.responseText);
-            
-                if (!json || typeof json.location != 'string') {
-                    failure('Invalid JSON: ' + xhr.responseText);
-                    return;
-                }
-            
-                success(json.location);
-            };
-          
-            formData = new FormData();
-            formData.append('file', blobInfo.blob(), blobInfo.filename());
-          
-            xhr.send(formData);
-        },
-
-      });
-    </script>
-
  
 
     {% block footer %} {% endblock %}

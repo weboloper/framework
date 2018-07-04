@@ -34,7 +34,7 @@ class Terms extends AbstractMigration
             ->addColumn('taxonomy', 'string')
             ->addColumn('description', 'text', ['null' => true ])
             ->addColumn('count', 'integer', ['default' => 0 ] )
-            ->addColumn('parent', 'integer' , ['default' => 0 ])
+            ->addColumn('parent_id', 'integer' , ['default' => 0 ])
             ->create();
 
    

@@ -53,7 +53,7 @@ class TermsController extends Controller
      */
     public function new()
     {   
-        $objects = Terms::find(['taxonomy = :taxonomy:', 'bind' => [ 'taxonomy' =>  $this->taxonomy  ]]);
+        $objects = Terms::find(['taxonomy = :taxonomy: and parent_id = 0 ', 'bind' => [ 'taxonomy' =>  $this->taxonomy  ]]);
 
         return view('admin.terms.edit')
             ->with('form', new TermsForm() )

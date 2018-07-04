@@ -75,8 +75,8 @@ class Terms extends Model
         $this->hasMany('term_id', TermMeta::class, 'term_id', ['alias' => 'meta', 'reusable' => true]);
 
 
-        $this->hasMany('term_id', Terms::class, 'parent', ['alias' => 'children' ]);
-        $this->belongsTo('parent', Terms::class, 'term_id', ['alias' => 'parenting', 'reusable' => true]);
+        $this->hasMany('term_id', Terms::class, 'parent_id', ['alias' => 'children' ]);
+        $this->belongsTo('parent_id', Terms::class, 'term_id', ['alias' => 'parent', 'reusable' => true]);
 
     }
 

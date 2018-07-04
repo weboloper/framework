@@ -107,8 +107,7 @@ class UsersController extends Controller
     public function edit($id)
     {
         if (!$object = Users::findFirstById($id)) {
-            $this->flashSession->error(t("Users doesn't exist."));
-            return $this->currentRedirect();
+            return redirect()->to( url("admin/users"))->withError("Object  not found");
         }
 
         $user_roles = [];
@@ -148,7 +147,9 @@ class UsersController extends Controller
                     ->withError(RegistrationValidator::toHtml($validation));
             }
 
-            $object = Users::findFirstById($id);
+            if (!$object = Users::findFirstById($id)) {
+                return redirect()->to( url("admin/users"))->withError("Object  not found");
+            }
 
             $object->assign(
                 $inputs,

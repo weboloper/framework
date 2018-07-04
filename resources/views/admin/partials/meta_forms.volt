@@ -6,7 +6,7 @@
              	{{ select("meta_key", objectType['metas'] ,  'useEmpty': true ,  'class': 'form-control' ) }}
          	</div>
          	<div class="col-5">
-             	{{ text_field( 'meta_value' , 'class': 'form-control' ) }}
+             	{{ text_area( 'meta_value' , 'class': 'form-control' ) }}
          	</div>
          	<div class="col-2">
          		<button href="#" class="btn btn-secondary">add</button>

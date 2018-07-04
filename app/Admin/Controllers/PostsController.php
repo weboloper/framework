@@ -32,12 +32,7 @@ class PostsController extends Controller
 
 
         if( !array_key_exists( $type , Posts::POST_TYPES)){
-            return redirect()
-            ->to(
-                url("admin")
-            )
-            ->withError("Object type [" . $type ."] not found");
-
+            return redirect()->to( url("admin"))->withError("Object type [" . $type ."] not found");
         }
 
         $this->view->tab = $type;        
@@ -96,6 +91,8 @@ class PostsController extends Controller
             $params['status']  = $status ;
             $statusConditions = 'p.status = :status:';
             $itemBuilder->andWhere($statusConditions);
+        }else {
+            $statusConditions = 'p.status != "trash" ';
         }
 
         $objects = $itemBuilder->getQuery()->execute($params);
@@ -119,6 +116,7 @@ class PostsController extends Controller
         $object->setBody(' ');
         $object->setType($this->type);
         $object->setExcerpt(' ');
+        $object->setStatus( Posts::STATUS_DRAFT );
         $object->setUserId(auth()->getUserId());
         if ($object->save() === false) {
             foreach ($object->getMessages() as $message) {
@@ -128,7 +126,7 @@ class PostsController extends Controller
 
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
-            $terms  = Terms::find([   'taxonomy = :type: and parent = 0 ' , 'bind' => ['type' => $key ]]) ; 
+            $terms  = Terms::find([   'taxonomy = :type: and parent_id = 0 ' , 'bind' => ['type' => $key ]]) ; 
             $terms_array[$key] = $terms ;
 
         }
@@ -158,13 +156,12 @@ class PostsController extends Controller
     public function edit($id)
     {   
         if (!$object = Posts::findFirstById($id)) {
-            $this->flashSession->error(t("Posts doesn't exist."));
-            return $this->currentRedirect();
+            return redirect()->to( url("admin/posts"))->withError("Object  not found");
         }
 
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
-            $terms  = Terms::find([   'taxonomy = :type: and parent = 0 ' , 'bind' => ['type' => $key ]]) ; 
+            $terms  = Terms::find([   'taxonomy = :type: and parent_id = 0 ' , 'bind' => ['type' => $key ]]) ; 
             $terms_array[$key] = $terms ;
 
         }
@@ -208,7 +205,10 @@ class PostsController extends Controller
                 return redirect()->to(url('admin/posts/'. $id. '/edit'))
                     ->withError(PostsValidator::toHtml($validation));
             }
-            $object = Posts::findFirstById($id);
+
+            if (!$object = Posts::findFirstById($id)) {
+                return redirect()->to( url("admin/posts"))->withError("Object  not found");
+            }
 
             $object->assign(
                 $inputs,

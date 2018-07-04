@@ -23,11 +23,8 @@ class IndexController extends Controller
 
             foreach ($uploads as $fileObj) {
                 
-               
-
-               $x = $media->initFile($fileObj);
-
-                echo json_encode(array('location' =>   $x ));
+                $location = $media->initFile($fileObj);
+                echo json_encode(array('location' =>   $location ));
 
             }
             // if (!$uploaded) {
@@ -38,8 +35,7 @@ class IndexController extends Controller
             //     $this->response->setStatusCode(200, t("Success"));
             // }
             // return $this->response->send();
-        }
-
+        } 
 
     }
 }

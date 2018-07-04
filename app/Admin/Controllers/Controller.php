@@ -106,7 +106,7 @@ class Controller extends BaseController
 
             if(!$object) {
                 $this->jsonMessages['messages'][] = [
-                    'type'    => 'danger',
+                    'type'    => 'warning',
                     'content' => 'Object not found!'
                 ];
                 return $this->jsonMessages;
@@ -115,7 +115,7 @@ class Controller extends BaseController
 
  
             $this->jsonMessages['messages'][] = [
-                'type'    => 'danger',
+                'type'    => 'success',
                 'content' => 'Object has been deleted!'
             ];
             return $this->jsonMessages;

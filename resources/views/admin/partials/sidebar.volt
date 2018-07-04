@@ -33,6 +33,13 @@
                 </li>
             {% endfor %}
 
+            <li class="nav-item nav-dropdown">
+                <a href="/admin/filemanager" class="nav-link">
+                    <i class="fas fa-file text-light"> </i> File manager <i class=""></i>
+                </a>              
+            </li>
+
+
             <li class="nav-title">Terms</li>
 
             {% for item in termTypes %}
@@ -59,6 +66,7 @@
                     </ul>
                 </li>
             {% endfor %}
+
 
             <li class="nav-title">Users</li>
             <li class="nav-item nav-dropdown {{ tab  == 'users' ? 'open' : '' }}">
@@ -87,5 +95,7 @@
         </ul>
     </nav>
 
-    <a href="http://www.projeksen.com" target="_blank">Projeksen</a>
+    <div class="d-flex flex-row my-4 p-3">
+        <a href="http://www.projeksen.com" target="_blank"><img src="{{ getImageSrc('projeksen')}}" style="height:30px"/> Projeksen Cms</a>
+    </div>
 </div>

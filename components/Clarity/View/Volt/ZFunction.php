@@ -26,6 +26,13 @@ class ZFunction extends Injectable
         }
     }
 
+ 
+    public static function getImageSrc($name = 'logo.png')
+    {
+     
+        return "/assets/img/$name";
+    }
+
     public static function timeFormat($format, $date)
     {   
         $date = strtotime($date);

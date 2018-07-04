@@ -31,8 +31,8 @@ class AuditDetail extends AbstractMigration
 
         $table->addColumn('audit_id', 'integer')
             ->addColumn('field_name', 'string')
-            ->addColumn('old_value', 'text')
-            ->addColumn('new_value', 'string')
+            ->addColumn('old_value',  'text' , ['limit' => 'TEXT_LONG'])
+            ->addColumn('new_value',  'text' , ['limit' => 'TEXT_LONG'])
             ->create();
     }
 }

@@ -11,5 +11,10 @@ class IndexController extends Controller
         return view('admin.home');
     }
 
+    public function filemanager()
+    {
+        return view('admin.media');
+    }
+
 
 }

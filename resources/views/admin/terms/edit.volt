@@ -26,10 +26,11 @@
             {{ form.render('description', ['class': 'form-control']) }}
         </div>
 
+
         {% if objectType['hierachical']  %}
         <div class="form-group">
         	 <strong>Parent</strong>
-        	{{ select(  'parent'  , objects , 'using' : [  'term_id',  'name'  ],  'useEmpty': true ,  'class': 'select2-select form-control'  ) }}
+        	{{ select(  'parent'  , objects , 'using' : [  'term_id',  'name'  ],  'useEmpty': true ,  'class': ' form-control'  ) }}
         </div>
         {% endif %}
 

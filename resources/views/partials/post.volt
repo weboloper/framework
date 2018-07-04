@@ -5,6 +5,7 @@
 
 	id: {{ post.id }}</br>
 	title: {{ post.title }}</br>
+	title: {{ post.body }}</br>
 	phone meta: {{ post.get_meta('phone', true )}}</br>
 	timeAgo: {{ timeAgo( post.created_at )}}</br>
 	date: {{ post.created_at }}</br>

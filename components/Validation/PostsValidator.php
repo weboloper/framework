@@ -17,9 +17,9 @@ class PostsValidator extends Validation
             'message' => 'Title is required',
         ]));
 
-        $this->add('body', new PresenceOf([
-            'message' => 'Body is required',
-        ]));
+        // $this->add('body', new PresenceOf([
+        //     'message' => 'Body is required',
+        // ]));
         
         $this->add('status', new PresenceOf([
             'message' => 'Status is required',
