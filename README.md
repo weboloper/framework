@@ -1,1 +1,9 @@
-# framework
+# projeksen cms framework
+
+
+php brood db:migrate
+php brood seed:run
+
+framework.dev/admin
+admin
+123123
