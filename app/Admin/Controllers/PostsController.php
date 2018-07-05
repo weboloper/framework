@@ -92,7 +92,9 @@ class PostsController extends Controller
             $statusConditions = 'p.status = :status:';
             $itemBuilder->andWhere($statusConditions);
         }else {
+
             $statusConditions = 'p.status != "trash" ';
+            $itemBuilder->andWhere($statusConditions);
         }
 
         $objects = $itemBuilder->getQuery()->execute($params);

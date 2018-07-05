@@ -51,7 +51,7 @@
           </a>
 
           <a class="navbar-brand" href="/admin#">
-             <img src="{{ getImageSrc('projeksen')}}" style="height:30px"/> Projeksen CMS
+            Projeksen CMS
           </a>
 
           <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
