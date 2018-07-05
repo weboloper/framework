@@ -2,6 +2,8 @@
 
 use Clarity\Support\Phinx\Migration\AbstractMigration;
 
+use Phinx\Db\Adapter\MysqlAdapter;
+
 class AuditDetail extends AbstractMigration
 {
     /**
@@ -31,8 +33,8 @@ class AuditDetail extends AbstractMigration
 
         $table->addColumn('audit_id', 'integer')
             ->addColumn('field_name', 'string')
-            ->addColumn('old_value',  'text' , ['limit' => 'TEXT_LONG'])
-            ->addColumn('new_value',  'text' , ['limit' => 'TEXT_LONG'])
+            ->addColumn('old_value',  'text' , ['limit' =>  MysqlAdapter::TEXT_LONG])
+            ->addColumn('new_value',  'text' , ['limit' =>  MysqlAdapter::TEXT_LONG ])
             ->create();
     }
 }

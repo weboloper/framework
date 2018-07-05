@@ -2,6 +2,9 @@
 
 use Clarity\Support\Phinx\Migration\AbstractMigration;
 
+use Phinx\Db\Adapter\MysqlAdapter;
+
+
 class Posts extends AbstractMigration
 {
     /**
@@ -32,7 +35,7 @@ class Posts extends AbstractMigration
         $table->addColumn('title', 'string')
             ->addColumn('slug', 'string', ['default' => '' ])
             ->addColumn('type', 'string' , ['default' => 'post' ])
-            ->addColumn('body', 'text' , ['limit' => 'TEXT_LONG', 'null' => true] )
+            ->addColumn('body', 'text' , [ 'limit' => MysqlAdapter::TEXT_LONG   , 'null' => true] )
             ->addColumn('excerpt', 'text' ,  ['null' => true] )
             ->addColumn('user_id', 'integer')
             ->addColumn('status', 'string', ['default' => 'publish' ])
