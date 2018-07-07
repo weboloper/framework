@@ -13,7 +13,7 @@ $(document).ajaxComplete(function (event, xhr, settings) {
               // title: xhr.responseJSON.messages[key].type,
               icon:   xhr.responseJSON.messages[key].type,
               text: xhr.responseJSON.messages[key].content ,
-              timer: 1000,
+              timer: 1300,
               buttons: false,
             });
 

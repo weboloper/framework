@@ -49,4 +49,10 @@ class Slug
 
         return $clean;
     }
+
+    public static function remove_special_chars($str)
+    {
+        return preg_replace('/[^\00-\255]+/u', '-', $str);
+
+    }
 }

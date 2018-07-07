@@ -9,30 +9,39 @@ var media = (function () {
   var global$2 = tinymce.util.Tools.resolve('tinymce.util.Tools');
 
   var getScripts = function (editor) {
+    //console.log(1);
     return editor.getParam('media_scripts');
   };
   var getAudioTemplateCallback = function (editor) {
+     //console.log(2);
     return editor.getParam('audio_template_callback');
   };
   var getVideoTemplateCallback = function (editor) {
+     //console.log(3);
     return editor.getParam('video_template_callback');
   };
   var hasLiveEmbeds = function (editor) {
+     //console.log(4);
     return editor.getParam('media_live_embeds', true);
   };
   var shouldFilterHtml = function (editor) {
+     //console.log(5);
     return editor.getParam('media_filter_html', true);
   };
   var getUrlResolver = function (editor) {
+     //console.log(6);
     return editor.getParam('media_url_resolver');
   };
   var hasAltSource = function (editor) {
+     //console.log(7);
     return editor.getParam('media_alt_source', true);
   };
   var hasPoster = function (editor) {
+     //console.log(8);
     return editor.getParam('media_poster', true);
   };
   var hasDimensions = function (editor) {
+     //console.log(9);
     return editor.getParam('media_dimensions', true);
   };
   var $_6sokf8ghjh8lpv9z = {
@@ -52,6 +61,7 @@ var media = (function () {
   var global$4 = tinymce.util.Tools.resolve('tinymce.dom.DOMUtils');
 
   var getVideoScriptMatch = function (prefixes, src) {
+     //console.log(10);
     if (prefixes) {
       for (var i = 0; i < prefixes.length; i++) {
         if (src.indexOf(prefixes[i].filter) !== -1) {
@@ -63,17 +73,21 @@ var media = (function () {
   var $_6gi4v7gljh8lpva3 = { getVideoScriptMatch: getVideoScriptMatch };
 
   var trimPx = function (value) {
+     //console.log(11);
     return value.replace(/px$/, '');
   };
   var addPx = function (value) {
+     //console.log(12);
     return /^[0-9.]+$/.test(value) ? value + 'px' : value;
   };
   var getSize = function (name) {
+     //console.log(13);
     return function (elm) {
       return elm ? trimPx(elm.style[name]) : '';
     };
   };
   var setSize = function (name) {
+     //console.log(14);
     return function (elm, value) {
       if (elm) {
         elm.style[name] = addPx(value);
@@ -89,13 +103,16 @@ var media = (function () {
 
   var DOM = global$4.DOM;
   var getEphoxEmbedIri = function (elm) {
+     //console.log(15);
     return DOM.getAttrib(elm, 'data-ephox-embed-iri');
   };
   var isEphoxEmbed = function (html) {
+     //console.log(16);
     var fragment = DOM.createFragment(html);
     return getEphoxEmbedIri(fragment.firstChild) !== '';
   };
   var htmlToDataSax = function (prefixes, html) {
+     //console.log(17);
     var data = {};
     global$3({
       validate: false,
@@ -141,6 +158,7 @@ var media = (function () {
     return data;
   };
   var ephoxEmbedHtmlToData = function (html) {
+     //console.log(18);
     var fragment = DOM.createFragment(html);
     var div = fragment.firstChild;
     return {
@@ -153,6 +171,7 @@ var media = (function () {
     };
   };
   var htmlToData = function (prefixes, html) {
+     //console.log(19);
     return isEphoxEmbed(html) ? ephoxEmbedHtmlToData(html) : htmlToDataSax(prefixes, html);
   };
   var $_8dw76mgijh8lpva0 = { htmlToData: htmlToData };
@@ -160,6 +179,7 @@ var media = (function () {
   var global$5 = tinymce.util.Tools.resolve('tinymce.util.Promise');
 
   var guess = function (url) {
+     //console.log(20);
     var mimes = {
       mp3: 'audio/mpeg',
       wav: 'audio/wav',
@@ -180,6 +200,7 @@ var media = (function () {
 
   var DOM$1 = global$4.DOM;
   var setAttributes = function (attrs, updatedAttrs) {
+     //console.log(21);
     var name;
     var i;
     var value;
@@ -210,12 +231,14 @@ var media = (function () {
     }
   };
   var normalizeHtml = function (html) {
+     //console.log(22);
     var writer = global$6();
     var parser = global$3(writer);
     parser.parse(html);
     return writer.getContent();
   };
   var updateHtmlSax = function (html, data, updateAll) {
+     //console.log(23);
     var writer = global$6();
     var sourceCount = 0;
     var hasImage;
@@ -315,10 +338,12 @@ var media = (function () {
     return writer.getContent();
   };
   var isEphoxEmbed$1 = function (html) {
+     //console.log(24);
     var fragment = DOM$1.createFragment(html);
     return DOM$1.getAttrib(fragment.firstChild, 'data-ephox-embed-iri') !== '';
   };
   var updateEphoxEmbed = function (html, data) {
+     //console.log(25);
     var fragment = DOM$1.createFragment(html);
     var div = fragment.firstChild;
     $_877lsegmjh8lpva4.setMaxWidth(div, data.width);
@@ -326,6 +351,7 @@ var media = (function () {
     return normalizeHtml(div.outerHTML);
   };
   var updateHtml = function (html, data, updateAll) {
+     //console.log(26);
     return isEphoxEmbed$1(html) ? updateEphoxEmbed(html, data) : updateHtmlSax(html, data, updateAll);
   };
   var $_984lvgrjh8lpvad = { updateHtml: updateHtml };
@@ -397,6 +423,7 @@ var media = (function () {
     }
   ];
   var getUrl = function (pattern, url) {
+     //console.log(27);
     var match = pattern.regex.exec(url);
     var newUrl = pattern.url;
     var _loop_1 = function (i) {
@@ -410,6 +437,7 @@ var media = (function () {
     return newUrl.replace(/\?$/, '');
   };
   var matchPattern = function (url) {
+     //console.log(28);
     var pattern = urlPatterns.filter(function (pattern) {
       return pattern.regex.test(url);
     });
@@ -421,10 +449,12 @@ var media = (function () {
   };
 
   var getIframeHtml = function (data) {
+     //console.log(29);
     var allowFullscreen = data.allowFullscreen ? ' allowFullscreen="1"' : '';
     return '<iframe src="' + data.source1 + '" width="' + data.width + '" height="' + data.height + '"' + allowFullscreen + '></iframe>';
   };
   var getFlashHtml = function (data) {
+     //console.log(30);
     var html = '<object data="' + data.source1 + '" width="' + data.width + '" height="' + data.height + '" type="application/x-shockwave-flash">';
     if (data.poster) {
       html += '<img src="' + data.poster + '" width="' + data.width + '" height="' + data.height + '" />';
@@ -433,6 +463,7 @@ var media = (function () {
     return html;
   };
   var getAudioHtml = function (data, audioTemplateCallback) {
+    //console.log(31);
     if (audioTemplateCallback) {
       return audioTemplateCallback(data);
     } else {
@@ -440,6 +471,7 @@ var media = (function () {
     }
   };
   var getVideoHtml = function (data, videoTemplateCallback) {
+    //console.log(32);
     if (videoTemplateCallback) {
       return videoTemplateCallback(data);
     } else {
@@ -447,9 +479,11 @@ var media = (function () {
     }
   };
   var getScriptHtml = function (data) {
+    //console.log(33);
     return '<script src="' + data.source1 + '"></script>';
   };
   var dataToHtml = function (editor, dataIn) {
+    //console.log(34);
     var data = global$2.extend({}, dataIn);
     if (!data.source1) {
       global$2.extend(data, $_8dw76mgijh8lpva0.htmlToData($_6sokf8ghjh8lpv9z.getScripts(editor), data.embed));
@@ -463,6 +497,7 @@ var media = (function () {
     if (!data.poster) {
       data.poster = '';
     }
+    // //console.log(data);
     data.source1 = editor.convertURL(data.source1, 'source');
     data.source2 = editor.convertURL(data.source2, 'source');
     data.source1mime = $_fxy5sbgqjh8lpvab.guess(data.source1);
@@ -485,6 +520,7 @@ var media = (function () {
         data.width = videoScript.width;
         data.height = videoScript.height;
       }
+      //console.log('aaa');
       var audioTemplateCallback = $_6sokf8ghjh8lpv9z.getAudioTemplateCallback(editor);
       var videoTemplateCallback = $_6sokf8ghjh8lpv9z.getVideoTemplateCallback(editor);
       data.width = data.width || 300;
@@ -500,15 +536,19 @@ var media = (function () {
         return getAudioHtml(data, audioTemplateCallback);
       } else if (data.type === 'script') {
         return getScriptHtml(data);
-      } else {
+      } else if (data.source1mime.indexOf('video') !== -1) {
         return getVideoHtml(data, videoTemplateCallback);
-      }
+      } else {
+        // return getVideoHtml(data, videoTemplateCallback);
+        return "<a href='" + data.source1 + "' class='doc-viewer'>[file link]</a>";
+       }
     }
   };
   var $_185myvgpjh8lpva9 = { dataToHtml: dataToHtml };
 
   var cache = {};
   var embedPromise = function (data, dataToHtml, handler) {
+    //console.log(35);
     return new global$5(function (res, rej) {
       var wrappedResolve = function (response) {
         if (response.html) {
@@ -527,6 +567,7 @@ var media = (function () {
     });
   };
   var defaultPromise = function (data, dataToHtml) {
+    //console.log(36);
     return new global$5(function (res) {
       res({
         html: dataToHtml(data),
@@ -535,15 +576,18 @@ var media = (function () {
     });
   };
   var loadedData = function (editor) {
+    //console.log(37);
     return function (data) {
       return $_185myvgpjh8lpva9.dataToHtml(editor, data);
     };
   };
   var getEmbedHtml = function (editor, data) {
+    //console.log(38);
     var embedHandler = $_6sokf8ghjh8lpv9z.getUrlResolver(editor);
     return embedHandler ? embedPromise(data, loadedData(editor), embedHandler) : defaultPromise(data, loadedData(editor));
   };
   var isCached = function (url) {
+    //console.log(39);
     return cache.hasOwnProperty(url);
   };
   var $_eypu3rgnjh8lpva6 = {
@@ -552,10 +596,12 @@ var media = (function () {
   };
 
   var doSyncSize = function (widthCtrl, heightCtrl) {
+    //console.log(40);
     widthCtrl.state.set('oldVal', widthCtrl.value());
     heightCtrl.state.set('oldVal', heightCtrl.value());
   };
   var doSizeControls = function (win, f) {
+    //console.log(41);
     var widthCtrl = win.find('#width')[0];
     var heightCtrl = win.find('#height')[0];
     var constrained = win.find('#constrain')[0];
@@ -564,6 +610,7 @@ var media = (function () {
     }
   };
   var doUpdateSize = function (widthCtrl, heightCtrl, isContrained) {
+    //console.log(42);
     var oldWidth = widthCtrl.state.get('oldVal');
     var oldHeight = heightCtrl.state.get('oldVal');
     var newWidth = widthCtrl.value();
@@ -584,12 +631,15 @@ var media = (function () {
     doSyncSize(widthCtrl, heightCtrl);
   };
   var syncSize = function (win) {
+    //console.log(43);
     doSizeControls(win, doSyncSize);
   };
   var updateSize = function (win) {
+    //console.log(44);
     doSizeControls(win, doUpdateSize);
   };
   var createUi = function (onChange) {
+    //console.log(45);
     var recalcSize = function () {
       onChange(function (win) {
         updateSize(win);
@@ -639,6 +689,7 @@ var media = (function () {
 
   var embedChange = global$1.ie && global$1.ie <= 8 ? 'onChange' : 'onInput';
   var handleError = function (editor) {
+    //console.log(46);
     return function (error) {
       var errorMessage = error && error.msg ? 'Media embed handler error: ' + error.msg : 'Media embed handler threw unknown error.';
       editor.notificationManager.open({
@@ -648,6 +699,7 @@ var media = (function () {
     };
   };
   var getData = function (editor) {
+    //console.log(47);
     var element = editor.selection.getNode();
     var dataEmbed = element.getAttribute('data-ephox-embed-iri');
     if (dataEmbed) {
@@ -661,12 +713,14 @@ var media = (function () {
     return element.getAttribute('data-mce-object') ? $_8dw76mgijh8lpva0.htmlToData($_6sokf8ghjh8lpv9z.getScripts(editor), editor.serializer.serialize(element, { selection: true })) : {};
   };
   var getSource = function (editor) {
+    //console.log(48);
     var elm = editor.selection.getNode();
     if (elm.getAttribute('data-mce-object') || elm.getAttribute('data-ephox-embed-iri')) {
       return editor.selection.getContent();
     }
   };
   var addEmbedHtml = function (win, editor) {
+    //console.log(49);
     return function (response) {
       var html = response.html;
       var embed = win.find('#embed')[0];
@@ -679,6 +733,7 @@ var media = (function () {
     };
   };
   var selectPlaceholder = function (editor, beforeObjects) {
+    //console.log(50);
     var i;
     var y;
     var afterObjects = editor.dom.select('img[data-mce-object]');
@@ -692,12 +747,14 @@ var media = (function () {
     editor.selection.select(afterObjects[0]);
   };
   var handleInsert = function (editor, html) {
+    //console.log(51);
     var beforeObjects = editor.dom.select('img[data-mce-object]');
     editor.insertContent(html);
     selectPlaceholder(editor, beforeObjects);
     editor.nodeChanged();
   };
   var submitForm = function (win, editor) {
+    //console.log(52);
     var data = win.toJSON();
     data.embed = $_984lvgrjh8lpvad.updateHtml(data.embed, data);
     if (data.embed && $_eypu3rgnjh8lpva6.isCached(data.source1)) {
@@ -709,11 +766,13 @@ var media = (function () {
     }
   };
   var populateMeta = function (win, meta) {
+    //console.log(53);
     global$2.each(meta, function (value, key) {
       win.find('#' + key).value(value);
     });
   };
   var showDialog = function (editor) {
+    //console.log(54);
     var win;
     var data;
     var generalFormItems = [{
@@ -826,6 +885,7 @@ var media = (function () {
   var $_55a3zkgejh8lpv9v = { showDialog: showDialog };
 
   var get = function (editor) {
+    //console.log(55);
     var showDialog = function () {
       $_55a3zkgejh8lpv9v.showDialog(editor);
     };
@@ -834,6 +894,7 @@ var media = (function () {
   var $_8gzpd7gdjh8lpv9t = { get: get };
 
   var register = function (editor) {
+    //console.log(56);
     var showDialog = function () {
       $_55a3zkgejh8lpv9v.showDialog(editor);
     };
@@ -844,6 +905,7 @@ var media = (function () {
   var global$8 = tinymce.util.Tools.resolve('tinymce.html.Node');
 
   var sanitize = function (editor, html) {
+    //console.log(57);
     if ($_6sokf8ghjh8lpv9z.shouldFilterHtml(editor) === false) {
       return html;
     }
@@ -890,6 +952,7 @@ var media = (function () {
   var $_87m6ryh0jh8lpvaw = { sanitize: sanitize };
 
   var createPlaceholderNode = function (editor, node) {
+    //console.log(58);
     var placeHolder;
     var name = node.name;
     placeHolder = new global$8('img', 1);
@@ -935,6 +998,7 @@ var media = (function () {
     return previewWrapper;
   };
   var retainAttributesAndInnerHtml = function (editor, sourceNode, targetNode) {
+    //console.log(59);
     var attrName;
     var attrValue;
     var attribs;
@@ -959,6 +1023,7 @@ var media = (function () {
     }
   };
   var isWithinEphoxEmbed = function (node) {
+    //console.log(60);
     while (node = node.parent) {
       if (node.attr('data-ephox-embed-iri')) {
         return true;
@@ -967,6 +1032,7 @@ var media = (function () {
     return false;
   };
   var placeHolderConverter = function (editor) {
+    //console.log(61);
     return function (nodes) {
       var i = nodes.length;
       var node;
@@ -1012,6 +1078,7 @@ var media = (function () {
   };
 
   var setup = function (editor) {
+    //console.log(62);
     editor.on('preInit', function () {
       var specialElements = editor.schema.getSpecialElements();
       global$2.each('video audio iframe object'.split(' '), function (name) {
@@ -1088,6 +1155,7 @@ var media = (function () {
   var $_6reo8igxjh8lpvaq = { setup: setup };
 
   var setup$1 = function (editor) {
+    //console.log(63);
     editor.on('ResolveName', function (e) {
       var name;
       if (e.target.nodeType === 1 && (name = e.target.getAttribute('data-mce-object'))) {
@@ -1098,6 +1166,7 @@ var media = (function () {
   var $_2fvp2eh1jh8lpvay = { setup: setup$1 };
 
   var setup$2 = function (editor) {
+    //console.log(64);
     editor.on('click keyup', function () {
       var selectedNode = editor.selection.getNode();
       if (selectedNode && editor.dom.hasClass(selectedNode, 'mce-preview-object')) {
@@ -1130,6 +1199,7 @@ var media = (function () {
   var $_9k0a0dh2jh8lpvaz = { setup: setup$2 };
 
   var register$1 = function (editor) {
+    //console.log(65);
     editor.addButton('media', {
       tooltip: 'Insert/edit media',
       cmd: 'mceMedia',
@@ -1158,6 +1228,7 @@ var media = (function () {
     return $_8gzpd7gdjh8lpv9t.get(editor);
   });
   function Plugin () {
+    //console.log(66);
   }
 
   return Plugin;

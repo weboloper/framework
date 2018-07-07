@@ -36,6 +36,10 @@
           top: -99999999px;
         }
 
+        .swal-overlay--show-modal {
+          z-index: 999999;
+        }
+
     </style>
 
     
@@ -139,18 +143,23 @@
     {{ javascript_include('core/select2/dist/js/select2.full.min.js') }}
     {{ javascript_include('core/tinymce/tinymce.min.js') }}
     
+    
 
     {{ javascript_include('https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js') }}
     {{ javascript_include('https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js') }}
     
 
-    {{ javascript_include('assets/js/bootstrap-notify/bootstrap-notify.js') }}
+    <!-- javascript_include('assets/js/bootstrap-notify/bootstrap-notify.js')   -->
     {{ javascript_include('assets/carbon/js/carbon.js') }}
     {{ javascript_include('assets/carbon/js/demo.js') }}
     {{ javascript_include('https://unpkg.com/sweetalert/dist/sweetalert.min.js') }}
    
     {{ javascript_include('assets/carbon/js/app.ajax.js') }}
-    {{ javascript_include('assets/carbon/js/scripts.js') }}
+    {{ javascript_include('core/scripts/tinymce.settings.js') }}
+ 
+    <script
+        src="/assets/carbon/js/scripts.js?v=<?php print rand(1,9999999); ?>"
+        crossorigin="anonymous"></script>
 
     {{ assets.outputInlineJs() }}
  

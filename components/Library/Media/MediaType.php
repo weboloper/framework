@@ -18,7 +18,16 @@ class MediaType
 
     public $documentTypes  = [
         'text/plain',
-        'application/pdf'
+        'application/pdf',
+        'application/zip',
+
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+        'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+        'application/vnd.ms-powerpoint.template.macroEnabled.12',
+        'application/vnd.ms-powerpoint.slideshow.macroEnabled.12'
     ];
     /**
      * Attempt to determine the real file type of a file.

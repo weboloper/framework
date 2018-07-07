@@ -1,8 +1,28 @@
 AddDefaultCharset UTF-8
 
 <IfModule mod_rewrite.c>
+	#eskisi
+    #RewriteEngine On
+    #RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteCond %{REQUEST_FILENAME} !-f
+    #RewriteRule ^(.*)$ index.php?_url=/$1 [QSA,L]
+
+
+
+    # Turn on URL rewriting
     RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Do not rewrite index.php
+    RewriteRule ^index\.php$ - [L]
+
+    # Allow any files or directories that exist to be displayed directly
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ index.php?_url=/$1 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Rewrite all other URLs to index.php?_url=/URL
+    RewriteRule ^((?s).*)$ index.php?_url=/$1 [QSA,L]
+
+
 </IfModule>
+
+ 

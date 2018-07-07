@@ -14,7 +14,7 @@ use Phalcon\Mvc\Model\Behavior\SoftDelete;
 
 use Components\Model\Audit;
 
-
+use Components\Utils\Slug;
 
 use Phalcon\Http\Request\File;
 use Components\Library\Media\MediaFiles;
@@ -26,6 +26,12 @@ class Posts extends Model
     use SoftDeletable;
 
     public $type;
+
+    const IMAGE_TYPE = 'image';
+    const VIDEO_TYPE = 'video';
+    //Such as pdf, docs, xls
+    const DOCUMENT_TYPE   = 'document';
+
 
     const TYPE_POST = [
         'name' => 'Posts',
@@ -81,6 +87,11 @@ class Posts extends Model
 
     ];
 
+    /**
+     * store error
+     * @var array
+     */
+    protected $error;
 
     public function getSource()
     {
@@ -235,56 +246,85 @@ class Posts extends Model
         return $this->parent_id;
     }
 
+    public function setMime_type($mime_type)
+    {
+        $this->mime_type = $mime_type;
+        return $this;
+    }
 
+    /**
+     * Get an error if occurred
+     * @return array
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    private function setError($error)
+    {
+        $this->error[] = $error;
+        return false;
+    }
  
     /// media
     public function initFile(File $fileObj)
     {   
-
         $fileExt     = $fileObj->getRealType();
         $mediaType   = new MediaType();
- 
+
         // Check if file extension's allowed
         if (!$mediaType->checkExtension($fileExt)) {
-            return $this->setError(t("Can't upload because file type's not allowed"). ": ". $fileExt);
+            return $this->setError("Can't upload because file type's not allowed : ". $fileExt);
         }
-
-      
+        
         // generate path of file
-        $key = date('Y/m/') .  $fileObj->getName();
+        $filename =  Slug::remove_special_chars( $fileObj->getName());
+        $key = date('Y/m/') .  $filename ;
         $serverPath = sandbox_path('uploads/' . $key);
         $localPath = $fileObj->getTempName();
         
-
+       
         if (!file_exists($localPath)) {
-            return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
+            return $this->setError("Can't find temp file for upload. This maybe caused by server configure");
+        }
+ 
+        if ($this->fileSystem->checkFileExists($serverPath)) {
+
+            $key = date('Y/m/') .uniqid().  $filename ;
+            $serverPath = sandbox_path('uploads/' . $key);
+            // return $this->setError(
+                
+            //         'An error(s) occurred when uploading file(s), ' .
+            //         'Another file have same name with this file. Please change file name before upload'
+                 
+            // );
         }
 
-        if ($this->fileSystem->checkFileExists($serverPath)) {
-            return $this->setError(
-                t(
-                    'An error(s) occurred when uploading file(s), ' .
-                    'Another file have same name with this file. Please change file name before upload'
-                )
-            );
-        }
 
         if (!$this->fileSystem->uploadFile($localPath, 'uploads/'. $key, $fileObj->getExtension())) {
-            return $this->setError(t("Can't find temp file for upload. This maybe caused by server configure"));
+            return $this->setError("Can't find temp file for upload. This maybe caused by server configure");
         }
 
-        $meta['type'] = null;
+        $meta['type'] = $fileExt;
         if ($mediaType->imageCheck($fileExt)) {
-            // $meta['type'] = self::IMAGE_TYPE;
+            $meta['type'] = self::IMAGE_TYPE;
             //@TODO add thumbnail
         }
         $meta['title'] = $fileObj->getName();
-        $meta['key']  = $key;
+        $meta['key']  = url()->get(('uploads/'. $key));
         $uploadStatus = $this->saveToDB($meta);
         if (!$uploadStatus) {
-            return "error";
+            return $this->setError(
+                
+                    'An error(s) occurred when uploading file(s), ' .
+                    'Another file have same name with this file. Please change file name before upload'
+                 
+            );
         }
-        return '/uploads/'. $key;
+
+        return $meta;
+        
  
     }
 
@@ -296,10 +336,11 @@ class Posts extends Model
     {
         $media = new Posts();
         $media->setTitle($file['title']);
-        $media->setSlug('uploads/'.$file['key']);
+        $media->setSlug($file['key']);
         $media->setType('attachment');
         $media->setUserId(  auth()->getUserId()  );
         $media->setStatus('inherit');
+        $media->setMime_type($file['type']);
         if (!$media->save()) {
             return false;
             foreach ($media->getMessages() as $message) {
@@ -309,5 +350,6 @@ class Posts extends Model
         return true;
     }
 
+ 
 
 }

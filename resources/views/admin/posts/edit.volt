@@ -24,7 +24,7 @@
         {% if in_array('body',  objectType['inputs']) %}
 	 	    <div class="form-group">
             <strong>Content</strong>
-            {{ form.render('body', ['class': 'form-control wysiwyg-file']) }}
+            {{ form.render('body', ['class': 'form-control wysiwyg-full']) }}
         </div>
         {% endif %}
 

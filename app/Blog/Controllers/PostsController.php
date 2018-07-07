@@ -20,7 +20,7 @@ class PostsController extends Controller
         // $post->save();
 
         list($itemBuilder, $totalBuilder) =
-                Model::prepareQueriesPosts( false , false, 5);
+                Model::prepareQueriesPosts( false , "p.type = 'post'", 5);
 
         $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute();
 
