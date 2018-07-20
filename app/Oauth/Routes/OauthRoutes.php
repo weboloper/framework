@@ -56,6 +56,12 @@ class OauthRoutes extends RouteGroup
         ])
         ->setName('loginFacebook');
 
+
+
+        $this->add('/islogged', [
+             'action'     => 'isLogged'
+        ]);
+
     }
 
 }

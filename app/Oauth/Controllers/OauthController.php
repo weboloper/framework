@@ -30,6 +30,12 @@ class OauthController extends Controller
             ],
         ]);
 
+        $this->middleware('auth', [
+            'only' => [
+                'isLogged',
+            ],
+        ]);
+
         $this->userService = new userService;
         $this->failedLoginService = new failedLogin;
 
@@ -187,7 +193,7 @@ class OauthController extends Controller
                 return $redirect;
             }
 
-            return redirect()->to(url()->to('logged'));
+            return redirect()->to(url()->to( $this->config->app->auth->login_redirect ));
         }
 
         $user = $this->userService->getFirstByEmail($credentials['email']);
@@ -261,7 +267,25 @@ class OauthController extends Controller
     }
 
 
- 
+    /**
+     * GET, POST | This logouts the current session logged-in.
+     *
+     * @return mixed
+     */
+    public function isLogged()
+    {
+        return view('auth.isLogged');
+    }
+    
+    /**
+     * GET, POST | This logouts the current session logged-in.
+     *
+     * @return mixed
+     */
+    public function notLogged()
+    {
+        return view('auth.notLogged');
+    }
 
 
     /**

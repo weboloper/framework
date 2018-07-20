@@ -164,13 +164,13 @@ class Users extends Model
      public function initialize()
      {  
         // if (auth()->isAuthorizedVisitor()) {
-           $this->addBehavior(
-                new Blameable(
-                    [
-                        'auditClass'       => Audit::class,
-                    ]
-                )
-            );
+           // $this->addBehavior(
+           //      new Blameable(
+           //          [
+           //              'auditClass'       => Audit::class,
+           //          ]
+           //      )
+           //  );
         // }
 
         $this->keepSnapshots(true);

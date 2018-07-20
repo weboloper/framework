@@ -11,17 +11,7 @@ Route::add('/{router}', [
      return ! request()->isAjax();
 });
 
-Route::addGet('/', [
-    'controller' => 'Home',
-    'action' => 'welcome',
-]);
-
-Route::addGet('/logged', [
-    'controller' => 'Home',
-    'action' => 'logged',
-]);
-
-
+ 
 
 /*
 +----------------------------------------------------------------+

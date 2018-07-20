@@ -213,6 +213,7 @@ return [
         'model'          => Components\Model\Users::class,
         'password_field' => 'password',
         'redirect_key'   => 'ref',
+        'login_redirect' => env('LOGIN_REDIRECT' , 'oauth/islogged')  
     ],
 
     /*
@@ -258,8 +259,8 @@ return [
         Components\Clarity\Providers\CollectionManager::class,
         Components\Clarity\Providers\Console::class,
         Components\Clarity\Providers\Crypt::class,
-        // Components\Clarity\Providers\DB::class,
-        Components\Providers\DB::class,
+        Components\Clarity\Providers\DB::class,
+        // Components\Providers\DB::class,
         Components\Providers\Dispatcher::class,
         Components\Clarity\Providers\ErrorHandler::class,
         Components\Clarity\Providers\Filter::class,

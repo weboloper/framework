@@ -112,13 +112,13 @@ class Posts extends Model
 
         $this->keepSnapshots(true);
         // if (auth()->isAuthorizedVisitor()) {
-           $this->addBehavior(
-                new Blameable(
-                    [
-                        'auditClass'       => Audit::class,
-                    ]
-                )
-            );
+           // $this->addBehavior(
+           //      new Blameable(
+           //          [
+           //              'auditClass'       => Audit::class,
+           //          ]
+           //      )
+           //  );
         // }
 
         $this->addBehavior(

@@ -11,11 +11,11 @@ class HomeController extends Controller
      */
     public function initialize()
     {
-        $this->middleware('auth', [
-            'only' => [
-                'logged',
-            ],
-        ]);
+        // $this->middleware('auth', [
+        //     'only' => [
+        //         'logged',
+        //     ],
+        // ]);
 
         $this->postService = new postService;
 
@@ -42,20 +42,6 @@ class HomeController extends Controller
     }
 
 
-    /**
-     * GET | This shows the final landing page, in which it is the newsfeed.
-     *
-     * @return mixed
-     */
-    public function welcome()
-    {   
-        $this->tag->prependTitle("Home - ");
-        return view('welcome');
-    }
-
-    public function logged()
-    {
-
-        return view('logged');
-    }
+   
+    
 }
