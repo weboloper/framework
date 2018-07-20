@@ -66,8 +66,8 @@
  
               <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000" class="avatar avatar-sm" alt="logo">
-                      <span class="small ml-1 d-md-down-none">Account</span>
+                      <img src="{{ gravatar(user.email)}}" class="avatar avatar-sm" alt="logo">
+                      <span class="small ml-1 d-md-down-none"> {{ user.name }} </span>
                   </a>
 
                   <div class="dropdown-menu dropdown-menu-right">
@@ -85,6 +85,7 @@
           </ul>
       </nav>
  
+  
       <div class="main-container">
           {% include "partials/sidebar.volt" %}
            <div class="content">

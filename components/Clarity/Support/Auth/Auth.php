@@ -93,6 +93,7 @@ class Auth
         if ($this->security->checkHash($password, $records->{$password_field})) {
             $this->session->set('isAuthenticated', true);
             $records->$password_field = null ;
+            $records->token = null ;
             $this->session->set('user', $records);
 
             return true;
