@@ -26,6 +26,10 @@
                 <p><a href="https://phalconslayer.readme.io/">Docs</a></p>
                 <h5>Todo</h5>
                 {{  dump(app) }}
+
+                {% if is_authorized() %}
+                    <a href="/oauth/logout" class="btn btn-danger">Logout</a>
+                {% endif  %}
               </div>
             </div>
          </div>

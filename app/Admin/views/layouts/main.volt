@@ -52,17 +52,24 @@
             Projeksen CMS
           </a>
 
+
           <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
               <i class="fa fa-bars"></i>
           </a>
 
           <ul class="navbar-nav ml-auto">
+
+             <li class="nav-item mr-3">
+                <a href="/">Visit site <i class="fas fa-external-link-alt"></i></a>
+              </li>
+
               <li class="nav-item d-md-down-none">
                   <a href="#">
                       <i class="fa fa-bell"></i>
                    </a>
               </li>
 
+             
  
               <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
