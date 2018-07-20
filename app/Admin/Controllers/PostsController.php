@@ -17,6 +17,7 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 
+use claviska\SimpleImage;
 
 class PostsController extends Controller
 {   
@@ -99,7 +100,10 @@ class PostsController extends Controller
 
         $objects = $itemBuilder->getQuery()->execute($params);
 
-        return view('admin.posts.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
+        // if($this->type == 'attachment') {
+        //     return view('attachments.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
+        // }
+        return view('posts.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
     }
 
     /**
@@ -111,6 +115,11 @@ class PostsController extends Controller
      */
     public function new()
     {   
+
+        if($this->type == 'attachment')
+        {
+            return view('posts.upload');
+        }
         
         $object = new Posts();
         $object->setTitle(' ');
@@ -138,7 +147,9 @@ class PostsController extends Controller
         // $this->assets->addInlineJs('$(window).bind("beforeunload",function(){return"Are you sure you want to leave?"});');
         // $this->assets->addInlineJs('swal("Good job!", "You clicked the button!", "success");');
 
-        return view('admin.posts.edit')
+        
+
+        return view('posts.edit')
             ->with('form', new PostsForm($object) )
             ->with( 'objectType', $this->objectType )
             ->with( 'terms_array', $terms_array )
@@ -161,6 +172,12 @@ class PostsController extends Controller
             return redirect()->to( url("admin/posts"))->withError("Object  not found");
         }
 
+        if($this->type == 'attachment')
+        {
+            return view('posts.edit_file')->withObject($object);
+        }
+        
+
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
             $terms  = Terms::find([   'taxonomy = :type: and parent_id = 0 ' , 'bind' => ['type' => $key ]]) ; 
@@ -173,7 +190,7 @@ class PostsController extends Controller
             $post_terms[] =  $item['term_id'];
         }
 
-        return view('admin.posts.edit')
+        return view('posts.edit')
             ->with('id', $id)
             ->with('form', new PostsForm($object) )
             ->with( 'objectType', Posts::POST_TYPES[$object->getType()] )
@@ -217,15 +234,17 @@ class PostsController extends Controller
                 null,
                 [
                     "title",
-                    // "slug",
+                    // "slug", // because its disabled
                     "body",
                     "status",
                 ]
             );
 
+            $slug = Slug::generate($inputs['title']);
+            
+            $object->setSlug( $slug  );
+            // $object->setGuid(  url()->get((  $slug ))   );
 
-
- 
             if ( request()->getPost('savePost')) {
                 $object->setStatus( $inputs['status'] );
              }else {
@@ -242,9 +261,7 @@ class PostsController extends Controller
 
                 if(!is_null($terms) ) { $terms_array = array_merge($terms_array, $terms); }
             }
- 
-            $object->setSlug(Slug::generate(  $inputs['title'] ));
-
+            
         
             if ($object->save() === false) {
                 foreach ($object->getMessages() as $message) {

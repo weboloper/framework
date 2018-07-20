@@ -8,12 +8,12 @@ class IndexController extends Controller
 
     public function home()
     {
-        return view('admin.home');
+        return view('home');
     }
 
     public function filemanager()
     {
-        return view('admin.media');
+        return view('media');
     }
 
 

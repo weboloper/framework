@@ -3,7 +3,7 @@
 
 	RewriteBase /
 	RewriteRule ^(core)($|/) - [NC,L]
-	RewriteRule ^(uploads)($|/) - [NC,L]
+	RewriteRule ^(resources)($|/) - [NC,L]
 
 	RewriteRule  ^$ public/    [L]
 	RewriteRule  (.*) public/$1 [L]

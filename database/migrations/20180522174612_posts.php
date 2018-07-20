@@ -34,6 +34,7 @@ class Posts extends AbstractMigration
 
         $table->addColumn('title', 'string')
             ->addColumn('slug', 'string', ['default' => '' ])
+            ->addColumn('guid', 'string', ['default' => '' ])
             ->addColumn('type', 'string' , ['default' => 'post' ])
             ->addColumn('body', 'text' , [ 'limit' => MysqlAdapter::TEXT_LONG   , 'null' => true] )
             ->addColumn('excerpt', 'text' ,  ['null' => true] )

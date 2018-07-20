@@ -21,11 +21,11 @@ class MediaFiles
      * @return boolean
      */
     public function uploadFile($localPath, $serverPath, $extension = null)
-    {
-        if ($this->checkFileExists($serverPath)) {
-            $item = explode($extension, $serverPath);
-            $serverPath = $item[0] . uniqid() . '.' . $extension;
-        }
+    {   // dosya adı bilerek hata versin bir daha yüklesin
+        // if ($this->checkFileExists($serverPath)) {
+        //     $item = explode($extension, $serverPath);
+        //     $serverPath = $item[0] . uniqid() . '.' . $extension;
+        // }
         $stream = fopen($localPath, 'r+');
         $status = $this->fileSystem->writeStream($serverPath, $stream);
 

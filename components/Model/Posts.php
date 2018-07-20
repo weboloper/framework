@@ -20,8 +20,12 @@ use Phalcon\Http\Request\File;
 use Components\Library\Media\MediaFiles;
 use Components\Library\Media\MediaType;
 
+use Components\Model\Services\Service\Post as postService;
+
+
 class Posts extends Model
-{
+{   
+    
     use Timestampable;
     use SoftDeletable;
 
@@ -37,8 +41,8 @@ class Posts extends Model
         'name' => 'Posts',
         'slug'  => 'post',
         'terms' => [ 'tag' , 'category', 'format'],
-        'metas' => [ 'seo_title'  => 'seo_title'  , 'seo_desc' => 'seo_desc'],
-        'inputs' => ['title', 'body' , 'excerpt'],
+        'metas' => [ 'seotitle'  => 'seo title'  , 'seodesc' => 'seo description' , 'thumbnail' => 'thumbnail'],
+        'inputs' => ['title', 'slug' , 'body' , 'excerpt'],
         'icon' => "paper-plane",
     ];
 
@@ -47,7 +51,7 @@ class Posts extends Model
         'slug' => 'page',
         'terms' => [],
         'metas' => [ 'seo_title'  => 'seo_title'  , 'seo_desc' => 'seo_desc'],
-        'inputs' => ['title', 'body' , 'excerpt'],
+        'inputs' => ['title', 'slug' , 'body' , 'excerpt'],
         'icon' => "newspaper",
     ];
 
@@ -76,15 +80,18 @@ class Posts extends Model
     const STATUS_DRAFT      = 'draft';
 
     const POST_STATUS = [
-
         self::STATUS_DRAFT      => self::STATUS_DRAFT,
         self::STATUS_PUBLISH    => self::STATUS_PUBLISH,
         self::STATUS_PENDING    => self::STATUS_PENDING,
         self::STATUS_FUTURE     => self::STATUS_FUTURE,
         self::STATUS_TRASH      => self::STATUS_TRASH,
         self::STATUS_PRIVATE    => self::STATUS_PRIVATE,
- 
+    ];
 
+    const POST_THUMBNAILS = [
+        'small' => [150, 150],
+        'medium'    => [300, 300],
+        'large'     => [600, 600] 
     ];
 
     /**
@@ -101,6 +108,7 @@ class Posts extends Model
     public function initialize()
     {  
         $this->fileSystem = new MediaFiles();
+        $this->postService = new postService;
 
         $this->keepSnapshots(true);
         // if (auth()->isAuthorizedVisitor()) {
@@ -179,6 +187,18 @@ class Posts extends Model
     {
         return $this->slug;
     }
+
+    public function setGuid($guid)
+    {
+        $this->guid = $guid;
+        return $this;
+    }
+
+    public function getGuid()
+    {
+        return $this->guid;
+    }
+
 
     public function setType($type)
     {
@@ -268,7 +288,7 @@ class Posts extends Model
     }
  
     /// media
-    public function initFile(File $fileObj)
+    public function initFile(File $fileObj, $title = null )
     {   
         $fileExt     = $fileObj->getRealType();
         $mediaType   = new MediaType();
@@ -279,41 +299,41 @@ class Posts extends Model
         }
         
         // generate path of file
-        $filename =  Slug::remove_special_chars( $fileObj->getName());
-        $key = date('Y/m/') .  $filename ;
-        $serverPath = sandbox_path('uploads/' . $key);
-        $localPath = $fileObj->getTempName();
+        $originalname   =  $fileObj->getName();
+        $filename       =  Slug::remove_special_chars( $fileObj->getName());
+        $key            =  date('Y/m/') .  $filename ;
+        $serverPath     =  resources_path( 'uploads/'. $key);
+        $localPath      =  $fileObj->getTempName();
         
        
         if (!file_exists($localPath)) {
             return $this->setError("Can't find temp file for upload. This maybe caused by server configure");
         }
  
-        if ($this->fileSystem->checkFileExists($serverPath)) {
+        if ($this->fileSystem->checkFileExists( 'resources/uploads/'. $key )) {
 
             $key = date('Y/m/') .uniqid().  $filename ;
-            $serverPath = sandbox_path('uploads/' . $key);
-            // return $this->setError(
-                
-            //         'An error(s) occurred when uploading file(s), ' .
-            //         'Another file have same name with this file. Please change file name before upload'
-                 
-            // );
+            $serverPath = resources_path( 'uploads/'. $key);
         }
 
+        
 
-        if (!$this->fileSystem->uploadFile($localPath, 'uploads/'. $key, $fileObj->getExtension())) {
+        if (!$this->fileSystem->uploadFile($localPath, 'resources/uploads/'. $key, $fileObj->getExtension())) {
             return $this->setError("Can't find temp file for upload. This maybe caused by server configure");
         }
+
+       
 
         $meta['type'] = $fileExt;
         if ($mediaType->imageCheck($fileExt)) {
             $meta['type'] = self::IMAGE_TYPE;
             //@TODO add thumbnail
+             $this->postService->generate_thumbnails($key,  $fileObj->getExtension());
         }
-        $meta['title'] = $fileObj->getName();
-        $meta['key']  = url()->get(('uploads/'. $key));
-        $uploadStatus = $this->saveToDB($meta);
+        $meta['title']  = $title ? $title : $originalname;
+        $meta['slug']   = $filename;
+        $meta['key']    = url()->get(('resources/uploads/'. $key));
+        $uploadStatus   = $this->saveToDB($meta);
         if (!$uploadStatus) {
             return $this->setError(
                 
@@ -336,7 +356,8 @@ class Posts extends Model
     {
         $media = new Posts();
         $media->setTitle($file['title']);
-        $media->setSlug($file['key']);
+        $media->setSlug($file['slug']);
+        $media->setGuid($file['key']);
         $media->setType('attachment');
         $media->setUserId(  auth()->getUserId()  );
         $media->setStatus('inherit');

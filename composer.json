@@ -23,7 +23,8 @@
         "swiftmailer/swiftmailer": "^5.4",
         "league/oauth2-client": "^0.10",
         "league/fractal": "^0.9",
-        "danielstjules/stringy": "^2.3"
+        "danielstjules/stringy": "^2.3",
+        "claviska/simpleimage": "^3.3"
     },
     "require-dev": {
         "behat/mink": "^1.7",

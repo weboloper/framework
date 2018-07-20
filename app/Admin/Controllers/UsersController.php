@@ -34,7 +34,7 @@ class UsersController extends Controller
     public function index()
     {   
         $objects = Users::find();
-        return view('admin.users.index')->withObjects( $objects );
+        return view('users.index')->withObjects( $objects );
     }
 
     /**
@@ -45,7 +45,7 @@ class UsersController extends Controller
     public function new()
     {
       
-        return view('admin.users.new');
+        return view('users.new');
     }
 
     /**
@@ -116,7 +116,7 @@ class UsersController extends Controller
         }
 
 
-        return view('admin.users.edit')
+        return view('users.edit')
             ->with('id', $id)
             ->with('form', new UsersForm($object) )
             ->with('user_roles', $user_roles )
@@ -273,7 +273,7 @@ class UsersController extends Controller
 
         }
       
-        return view('admin.users.changePassword');
+        return view('users.changePassword');
     }
 
 }

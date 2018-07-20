@@ -43,7 +43,7 @@ class TermsController extends Controller
  
         $objects = Terms::find(['taxonomy = :taxonomy:', 'bind' => [ 'taxonomy' =>  $this->taxonomy  ]]);
         
-        return view('admin.terms.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
+        return view('terms.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
     }
 
     /**
@@ -55,11 +55,32 @@ class TermsController extends Controller
     {   
         $objects = Terms::find(['taxonomy = :taxonomy: and parent_id = 0 ', 'bind' => [ 'taxonomy' =>  $this->taxonomy  ]]);
 
-        return view('admin.terms.edit')
+        return view('terms.edit')
             ->with('form', new TermsForm() )
             ->with('objects', $objects )
             ->with('objectType', $this->objectType );
      }
+
+      /**
+     * To show an output based on the requested ID
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function edit($id)
+    {   
+        if (!$object = Terms::findFirstByTerm_id($id)) {
+            return redirect()->to( url("admin/terms"))->withError("Object  not found");
+        }
+
+        return view('terms.edit')
+            ->with('form', new TermsForm($object) )
+            ->with('objects', $objects )
+            ->with('objectType', $this->objectType );
+ 
+    }
+
 
 
     /**

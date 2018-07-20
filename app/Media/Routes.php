@@ -6,7 +6,13 @@ Route::add('/media/upload', [
     'action' => 'upload',
 ]);
 
-Route::add( '/media/list.js', [
+Route::add( '/media/browser', [
+    'controller' => 'Index',
+    'action' => 'browser',
+]);
+
+
+Route::add( '/media/list', [
     'controller' => 'Index',
     'action' => 'list',
 ]);

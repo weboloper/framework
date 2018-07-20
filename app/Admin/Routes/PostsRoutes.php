@@ -44,8 +44,6 @@ class PostsRoutes extends RouteGroup
 
        
 
-
-
         //  # url as posts/grid
         // $this->add('/grid', [
         //     'action' => 'gridAction'

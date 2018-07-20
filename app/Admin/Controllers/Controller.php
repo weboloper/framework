@@ -41,6 +41,10 @@ class Controller extends BaseController
     	$this->request = request();
     	$this->response = response();
 
+        $base_path = __DIR__.'/../';
+         
+        $this->view->setViewsDir($base_path.'/views');
+
         $this->middleware('permission');
     }
 

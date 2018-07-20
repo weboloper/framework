@@ -4,49 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2843b45c8ca63a1d6be0b94fab3286b3",
+    "content-hash": "278bcff045e34e664a6114b9a6482567",
     "packages": [
-        {
-            "name": "ckeditor/ckeditor",
-            "version": "4.9.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ckeditor/ckeditor-releases.git",
-                "reference": "993eb4fba6a70545f6c50da1988d39ecd9cf47a3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/993eb4fba6a70545f6c50da1988d39ecd9cf47a3",
-                "reference": "993eb4fba6a70545f6c50da1988d39ecd9cf47a3",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+",
-                "LGPL-2.1+",
-                "MPL-1.1+"
-            ],
-            "authors": [
-                {
-                    "name": "CKSource",
-                    "homepage": "http://cksource.com"
-                }
-            ],
-            "description": "JavaScript WYSIWYG web text editor.",
-            "homepage": "http://ckeditor.com",
-            "keywords": [
-                "CKEditor",
-                "editor",
-                "fckeditor",
-                "html",
-                "javascript",
-                "richtext",
-                "text",
-                "wysiwyg"
-            ],
-            "time": "2018-04-18T09:04:40+00:00"
-        },
         {
             "name": "classpreloader/classpreloader",
             "version": "3.2.0",
@@ -158,6 +117,45 @@
                 "preload"
             ],
             "time": "2017-12-10T12:12:20+00:00"
+        },
+        {
+            "name": "claviska/simpleimage",
+            "version": "3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/claviska/SimpleImage.git",
+                "reference": "31ba5b8358e1663a2813e2ada7242fa8d97a96dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/claviska/SimpleImage/zipball/31ba5b8358e1663a2813e2ada7242fa8d97a96dc",
+                "reference": "31ba5b8358e1663a2813e2ada7242fa8d97a96dc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "league/color-extractor": "0.3.*",
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "claviska": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cory LaViska",
+                    "homepage": "http://www.abeautifulsite.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP class that makes working with images as simple as possible.",
+            "time": "2017-09-12T09:03:56+00:00"
         },
         {
             "name": "components/font-awesome",
@@ -650,150 +648,6 @@
                 "string"
             ],
             "time": "2017-07-22T12:18:28+00:00"
-        },
-        {
-            "name": "fortawesome/font-awesome",
-            "version": "v4.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/a8386aae19e200ddb0f6845b5feeee5eb7013687",
-                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687",
-                "shasum": ""
-            },
-            "require-dev": {
-                "jekyll": "1.0.2",
-                "lessc": "1.4.2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.6.x-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "OFL-1.1",
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dave Gandy",
-                    "email": "dave@fontawesome.io",
-                    "homepage": "http://twitter.com/davegandy",
-                    "role": "Developer"
-                }
-            ],
-            "description": "The iconic font and CSS framework",
-            "homepage": "http://fontawesome.io/",
-            "keywords": [
-                "FontAwesome",
-                "awesome",
-                "bootstrap",
-                "font",
-                "icon"
-            ],
-            "time": "2016-10-24T15:52:54+00:00"
-        },
-        {
-            "name": "froala/wysiwyg-editor",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/froala/wysiwyg-editor.git",
-                "reference": "3dc7dc27ffd02030951d2c7a4ec569a9c11a5f34"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/froala/wysiwyg-editor/zipball/3dc7dc27ffd02030951d2c7a4ec569a9c11a5f34",
-                "reference": "3dc7dc27ffd02030951d2c7a4ec569a9c11a5f34",
-                "shasum": ""
-            },
-            "type": "component",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Froala Labs",
-                    "email": "support@froala.com"
-                }
-            ],
-            "description": "A beautiful jQuery WYSIWYG HTML rich text editor. High performance and modern design make it easy to use for developers and loved by users.",
-            "homepage": "https://www.froala.com/wysiwyg-editor",
-            "keywords": [
-                "editor",
-                "froala",
-                "froala-editor",
-                "froala-wysiwyg",
-                "html",
-                "javascript",
-                "jquery",
-                "jquery-plugin",
-                "rich editor",
-                "rich text editor",
-                "rte",
-                "text",
-                "wysiwyg"
-            ],
-            "time": "2018-06-05T19:36:49+00:00"
-        },
-        {
-            "name": "froala/wysiwyg-editor-php-sdk",
-            "version": "2.3.4-rc.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/froala/wysiwyg-editor-php-sdk.git",
-                "reference": "adbf97a527ab754deaed08ba8d6b2300695f738d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/froala/wysiwyg-editor-php-sdk/zipball/adbf97a527ab754deaed08ba8d6b2300695f738d",
-                "reference": "adbf97a527ab754deaed08ba8d6b2300695f738d",
-                "shasum": ""
-            },
-            "require": {
-                "components/jquery": ">=1.11.0",
-                "fortawesome/font-awesome": ">=4.4.0",
-                "froala/wysiwyg-editor": "dev-master"
-            },
-            "type": "php-plugin",
-            "extra": {
-                "installer-name": "FroalaEditor"
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Froala Labs",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "PHP SDK for Froala WYSIWYG Editor",
-            "homepage": "https://www.froala.com/wysiwyg-editor",
-            "keywords": [
-                "editor",
-                "froala",
-                "html",
-                "php",
-                "php rich text editor",
-                "php rte",
-                "php wysiwyg",
-                "rich editor",
-                "rich text editor",
-                "rte",
-                "sdk",
-                "text",
-                "wysiwyg"
-            ],
-            "time": "2016-09-15T10:16:27+00:00"
         },
         {
             "name": "fzaninotto/faker",
@@ -1680,6 +1534,60 @@
                 "minification"
             ],
             "time": "2016-11-11T18:43:20+00:00"
+        },
+        {
+            "name": "league/color-extractor",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/color-extractor.git",
+                "reference": "837086ec60f50c84c611c613963e4ad2e2aec806"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/color-extractor/zipball/837086ec60f50c84c611c613963e4ad2e2aec806",
+                "reference": "837086ec60f50c84c611c613963e4ad2e2aec806",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.4.0"
+            },
+            "replace": {
+                "matthecat/colorextractor": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2",
+                "phpunit/phpunit": "~5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu Lechat",
+                    "email": "math.lechat@gmail.com",
+                    "homepage": "http://matthecat.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Extract colors from an image as a human would do.",
+            "homepage": "https://github.com/thephpleague/color-extractor",
+            "keywords": [
+                "color",
+                "extract",
+                "human",
+                "image",
+                "palette"
+            ],
+            "time": "2016-12-15T09:30:02+00:00"
         },
         {
             "name": "league/flysystem",

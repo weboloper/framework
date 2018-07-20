@@ -32,36 +32,25 @@ gulp.task('vendor', function() {
   gulp.src([
       './vendor/components/**/*'
     ])
-  .pipe(gulp.dest('./core'))
+  .pipe(gulp.dest('./resources/statics'))
 
   // Bootstrap
   gulp.src([
       './vendor/twbs/**/*'
     ])
-  .pipe(gulp.dest('./core'))
+  .pipe(gulp.dest('./resources/statics'))
 
   // Select2
   gulp.src([
       './vendor/select2/**/*'
     ])
-  .pipe(gulp.dest('./core'))
+  .pipe(gulp.dest('./resources/statics'))
 
-  // ckeditor4
-  gulp.src([
-      './vendor/ckeditor/**/*'
-    ])
-  .pipe(gulp.dest('./core'))
-
-   // froala
-  gulp.src([
-      './vendor/froala/wysiwyg-editor/**/*'
-    ])
-  .pipe(gulp.dest('./core/froala'))
 
   // tinymce
   gulp.src([
       './vendor/tinymce/**/*'
     ])
-  .pipe(gulp.dest('./core'))
+  .pipe(gulp.dest('./resources/statics'))
 
 });

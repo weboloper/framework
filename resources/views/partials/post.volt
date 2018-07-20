@@ -14,4 +14,6 @@
 	{% if teaser is defined %}
 	<p>link</p>
 	{% endif %}
+
+	{{ dump(get_the_post_thumbnail(post))}}
 </article>
