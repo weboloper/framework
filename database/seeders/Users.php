@@ -18,7 +18,8 @@ class Users extends AbstractSeed
             [
                 'email'       => 'admin@slayer.com',
                 'password'    => security()->hash("123123123"),
-                'name'        => 'admin',
+                'username'    => 'admin',
+                'name'        => 'mr. admin',
                 'token'       =>  bin2hex(random_bytes(100)),
                 'activated'   => (int) true,
                 'created_at'  => date('Y-m-d H:i:s'),
@@ -26,7 +27,8 @@ class Users extends AbstractSeed
             [
                 'email'       => 'mod@slayer.com',
                 'password'    => security()->hash("123123123"),
-                'name'        => 'mod',
+                'username'    => 'mod',
+                'name'        => 'mr. mod',
                 'token'       =>  bin2hex(random_bytes(100)),
                 'activated'   => (int) true,
                 'created_at'  => date('Y-m-d H:i:s'),
@@ -34,7 +36,8 @@ class Users extends AbstractSeed
             [
                 'email'       => 'user@slayer.com',
                 'password'    => security()->hash("123123123"),
-                'name'        => 'user',
+                'username'    => 'user',
+                'name'        => 'mr. user',
                 'token'       =>  bin2hex(random_bytes(100)),
                 'activated'   => (int) true,
                 'created_at'  => date('Y-m-d H:i:s'),

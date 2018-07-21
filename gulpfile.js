@@ -32,25 +32,25 @@ gulp.task('vendor', function() {
   gulp.src([
       './vendor/components/**/*'
     ])
-  .pipe(gulp.dest('./resources/statics'))
+  .pipe(gulp.dest('./resources/statics/plugins'))
 
   // Bootstrap
   gulp.src([
       './vendor/twbs/**/*'
     ])
-  .pipe(gulp.dest('./resources/statics'))
+  .pipe(gulp.dest('./resources/statics/plugins'))
 
   // Select2
   gulp.src([
       './vendor/select2/**/*'
     ])
-  .pipe(gulp.dest('./resources/statics'))
+  .pipe(gulp.dest('./resources/statics/plugins'))
 
 
   // tinymce
   gulp.src([
       './vendor/tinymce/**/*'
     ])
-  .pipe(gulp.dest('./resources/statics'))
+  .pipe(gulp.dest('./resources/statics/plugins'))
 
 });

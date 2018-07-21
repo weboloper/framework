@@ -5,7 +5,7 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-	
+ 
     {{ form( 'admin/' ~   controller | lower ~  '/' ~  object.id  ~ '/update', 'class' : 'form-horizontal ') }}
     <div class="row mb-5">
 	    <div class="col-sm-8">

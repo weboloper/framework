@@ -1,18 +1,19 @@
 <html>
     <head>
-        <title>New Registered User</title>
+        <title>{{ lang.get('emails.register.title') }}</title>
     </head>
     <body>
-        Hi!<br><br>
+        {{ lang.get('emails.register.hi') }}<br><br>
 
         <div clas="well">
-            You have successfully registered, to activate your account please click the link below.<br>
-            <a href="{{ url }}">{{ url }}</a>
-        </div><br><br>
+            {{ lang.get('emails.register.email_text') }}<br>
+            
+        </div>
+
+        <a href="{{ url }}" class="btn btn-primary my-4">{{ lang.get('emails.register.button_text') }}</a>
 
         <p>
-        Sincerely Yours,<br>
-        Slayer Team!
+        {{ app.name }}
         </p>
     </body>
 </html>

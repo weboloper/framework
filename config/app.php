@@ -4,8 +4,10 @@ return [
 
     'app' => [
         'name' => env('APP_NAME' , 'slayer') ,
+        'description' => env('APP_DESC' , 'Solid layer app') ,
         'url' => env('APP_URL' , 'http://slayer.dev') 
     ],
+
     /*
     +----------------------------------------------------------------+
     |\ Application Debugging                                        /|
@@ -17,6 +19,7 @@ return [
     */
 
     'debug' => env('APP_DEBUG', false),
+   
 
     /*
     +----------------------------------------------------------------+
@@ -28,7 +31,7 @@ return [
     |
     */
 
-    'lang' => 'en',
+    'lang' => env('APP_LANG', "en"),
 
     /*
     +----------------------------------------------------------------+
@@ -213,7 +216,8 @@ return [
         'model'          => Components\Model\Users::class,
         'password_field' => 'password',
         'redirect_key'   => 'ref',
-        'login_redirect' => env('LOGIN_REDIRECT' , 'oauth/islogged')  
+        'login_redirect' => env('LOGIN_REDIRECT' , 'oauth/islogged')  ,
+        'usernames'      => env('USERNAMES' ,  true) 
     ],
 
     /*
@@ -283,7 +287,8 @@ return [
 
         # register your providers below.
         App\Oauth\Providers\RouterServiceProvider::class,
-        App\Blog\Providers\RouterServiceProvider::class,
+        App\Main\Providers\RouterServiceProvider::class,
+        // App\Blog\Providers\RouterServiceProvider::class,
         App\Admin\Providers\RouterServiceProvider::class,
         App\Media\Providers\RouterServiceProvider::class,
 

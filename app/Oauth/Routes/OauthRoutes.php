@@ -41,7 +41,7 @@ class OauthRoutes extends RouteGroup
             'action' => 'showForgetPasswordForm',
         ])->setName('showForgetPasswordForm');
 
-        $this->add('/reset-password/{token}', [
+        $this->add('/reset-password/{token}/{id}', [
             'action' => 'showResetPasswordForm',
         ])->setName('showResetPasswordForm');
 
@@ -60,6 +60,10 @@ class OauthRoutes extends RouteGroup
 
         $this->add('/islogged', [
              'action'     => 'isLogged'
+        ]);
+
+        $this->add('/test', [
+             'action'     => 'test'
         ]);
 
     }

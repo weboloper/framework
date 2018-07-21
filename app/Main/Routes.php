@@ -1,7 +1,7 @@
 <?php
 
 Route::add('/{router}', [
-    'controller' => 'Home',
+    'controller' => 'Index',
     'action' => 'index',
 ])->beforeMatch(function ($uri, $route) {
     $uris = ['posts', 'users', 'oauth' , 'terms', 'search', 'admin'];
@@ -12,8 +12,8 @@ Route::add('/{router}', [
 });
 
 Route::addGet('/', [
-    'controller' => 'Posts',
-    'action' => 'index',
+    'controller' => 'Index',
+    'action' => 'welcome',
 ]);
 
 /*
@@ -25,5 +25,5 @@ Route::addGet('/', [
 | mounting them to organize your routes
 |
 */
-Route::mount(new App\Blog\Routes\PostsRoutes);
+// Route::mount(new App\Main\Routes\PostsRoutes);
 

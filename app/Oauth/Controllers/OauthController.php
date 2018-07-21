@@ -83,6 +83,11 @@ class OauthController extends Controller
 
         $inputs = request()->get();
 
+        // this is if username is not allowed
+        if(!$this->config->app->auth->usernames){
+            $inputs['username'] = $inputs['email'];
+        }
+
         $validator = new RegistrationValidator;
         $validation = $validator->validate($inputs);
 
@@ -103,9 +108,11 @@ class OauthController extends Controller
             $user = new Users;
 
             $success = $user->create([
-                'email' => $inputs['email'],
+                'email'    => $inputs['email'],
+                'username' => $inputs['username'],
+                'name'     => $inputs['name'],
                 'password' => security()->hash($inputs['password']),
-                'token' => $token,
+                'token'    => $token,
             ]);
 
             if ($success === false) {
@@ -115,17 +122,17 @@ class OauthController extends Controller
                 );
             }
 
-            queue(
-                // 'Components\Queue\Email@registeredSender',
-                \Components\Queue\Email::class,
-                [
-                    'function' => 'registeredSender',
-                    'template' => 'emails.registered-inlined',
-                    'to' => $inputs['email'],
-                    'url' => route('activateUser', ['token' => $token]),
-                    'subject' => 'You are now registered, activation is required.',
-                ]
-            );
+            // queue(
+            //     // 'Components\Queue\Email@registeredSender',
+            //     \Components\Queue\Email::class,
+            //     [
+            //         'function' => 'registeredSender',
+            //         'template' => 'emails.registered-inlined',
+            //         'to' => $inputs['email'],
+            //         'url' => route('activateUser', ['token' => $token]),
+            //         'subject' => 'You are now registered, activation is required.',
+            //     ]
+            // );
 
             $connection->commit();
 
@@ -282,9 +289,9 @@ class OauthController extends Controller
      *
      * @return mixed
      */
-    public function notLogged()
+    public function index()
     {
-        return view('auth.notLogged');
+        return view('pages.welcome');
     }
 
 
@@ -328,7 +335,7 @@ class OauthController extends Controller
                         'function' => 'registeredSender',
                         'template' => 'emails.forgetpass',
                         'to' => $inputs['email'],
-                        'url' => route('showResetPasswordForm', ['token' => $token]),
+                        'url' => route('showResetPasswordForm', ['token' => $token , 'id'  => $user->getId() ]),
                         'subject' => 'You tried to reset your password.',
                     ]
                 );
@@ -368,7 +375,7 @@ class OauthController extends Controller
      *
      * @return mixed
      */
-    public function showResetPasswordForm($token)
+    public function showResetPasswordForm($token, $id)
     {   
         if(auth()->check())
         {   
@@ -377,10 +384,11 @@ class OauthController extends Controller
         }
 
         $user = Users::find([
-            'token = :token: AND forgetpass = :forgetpass:',
+            'token = :token: AND forgetpass = :forgetpass: AND id = :id: ',
             'bind' => [
                 'token' => $token,
                 'forgetpass' => true,
+                'id' => $id
             ],
         ])->getFirst();
 
@@ -392,6 +400,10 @@ class OauthController extends Controller
 
             return view('errors.404');
         }
+
+        // $user->setToken('');
+        // $user->setForgetpass(0);
+        // $user->save();
 
         if(request()->isPost()) {
             
@@ -471,4 +483,27 @@ class OauthController extends Controller
         }
     }
 
+
+
+
+    public function test()
+    {
+
+        try {
+        queue(
+                // 'Components\Queue\Email@registeredSender',
+                \Components\Queue\Email::class,
+                [
+                    'function' => 'registeredSender',
+                    'template' => 'emails.registered-inlined',
+                    'to' => "tesst@test.com",
+                    'url' => route('activateUser', ['token' => "asd"]),
+                    'subject' => 'You are now registered, activation is required.',
+                ]
+            );
+        } catch (\Exception $e) {
+            print $e;
+        }
+
+    }
 }

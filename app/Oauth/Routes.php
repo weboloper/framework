@@ -16,7 +16,7 @@ Route::addGet('/oauth', [
 
 Route::addGet('/', [
     'controller' => 'Oauth',
-    'action' => 'notLogged',
+    'action' => 'index',
 ]);
 
 Route::mount(new App\Oauth\Routes\OauthRoutes);

@@ -1,3 +1,21 @@
+// $(document).on('submit', '#form-grid', function (e) {
+//     e.preventDefault();
+//     $.ajax({
+//         type: "POST",
+//         url: baseUri + controller + '/' + 'grid',
+//         data: $(this).serialize() + '&filter=1',
+//         dataType: 'html',
+//         // async: false,
+//         XMLHttpRequest:  true,
+//         success: function (html) {
+
+//             // console.log(html);
+//             $('#grid').replaceWith(html);
+//             $(".chosen-select").length && $(".chosen-select").chosen({disable_search_threshold: 10});
+//         }
+//     });
+// });
+
 $(document).on('click', '.delete-btn', function (e) {
     e.preventDefault();
     var row =  $(this).closest('tr');
@@ -182,5 +200,12 @@ $(document).on('submit', '#object-meta-form', function (e) {
         // Set your other textbox to be the value in txtClone
         $('input.slug-out').val(str);
     });
+
+
+   
+
+
+    
+
 
 } );

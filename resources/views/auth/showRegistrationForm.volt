@@ -50,6 +50,17 @@
             <div class="border p-5">
                 <form class="form-vertical" method="POST" action="{{ route('storeRegistrationForm') }}" autocomplete="off">
                     <input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
+
+                    {% if config.app.auth.usernames %}
+                    <div class="form-group">
+                        <label>{{ lang.get('auth.login.username_label') }}</label>
+                        {{ text_field('username', 'class': 'form-control') }}
+                        <small class="inline-helper">{{ lang.get('auth.login.username_helper') }}</small>
+                    </div>
+                    {% endif %}
+                  
+ 
+
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.email_label') }}</label>
                         {{ text_field('email', 'class': 'form-control') }}

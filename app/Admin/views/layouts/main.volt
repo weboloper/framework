@@ -10,12 +10,12 @@
     <title>Projeksen CMS</title>
 
     <!-- Bootstrap core CSS -->
-    {{ stylesheet_link("assets/carbon/css/carbon.css")}}
-    {{ stylesheet_link("assets/carbon/css/custom.css")}}
+    {{ stylesheet_link("resources/statics/plugins/carbon/css/carbon.css")}}
+    {{ stylesheet_link("resources/statics/plugins/carbon/css/custom.css")}}
 
     <!-- Custom styles for this template -->
-    {{ stylesheet_link("resources/statics/select2/dist/css/select2.min.css")}}
-    {{ stylesheet_link("resources/statics/font-awesome/css/fontawesome-all.min.css")}}
+    {{ stylesheet_link("resources/statics/plugins/select2/dist/css/select2.min.css")}}
+    {{ stylesheet_link("resources/statics/plugins/font-awesome/css/fontawesome-all.min.css")}}
 
  
     
@@ -140,10 +140,10 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 
-    {{ javascript_include('assets/carbon/js/popper.min.js') }}
-    {{ javascript_include('assets/carbon/js/bootstrap.min.js') }}
-    {{ javascript_include('resources/statics/select2/dist/js/select2.full.min.js') }}
-    {{ javascript_include('resources/statics/tinymce/tinymce.min.js') }}
+    {{ javascript_include('resources/statics/plugins/carbon/js/popper.min.js') }}
+    {{ javascript_include('resources/statics/plugins/carbon/js/bootstrap.min.js') }}
+    {{ javascript_include('resources/statics/plugins/select2/dist/js/select2.full.min.js') }}
+    {{ javascript_include('resources/statics/plugins/tinymce/tinymce.min.js') }}
     
     
 
@@ -152,8 +152,8 @@
     
 
     <!-- javascript_include('assets/js/bootstrap-notify/bootstrap-notify.js')   -->
-    {{ javascript_include('assets/carbon/js/carbon.js') }}
-    {{ javascript_include('assets/carbon/js/demo.js') }}
+    {{ javascript_include('resources/statics/plugins/carbon/js/carbon.js') }}
+    {{ javascript_include('resources/statics/plugins/carbon/js/demo.js') }}
     {{ javascript_include('https://unpkg.com/sweetalert/dist/sweetalert.min.js') }}
    
     {{ javascript_include('resources/statics/js/app.ajax.js') }}
@@ -162,7 +162,7 @@
         src="/resources/statics/js/tinymce.settings.js?v=<?php print rand(1,9999999); ?>"
         crossorigin="anonymous"></script>
     <script
-        src="/assets/carbon/js/scripts.js?v=<?php print rand(1,9999999); ?>"
+        src="/resources/statics/plugins/carbon/js/scripts.js?v=<?php print rand(1,9999999); ?>"
         crossorigin="anonymous"></script>
 
     {{ assets.outputInlineJs() }}

@@ -240,9 +240,8 @@ class PostsController extends Controller
                 ]
             );
 
-            $slug = Slug::generate($inputs['title']);
-            
-            $object->setSlug( $slug  );
+            $this->getUniqueSlug($object , $inputs['title']);
+
             // $object->setGuid(  url()->get((  $slug ))   );
 
             if ( request()->getPost('savePost')) {
@@ -279,6 +278,46 @@ class PostsController extends Controller
 
 
         }
+    }
+
+    public function checkSlug($slug, $type )
+    {
+        return Posts::findFirst([
+            'type= :type: AND slug = :slug:',
+            'bind' => [
+                'type' => $type,
+                'slug' => $slug
+            ]
+        ]);
+    }
+
+    public function getUniqueSlug(Posts $object , $slug)
+    {   
+        $slug = Slug::generate($slug);
+
+        if($exists = $this->checkSlug($slug , $object->getType() ))
+        {      
+            // $options = [];
+            // $options['exists']['id'] = $exists->getId();
+            // $options['exists']['type'] = $exists->getType();
+
+            // $options['object']['id'] = $object->getId();
+            // $options['object']['type'] = $object->getType();
+
+            // die(var_dump(  $options ));
+
+            if(  $exists->getType() == $object->getType() AND $exists->getId() != $object->getId()     ) {
+
+                return $this->getUniqueSlug($object, $slug."-2");
+
+            }
+        }
+
+        $object->setSlug($slug);
+
+        return $object;
+ 
+
     }
 
     /**

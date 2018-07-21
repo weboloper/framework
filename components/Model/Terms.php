@@ -23,7 +23,8 @@ class Terms extends Model
         'metas' => [ ],
         'icon' => "folder",
         'multiple' => true,
-        'hierachical' => true
+        'hierachical' => true,
+        'tagging'  => false
     ];
 
     const TYPE_TAG = [
@@ -33,7 +34,8 @@ class Terms extends Model
         'metas' => [ 'test_key_1'  => 'test_key_1' ],
         'icon' => "tag",
         'multiple' => true,
-        'hierachical' => false
+        'hierachical' => false,
+        'tagging'  => true
     ];
 
     const TYPE_FORMAT = [
@@ -43,7 +45,8 @@ class Terms extends Model
         'metas' => [ ],
         'icon' => "bookmark",
         'multiple' => false,
-        'hierachical' => false
+        'hierachical' => true,
+        'tagging'  => false
     ];
 
     #register post types
