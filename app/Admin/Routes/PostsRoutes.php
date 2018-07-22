@@ -28,6 +28,12 @@ class PostsRoutes extends RouteGroup
         ]);
 
         # url as posts/1/show
+        $this->addGet('/{id}/view', [
+            'action' => 'view'
+        ]);
+
+
+        # url as posts/1/show
         $this->addGet('/{id}/edit', [
             'action' => 'edit'
         ]);

@@ -36,6 +36,7 @@
 
     </style>
 
+    {% block header %} {% endblock %}
     
 
   </head>
@@ -155,7 +156,8 @@
     {{ javascript_include('resources/statics/plugins/carbon/js/carbon.js') }}
     {{ javascript_include('resources/statics/plugins/carbon/js/demo.js') }}
     {{ javascript_include('https://unpkg.com/sweetalert/dist/sweetalert.min.js') }}
-   
+    
+    {{ javascript_include('resources/statics/plugins/viewerJs/js/demo.js') }}
     {{ javascript_include('resources/statics/js/app.ajax.js') }}
      
     <script

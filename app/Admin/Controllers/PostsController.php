@@ -118,7 +118,7 @@ class PostsController extends Controller
 
         if($this->type == 'attachment')
         {
-            return view('posts.upload');
+            return view('posts.browser');
         }
         
         $object = new Posts();
@@ -151,7 +151,7 @@ class PostsController extends Controller
 
         return view('posts.edit')
             ->with('form', new PostsForm($object) )
-            ->with( 'objectType', $this->objectType )
+            ->with( 'objectType', Posts::POST_TYPES[$object->getType()] )
             ->with( 'terms_array', $terms_array )
             ->with( 'post_terms', array() )
             ->with( 'is_new', true )
@@ -171,12 +171,7 @@ class PostsController extends Controller
         if (!$object = Posts::findFirstById($id)) {
             return redirect()->to( url("admin/posts"))->withError("Object  not found");
         }
-
-        if($this->type == 'attachment')
-        {
-            return view('posts.edit_file')->withObject($object);
-        }
-        
+ 
 
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
@@ -197,8 +192,22 @@ class PostsController extends Controller
             ->with( 'terms_array', $terms_array )
             ->with( 'post_terms', $post_terms )
             ->with( 'is_new', false )
+            ->with( 'tab', $object->getType() )
             ->withObject($object);
     }
+
+ 
+    public function view($id)
+    {   
+        if (!$object = Posts::findFirstById($id)) {
+            return redirect()->to( url("admin/posts"))->withError("Object  not found");
+        }
+ 
+ 
+        return view('posts.view')
+            ->withObject($object);
+    }
+
 
     /**
      * To update a record based on the requested ID
@@ -215,6 +224,8 @@ class PostsController extends Controller
             
             $inputs = request()->get();
 
+
+
             $validator = new PostsValidator;
             $validation = $validator->validate($inputs);
 
@@ -224,6 +235,8 @@ class PostsController extends Controller
                 return redirect()->to(url('admin/posts/'. $id. '/edit'))
                     ->withError(PostsValidator::toHtml($validation));
             }
+
+
 
             if (!$object = Posts::findFirstById($id)) {
                 return redirect()->to( url("admin/posts"))->withError("Object  not found");

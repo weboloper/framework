@@ -30,7 +30,7 @@ class TermsController extends Controller
         }
 
         $this->taxonomy =  $taxonomy ;
-        $this->view->tab =  $this->taxonomy;
+        $this->view->tab =  $taxonomy;
         $this->objectType = Terms::TERM_TYPES[  $this->taxonomy ];
     }
     /**
@@ -77,6 +77,7 @@ class TermsController extends Controller
         return view('terms.edit')
             ->with('form', new TermsForm($object) )
             ->with('objects', $objects )
+            ->with('tab', $object->taxonomy )
             ->with('objectType', $this->objectType );
  
     }

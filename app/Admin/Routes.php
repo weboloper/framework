@@ -29,7 +29,6 @@ Route::add('/admin/filemanager', [
 
 
 Route::mount(new App\Admin\Routes\PostsRoutes);
-Route::mount(new App\Admin\Routes\PagesRoutes);
 Route::mount(new App\Admin\Routes\UsersRoutes);
 Route::mount(new App\Admin\Routes\TermsRoutes);
 // Route::mount(new App\Admin\Routes\RolesRoutes);

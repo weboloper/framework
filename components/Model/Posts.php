@@ -312,7 +312,8 @@ class Posts extends Model
  
         if ($this->fileSystem->checkFileExists( 'resources/uploads/'. $key )) {
 
-            $key = date('Y/m/') .uniqid().  $filename ;
+            $filename =  uniqid().  $filename ;
+            $key = date('Y/m/').  $filename ;
             $serverPath = resources_path( 'uploads/'. $key);
         }
 
@@ -323,7 +324,6 @@ class Posts extends Model
         }
 
        
-
         $meta['type'] = $fileExt;
         if ($mediaType->imageCheck($fileExt)) {
             $meta['type'] = self::IMAGE_TYPE;

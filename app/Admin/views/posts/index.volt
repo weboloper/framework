@@ -15,6 +15,7 @@
                 <th>ID</th>
                 {% if objectType['slug'] == 'attachment' %}<th>File</th>{% endif %}
                 <th>Title</th>
+                <th>Slug</th>
                 {% if objectType['slug'] == 'attachment' %}<th>Type</th>{% endif %}
                 <th>User</th>
                 <th>Status</th>
@@ -38,6 +39,7 @@
                             <p><a href="{{object.guid}}" target="_blank" class="text-primary">{{object.slug}}</a></p>
                         {% endif %}
                     </td>
+                    <td>{{object.slug}}</td>
                     {% if objectType['slug'] == 'attachment' %}
                     <td>{{ object.mime_type }}</td>
                     {% endif %}
