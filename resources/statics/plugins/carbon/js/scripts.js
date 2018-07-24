@@ -66,7 +66,6 @@ $(document).on('click', '.delete-btn', function (e) {
 /// meta attributes
 $(document).on('click', '.delete-meta-btn', function (e) {
     e.preventDefault();
-    console.log(  $(this).data('object-id') );
     var row =  $(this).closest('tr');
     $.ajax({
         type: "POST",
@@ -79,33 +78,31 @@ $(document).on('click', '.delete-meta-btn', function (e) {
         },
         XMLHttpRequest:  true,
         success: function (data) {
-            row.addClass('table-danger');
-            setTimeout(function(){  row.remove() ; }, 500);
+            console.log(data);
+            // row.addClass('table-danger');
+            // setTimeout(function(){  row.remove() ; }, 500);
             
         },
         error: function( xhr, status ) {
             console.log(xhr);
-        },
-        complete: function( xhr, status ) {
-           console.log(xhr);
-        }
+        } 
     });
 });
 
-$(document).on('submit', '#object-meta-form', function (e) {
+$(document).on('submit', '.object-meta-form', function (e) {
     e.preventDefault();
-    console.log($(this).serialize());
+    var formData = $(this).serialize() ;
     $.ajax({
         type: "POST",
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        dataType: 'html',
+        url: "/admin/posts/add_meta",
+        data: formData,
+        dataType: 'json',
         // async: false,
         XMLHttpRequest:  true,
-        success: function (html) {
+        success: function (json) {
 
-            // console.log(html);
-            $('#object-meta-table').append(html);
+            console.log(json);
+            // $('#object-meta-table').append(html);
          }
     });
 });
@@ -207,5 +204,82 @@ $(document).on('submit', '#object-meta-form', function (e) {
 
     
 
+$(document).on('change', '.uploader-wrapper .uploader-input', function (e) {
+
+        var previewer = $(this).parent().find('.uploader-preview');
+        var objectId  = $(this).parent().find('.uploader-object-id').val();
+
+        if(e.target.files[0].size > 2000000){
+           swal({
+              icon:  'error',
+              text: 'File is too big! Max File size: 2MB' ,
+              timer: 1300,
+              buttons: false,
+            });
+
+           return;
+        };
+
+        // var fileType = e.target.files[0]["type"];
+        // var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+        // if ($.inArray(fileType, ValidImageTypes) < 0) {
+        //      // invalid file type code goes here.
+        //      swal({
+        //       icon:  'error',
+        //       text: 'File must be image!' ,
+        //       timer: 1300,
+        //       buttons: false,
+        //     });
+
+        //    return;
+        // }
+
+        var myformData = new FormData();        
+        myformData.append('file',  e.target.files[0]  );
+
+        $.ajax({
+                  url: "/media/upload?accept=image",
+                  type: "POST",
+                  data: myformData,
+                  processData: false,
+                  contentType: false,
+                  cache: false,
+                  enctype: 'multipart/form-data',
+                  // async: false,
+                  success: function (json) {
+                       // json = JSON.parse(data);
+
+                
+                      if (!json || typeof json.key != 'string') {
+                          // failure('Invalid JSON: ' + data);
+                          console.log('Invalid JSON: ' + json);
+                          return;
+                      }
+
+                      $(previewer).html('<img class="img-thumbnail" src="'+ json.key +'"/>');
+
+                      $.ajax({
+                            type: "POST",
+                            url: "/admin/posts/add_meta",
+                            data: { meta_key : 'thumbnail' , meta_value : json.key , objectId : objectId , objectType : 'post' }  ,
+                            // async: false,
+                            XMLHttpRequest:  true,
+                            success: function (json) {
+                                console.log('done!')
+                            }
+                        });
+
+ 
+                  },
+                  error: function (data) {
+                      console.log(data);
+                      return data;
+                  }
+
+              });
+      
+          } );
+
+ 
 
 } );

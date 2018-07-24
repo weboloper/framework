@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 use Components\Model\Model;
 use Components\Model\Posts;
 use Components\Model\Terms;
+use Components\Model\Services\Service\Meta as metaService;
 use Phalcon\Mvc\View;
 
 
@@ -18,6 +19,8 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 
 use claviska\SimpleImage;
+
+use \Exception;
 
 class PostsController extends Controller
 {   
@@ -39,6 +42,7 @@ class PostsController extends Controller
         $this->view->tab = $type;        
         $this->type = $type;
         $this->objectType = Posts::POST_TYPES[$type];
+        $this->metaService = new metaService;
         
 
     }
@@ -257,14 +261,15 @@ class PostsController extends Controller
 
             // $object->setGuid(  url()->get((  $slug ))   );
 
-            if ( request()->getPost('savePost')) {
-                $object->setStatus( $inputs['status'] );
-             }else {
+            if ( request()->getPost('publish')) {
                 if( !$inputs['title'] ) {
                     return redirect()->to(url('admin/posts/'. $id. '/edit'))
                     ->withError('Post must have a title' );
                 }
-                $object->setStatus( Posts::STATUS_PUBLISH );
+                $object->setStatus(  Posts::STATUS_PUBLISH  );
+             }else {
+                
+                $object->setStatus( $inputs['status'] );
             }
 
             $terms_array = [];
@@ -366,5 +371,116 @@ class PostsController extends Controller
 
         }
     }
+
+
+
+    public function add_meta()
+    {   
+        if (request()->isPost()  && request()->isAjax()) {
+            
+            $this->setJsonResponse();
+
+            $objectId = request()->getPost('objectId', ['striptags', 'trim' , 'int'] );
+            $metaId = request()->getPost('metaId', ['striptags', 'trim' , 'int'] );
+            $objectType = request()->getPost('meta_key', ['striptags', 'trim' , 'alphanum'] );
+            $metaKey = request()->getPost('meta_key', ['striptags', 'trim' , 'alphanum'] );
+            $metaValue  = request()->getPost('meta_value', ['striptags', 'trim' , 'string']  );
+
+            if( !$metaKey || !$metaValue || !$objectId || !$objectType ){
+                    $this->jsonMessages['messages'][] = [
+                            'type'    => 'warning',
+                            'content' => 'Meta key and value required'
+                        ];
+                    return $this->jsonMessages;
+            }
+
+
+            if($metaKey == 'thumbnail'){
+
+                if (filter_var( $metaValue , FILTER_VALIDATE_URL) === FALSE) {
+                    $this->jsonMessages['messages'][] = [
+                        'type'    => 'warning',
+                        'content' => 'File not allowed'
+                    ];
+                    return $this->jsonMessages;
+                }
+
+                if($old_thumbnails = $this->has_meta($objectId , 'thumbnail'))
+                {
+                    foreach ( $old_thumbnails as $meta) {
+                        $meta->delete();
+                    }
+
+                }
+            }
+
+            if (!$object = Posts::findFirstById($objectId)) {
+                $this->jsonMessages['messages'][] = [
+                    'type'    => 'warning',
+                    'content' => 'Entity not found'
+                ];
+                return $this->jsonMessages;
+            }
+
+
+            try{
+                if($metaId) {
+                    $meta = $this->metaService->update_meta($metaId , $metaValue);
+                }else {
+                    $meta = $this->metaService->add_meta($objectId , $objectType ,  $metaKey, $metaValue);
+                }
+                
+                $this->response->setStatusCode(200,  "Success" );
+                $this->response->setJsonContent( $meta );
+                return $this->response->send();
+
+            }catch ( Exception $e) {
+                $this->response->setStatusCode(406 ,  $e );
+                $this->jsonMessages['messages'][] = [
+                    'type'    => 'warning',
+                    'content' =>  $e 
+                ];
+                return $this->jsonMessages;
+            }
+ 
+        }
+
+    }
+
+
+    /**
+     * To delete a record
+     *
+     * @param $id The id to be deleted
+     *
+     * @return void
+     */
+    public function delete_meta()
+    {
+        # process the request which it must be post and ajax request
+        if (request()->isPost()  && request()->isAjax()) {
+            
+            $metaId   = request()->getPost('object-id', 'int');
+            $object   = request()->getPost('object', 'alphanum');
+            
+            $this->setJsonResponse();
+
+            try {
+                $status = $this->metaService->delete_meta($metaId);
+                $this->response->setStatusCode(200,  "Success" );
+                $this->response->setJsonContent( $status );
+                return $this->response->send();
+            }catch ( Exception $e) {
+                $this->response->setStatusCode(406 ,  $e );
+                $this->jsonMessages['messages'][] = [
+                    'type'    => 'warning',
+                    'content' =>  $e 
+                ];
+                return $this->jsonMessages;
+            }             
+
+        }
+    }
+
 
 }

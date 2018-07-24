@@ -42,36 +42,41 @@
  
 		 </div>
 
+
 		 <div class="col-sm-4">
 		 	<div class="card bg-light">
 		 		<div class="card-body">
-				 	<div class="d-flex justify-content-between">
-					 	
-					 	<button class="btn btn-success" style="width:100%">PUBLISH</button>
-					 </div>
-
-				 	<hr>
-				 	<div class="form-group d-flex flex-row">
+				 
+				 	
+				 	  <div class="form-group d-flex flex-row">
  			            {{ form.render('status', ['class': 'form-control']) }}
-                   <button class="btn btn-secondary ml-1"  name="savePost" value="1">SAVE</button>
-			     </div>
+ 			       </div>
 
-          
+                <p> <small> Created At: {{ object.created_at }} </small></br>
+                  <small> Updated At: {{ object.updated_at }} </small></p>
+                </hr>
+  		 
+        
+                <div class="text-right">
+                <button class="btn btn-secondary mr-1" value="1">SAVE</button>
+                <button class="btn btn-primary float-right" name="publish">PUBLISH</button>
+               </div>
 
-				 	<ul class="list-group mt-4">
-		                <li class="list-group-item list-group-item-light">
-		                    <i class="fas fa-calendar"></i> Created At:
-		                    {{ object.created_at }}
-		                </li>
-		                <li class="list-group-item list-group-item-light">
-		                    <i class="fas fa-calendar"></i> Updated At
-		                    {{ object.updated_at }}
-		                </li>
-		         
-		            </ul>
 	        	</div>
-        	</div> 
-  
+        	</div>
+
+          <div class="uploader-wrapper mb-2">
+            <button class="btn">Select thumbnail</button>
+            <input type="file" name="thumbnail" class="uploader-input" accept="image/png, image/jpeg"/>
+            <input type="hidden" name="objectId"  class="uploader-object-id" value="{{object.getId()}}"  />
+            
+            <div class="uploader-preview thumbnail" >
+              {% if object.get_meta('thumbnail') %}
+                <img src="{{ object.get_meta('thumbnail')}}" class="img-thumbnail">
+              {% endif %}
+            </div>
+          </div>
+            
   			{% for term in objectType['terms'] %}
   				{% if termTypes[term]['hierachical']  %}
   					<div class="card">

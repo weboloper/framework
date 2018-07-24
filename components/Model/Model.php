@@ -81,6 +81,7 @@ class Model extends BaseModel
             $meta =  $this->getMeta(
                 [
                     "meta_key = :meta_key:",
+                    "order" => "meta_id DESC",
                     "bind" => [
                         "meta_key" => $meta_key
                     ]

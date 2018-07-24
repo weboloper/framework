@@ -41,9 +41,10 @@ class Posts extends Model
         'name' => 'Posts',
         'slug'  => 'post',
         'terms' => [ 'tag' , 'category', 'format'],
-        'metas' => [ 'seotitle'  => 'seo title'  , 'seodesc' => 'seo description' , 'thumbnail' => 'thumbnail'],
+        'metas' => [ 'seotitle'  => 'seo title'  , 'seodesc' => 'seo description' ],
         'inputs' => ['title', 'slug' , 'body' , 'excerpt'],
         'icon' => "paper-plane",
+        'thumbnail' => true
     ];
 
     const TYPE_PAGE = [
@@ -53,6 +54,7 @@ class Posts extends Model
         'metas' => [ 'seo_title'  => 'seo_title'  , 'seo_desc' => 'seo_desc'],
         'inputs' => ['title', 'slug' , 'body' , 'excerpt'],
         'icon' => "newspaper",
+        'thumbnail' => false
     ];
 
     const TYPE_ATTACHMENT = [
@@ -62,6 +64,7 @@ class Posts extends Model
         'metas' => [],
         'inputs' => ['title'],
         'icon' => "image",
+        'thumbnail' => false
     ];
 
     #register post types
@@ -75,7 +78,6 @@ class Posts extends Model
     const STATUS_PRIVATE    = 'private';
     const STATUS_PUBLISH    = 'publish';
     const STATUS_PENDING    = 'pending';
-    const STATUS_FUTURE     = 'future';
     const STATUS_TRASH      = 'trash';
     const STATUS_DRAFT      = 'draft';
 
@@ -83,7 +85,6 @@ class Posts extends Model
         self::STATUS_DRAFT      => self::STATUS_DRAFT,
         self::STATUS_PUBLISH    => self::STATUS_PUBLISH,
         self::STATUS_PENDING    => self::STATUS_PENDING,
-        self::STATUS_FUTURE     => self::STATUS_FUTURE,
         self::STATUS_TRASH      => self::STATUS_TRASH,
         self::STATUS_PRIVATE    => self::STATUS_PRIVATE,
     ];

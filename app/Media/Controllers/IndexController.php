@@ -5,6 +5,7 @@ namespace App\Media\Controllers;
 // use FroalaEditor\FroalaEditor_Image;
 use Components\Model\Posts;
 use Components\Model\Model;
+use Components\Library\Media\MediaType;
 
 
 use League\Fractal\Manager;
@@ -23,6 +24,7 @@ class IndexController extends Controller
             $this->setJsonResponse();
 
             $title   = request()->getPost('title', 'string');
+            $acceptonly   = request()->getQuery('accept', 'string');
 
             $media   = new Posts();
             $uploads =  $this->request->getUploadedFiles();
@@ -35,6 +37,23 @@ class IndexController extends Controller
                 
                 // $location = $media->initFile($fileObj);
 
+                if($acceptonly == 'image') {
+                    $fileExt     = $fileObj->getRealType();
+                    $imageType   = new MediaType();
+                    if (!$imageType->imageCheck($fileExt)) {
+                            $this->response->setStatusCode(406,  "Success" );
+                            $this->jsonMessages['messages'][] = [
+                                'type'    => 'warning',
+                                'content' =>  "Can't upload because file type's not allowed : ". $fileExt 
+                            ];
+                            return $this->jsonMessages;
+
+
+                    }
+
+                }
+                
+ 
                 if(!$status = $media->initFile($fileObj, $title)){
                     $uploaded = false;
                 }

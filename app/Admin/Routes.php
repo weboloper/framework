@@ -10,7 +10,7 @@ Route::addPost('/admin/posts/delete_meta', [
     'action' => 'delete_meta',
 ]);
 
-Route::addPost('/admin/posts/{id}/add_meta', [
+Route::add('/admin/posts/add_meta', [
     'controller' => 'Posts',
     'action' => 'add_meta',
 ]);
