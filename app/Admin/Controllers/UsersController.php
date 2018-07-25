@@ -170,6 +170,8 @@ class UsersController extends Controller
                 }
             } else {
 
+                $roles_array = ($roles_array) ? $roles_array : [] ;
+
                 $this->userService->saveRolesInUsers($roles_array, $object);
 
                 return redirect()->to(url('admin/users/'. $id. '/edit'))

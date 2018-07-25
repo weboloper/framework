@@ -14,6 +14,7 @@ $(document).ajaxComplete(function (event, xhr, settings) {
               text: xhr.responseJSON.messages[key].content ,
               timer: 1300,
               buttons: false,
+              animation: false
             });
  
         }

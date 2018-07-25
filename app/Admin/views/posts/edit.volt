@@ -7,7 +7,7 @@
 {% block content %}
  
     {{ form( 'admin/' ~   controller | lower ~  '/' ~  object.id  ~ '/update', 'class' : 'form-horizontal ') }}
-    <div class="row mb-5">
+    <div class="row">
 	    <div class="col-sm-8">
 	   
         <div class="form-group">
@@ -18,7 +18,7 @@
         {% if in_array('slug',  objectType['inputs']) %}
         <div class="form-group">
           <strong>Slug</strong>
-           {{ form.render('slug', ['class': 'form-control slug-out' , 'autocomplete' : 'off' , 'disabled' : 'disabled']) }}
+           {{ form.render('slug', ['class': 'form-control slug-out' , 'autocomplete' : 'off'  ]) }}
            <span class="help">Alphanumeric characters and "-" only</span>
         </div>
         {% endif %}
@@ -44,7 +44,7 @@
 
 
 		 <div class="col-sm-4">
-		 	<div class="card bg-light">
+		 	<div class="card bg-light mb-2">
 		 		<div class="card-body">
 				 
 				 	
@@ -59,27 +59,30 @@
         
                 <div class="text-right">
                 <button class="btn btn-secondary mr-1" value="1">SAVE</button>
-                <button class="btn btn-primary float-right" name="publish">PUBLISH</button>
+                <button class="btn btn-primary float-right" name="publish" value="publish">PUBLISH</button>
                </div>
 
 	        	</div>
         	</div>
-
-          <div class="uploader-wrapper mb-2">
-            <button class="btn">Select thumbnail</button>
-            <input type="file" name="thumbnail" class="uploader-input" accept="image/png, image/jpeg"/>
-            <input type="hidden" name="objectId"  class="uploader-object-id" value="{{object.getId()}}"  />
-            
-            <div class="uploader-preview thumbnail" >
-              {% if object.get_meta('thumbnail') %}
-                <img src="{{ object.get_meta('thumbnail')}}" class="img-thumbnail">
-              {% endif %}
+        <div class="card bg-light mb-2">
+            <div class="card-body">
+                <div class="uploader-wrapper mb-2">
+                  <button class="btn">Select thumbnail</button>
+                  <input type="file" name="thumbnail" class="uploader-input" accept="image/png, image/jpeg"/>
+                  <input type="hidden" name="objectId"  class="uploader-object-id" value="{{object.getId()}}"  />
+                  
+                  <div class="uploader-preview thumbnail mt-1" >
+                    {% if object.get_meta('thumbnail') %}
+                      <img src="{{ object.get_meta('thumbnail')}}" class="img-thumbnail">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
             
   			{% for term in objectType['terms'] %}
   				{% if termTypes[term]['hierachical']  %}
-  					<div class="card">
+  					<div class="card mb-2">
 						<div class="card-header bg-light">{{ termTypes[term]['name']}}</div>
     						<div class="card-body">
   								{% include "partials/term_tree"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}

@@ -9,6 +9,7 @@
 	<a href="/admin/{{ controller |lower }}/new?type={{ objectType['slug'] }}" class="float-right btn btn-primary">Add New</a>
     <h3>All {{ objectType['name'] }}</h3>
     <a href="{{ url('admin/' ~ controller |lower  ~ "?type=" ~ objectType['slug'])}}">All</a> | 
+    <a href="{{ url('admin/' ~ controller |lower  ~ "?type=" ~ objectType['slug'] ~ "&status=draft")}}">Draft</a> | 
     <a href="{{ url('admin/' ~ controller |lower  ~ "?type=" ~ objectType['slug'] ~ "&status=trash")}}">Trash</a>
     <hr>
 	<table id="posts" class="table table-striped table-bordered dashboard-table">
@@ -36,7 +37,7 @@
                     <td>{{ get_file_icon( object)}}</td>
                     {% endif %}
                     <td>
-                        {{ object.title | trim   ? object.title : '<i class="text-success ">auto draft</i>'}}
+                        {{ object.title | trim   ? object.title : '...'}}
                         {% if objectType['slug'] == 'attachment' %}
                             <p><a href="{{object.guid}}" target="_blank" class="text-primary">{{object.slug}}</a></p>
                         {% endif %}
@@ -49,7 +50,11 @@
         	 		<td>{{ object.status }}</td>
                     <td>{{ object.created_at }}</td>
                     <td><a href="/admin/{{ controller |lower }}/{{ object.id }}/edit?type={{ objectType['slug'] }}" class="text-success"><i class="fas fa-edit"></i></a></td>
-        	 		<td><a href="/admin/{{ controller |lower }}/{{ object.id }}/delete"  class="text-danger delete-btn"  data-id="{{ object.id }}"><i class="fas fa-trash"></i></a></td>
+        	 		<td>
+                        {% if object.status != "trash" %}
+                        <a href="/admin/{{ controller |lower }}/{{ object.id }}/delete"  class="text-danger delete-btn"  data-id="{{ object.id }}"><i class="fas fa-trash"></i></a>
+                        {% endif %}
+                    </td>
             	</tr>
         	{% endfor %}
 

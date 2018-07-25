@@ -98,7 +98,7 @@ class PostsController extends Controller
             $itemBuilder->andWhere($statusConditions);
         }else {
 
-            $statusConditions = 'p.status != "trash" ';
+            $statusConditions = ' p.status   !IN("draft", "trash")  ';
             $itemBuilder->andWhere($statusConditions);
         }
 
@@ -257,7 +257,7 @@ class PostsController extends Controller
                 ]
             );
 
-            $this->getUniqueSlug($object , $inputs['title']);
+            $this->getUniqueSlug($object , $inputs['slug']);
 
             // $object->setGuid(  url()->get((  $slug ))   );
 
@@ -385,7 +385,23 @@ class PostsController extends Controller
             $objectType = request()->getPost('meta_key', ['striptags', 'trim' , 'alphanum'] );
             $metaKey = request()->getPost('meta_key', ['striptags', 'trim' , 'alphanum'] );
             $metaValue  = request()->getPost('meta_value', ['striptags', 'trim' , 'string']  );
+            $btn_clicked  = request()->getPost('btn_clicked', ['striptags', 'trim' , 'string']  );
 
+
+            if($btn_clicked =='delete' && $metaKey &&  $objectId )
+            {
+                if($oldmetas = $this->metaService->has_meta($objectId , $metaKey ))
+                {
+                    foreach ( $oldmetas as $meta) {
+                        $meta->delete();
+                    }
+
+                }
+                $this->response->setStatusCode(200,  "Success" );
+                $this->response->setJsonContent('table-danger');
+                return $this->response->send();
+
+            }
             if( !$metaKey || !$metaValue || !$objectId || !$objectType ){
                     $this->jsonMessages['messages'][] = [
                             'type'    => 'warning',
@@ -404,14 +420,7 @@ class PostsController extends Controller
                     ];
                     return $this->jsonMessages;
                 }
-
-                if($old_thumbnails = $this->has_meta($objectId , 'thumbnail'))
-                {
-                    foreach ( $old_thumbnails as $meta) {
-                        $meta->delete();
-                    }
-
-                }
+       
             }
 
             if (!$object = Posts::findFirstById($objectId)) {
@@ -422,16 +431,26 @@ class PostsController extends Controller
                 return $this->jsonMessages;
             }
 
-
+             
             try{
-                if($metaId) {
-                    $meta = $this->metaService->update_meta($metaId , $metaValue);
-                }else {
-                    $meta = $this->metaService->add_meta($objectId , $objectType ,  $metaKey, $metaValue);
+                // if($metaId) {
+                //     $meta = $this->metaService->update_meta($metaId , $metaValue);
+                // }else {
+                //     $meta = $this->metaService->add_meta($objectId , $objectType ,  $metaKey, $metaValue);
+                // }
+
+                if($oldmetas = $this->metaService->has_meta($objectId , $metaKey ))
+                {
+                    foreach ( $oldmetas as $meta) {
+                        $meta->delete();
+                    }
+
                 }
+                $meta = $this->metaService->add_meta($objectId , $objectType ,  $metaKey, $metaValue);
                 
                 $this->response->setStatusCode(200,  "Success" );
-                $this->response->setJsonContent( $meta );
+                // $this->response->setJsonContent( $meta );
+                $this->response->setJsonContent('table-success');
                 return $this->response->send();
 
             }catch ( Exception $e) {

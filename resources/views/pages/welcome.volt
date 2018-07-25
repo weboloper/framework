@@ -29,6 +29,10 @@
                     <a href="https://phalconslayer.readme.io/" class="btn btn-secondary my-5" target="_blank">Docs</a>
                     
                     <p class="mt-5"><a href="#codes">Useful codes</a></p>
+
+                    <h3>to do</h3>
+                    admin publish/save
+                    
              
                 </div>
             </div>
@@ -83,6 +87,13 @@
                         <td>getImageSrc</td>
                         <td>excerpt long text, can be user as (text, lentgh, true|false) <br> default true: not cut text in half</td>
                         <td>{{ getImageSrc() }}</br></td>
+                    </tr>
+
+
+                    <tr>
+                        <td>object.get_meta('meta_key',true|false)</td>
+                        <td>get object meta  (meta_key, true|false) <br> default true: returns string, false: retuns array</td>
+                        <td>object.get_meta('meta_key',true|false)</br></td>
                     </tr>
 
                 </tbody>

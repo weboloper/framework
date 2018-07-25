@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-2">
 	<div class="card-header bg-light">{{ term['name']}}</div>
     <div class="card-body">
      	{% set classes = (term['tagging']) ?  'tagging-true' : 'tagging-false'  %}

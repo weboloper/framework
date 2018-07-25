@@ -5,12 +5,12 @@ Route::addGet('/admin', [
     'action' => 'home',
 ]);
  
-Route::addPost('/admin/posts/delete_meta', [
+Route::add('/admin/posts/delete_meta', [
     'controller' => 'Posts',
     'action' => 'delete_meta',
 ]);
 
-Route::add('/admin/posts/add_meta', [
+Route::addPost('/admin/posts/add_meta', [
     'controller' => 'Posts',
     'action' => 'add_meta',
 ]);

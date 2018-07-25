@@ -41,7 +41,7 @@ class Posts extends Model
         'name' => 'Posts',
         'slug'  => 'post',
         'terms' => [ 'tag' , 'category', 'format'],
-        'metas' => [ 'seotitle'  => 'seo title'  , 'seodesc' => 'seo description' ],
+        'metas' => [ 'seotitle'  => 'Seo title'  , 'Seodesc' => 'seo description' ],
         'inputs' => ['title', 'slug' , 'body' , 'excerpt'],
         'icon' => "paper-plane",
         'thumbnail' => true

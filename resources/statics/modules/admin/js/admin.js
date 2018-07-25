@@ -1,20 +1,31 @@
-// $(document).on('submit', '#form-grid', function (e) {
-//     e.preventDefault();
-//     $.ajax({
-//         type: "POST",
-//         url: baseUri + controller + '/' + 'grid',
-//         data: $(this).serialize() + '&filter=1',
-//         dataType: 'html',
-//         // async: false,
-//         XMLHttpRequest:  true,
-//         success: function (html) {
+$(document).ready(function () {
+    /**
+     * Sidebar Dropdown
+     */
+    $('.nav-dropdown-toggle').on('click', function (e) {
+        e.preventDefault();
+        $(this).parent().toggleClass('open');
+    });
 
-//             // console.log(html);
-//             $('#grid').replaceWith(html);
-//             $(".chosen-select").length && $(".chosen-select").chosen({disable_search_threshold: 10});
-//         }
-//     });
-// });
+    // open sub-menu when an item is active.
+    $('ul.nav').find('a.active').parent().parent().parent().addClass('open');
+
+    /**
+     * Sidebar Toggle
+     */
+    $('.sidebar-toggle').on('click', function (e) {
+        e.preventDefault();
+        $('body').toggleClass('sidebar-hidden');
+    });
+
+    /**
+     * Mobile Sidebar Toggle
+     */
+    $('.sidebar-mobile-toggle').on('click', function () {
+        $('body').toggleClass('sidebar-mobile-show');
+    });
+});
+
 
 $(document).on('click', '.delete-btn', function (e) {
     e.preventDefault();
@@ -26,6 +37,7 @@ $(document).on('click', '.delete-btn', function (e) {
       icon: "warning",
       buttons: true,
       dangerMode: true,
+      animation: false
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -89,9 +101,7 @@ $(document).on('click', '.delete-meta-btn', function (e) {
     });
 });
 
-$(document).on('submit', '.object-meta-form', function (e) {
-    e.preventDefault();
-    var formData = $(this).serialize() ;
+function add_meta(formData, row , textArea ){
     $.ajax({
         type: "POST",
         url: "/admin/posts/add_meta",
@@ -100,9 +110,57 @@ $(document).on('submit', '.object-meta-form', function (e) {
         // async: false,
         XMLHttpRequest:  true,
         success: function (json) {
+            // json returns class
+            // console.log(json);
+            // $('#object-meta-table').append(html);
 
+            if(json == 'table-danger')
+            {
+              textArea.val('');
+            }
+            row.addClass( json );
+            setTimeout(function() {
+                row.removeClass( json );
+            }, 600);
+         }
+    });
+}
+$(document).on('click', '.add_meta_btn', function (e) {
+    e.preventDefault();
+    var btn = $(this).val();
+    var formId = $(this).attr('form');
+    var row = $(this).parents('tr:first');
+    var textArea = $(row).find('textarea');
+    var form =  $('#' + formId);
+    var formData = $(form).serialize() + "&btn_clicked=" + btn;
+    add_meta(formData, row , textArea );
+});
+
+
+
+var buttonpressed;
+$('input[type=submit]').click(function() {
+    buttonpressed = $(this).val();
+});
+$(document).on('submit', '.object-meta-form-deprecated', function (e) {
+    e.preventDefault();
+    var row =  $(this).find('tr');
+    var formData = $(this).serialize() +"&buttonpressed="+ buttonpressed;
+    $.ajax({
+        type: "POST",
+        url: "/admin/posts/add_meta",
+        data: formData,
+        dataType: 'json',
+        // async: false,
+        XMLHttpRequest:  true,
+        success: function (json) {
+            // json returns class
             console.log(json);
             // $('#object-meta-table').append(html);
+            row.addClass( "table-success" );
+            setTimeout(function() {
+                row.removeClass( json );
+            }, 1100);
          }
     });
 });
@@ -125,8 +183,9 @@ $(document).on('submit', '.object-meta-form', function (e) {
     // DataTable
     var table = $('.dashboard-table ').DataTable( {
         colReorder: true,
-        "bLengthChange": false ,
-        "order": [[ 0, "desc" ]]
+        // "bLengthChange": false ,
+        "searching": false ,
+        "order": [[ 0, "desc" ]],
     } );
     $( table.table().container() )
     .removeClass( 'container-fluid' );
@@ -163,26 +222,7 @@ $(document).on('submit', '.object-meta-form', function (e) {
 
     });
 
-
-    function string_to_slug(str) {
-      str = str.replace(/^\s+|\s+$/g, ""); // trim
-      str = str.toLowerCase();
-
-      // remove accents, swap ñ for n, etc
-      var from = "çöışüğ";
-      var to = "coisug";
-
-      for (var i = 0, l = from.length; i < l; i++) {
-        str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
-      }
-
-      str = str
-        .replace(/[^a-z0-9 -]/g, "-") // remove invalid chars
-        .replace(/\s+/g, "-") // collapse whitespace and replace by -
-        .replace(/-+/g, "-"); // collapse dashes
-
-      return str;
-    }
+ 
 
     $('input.slug-in').keyup(function () {
         // Get the user input from "this" and put it in str variable
@@ -191,7 +231,7 @@ $(document).on('submit', '.object-meta-form', function (e) {
         str = string_to_slug(str);
 
         // Remove all non alpha-nums from str and store it back in the str variable
-        str = str.replace(/[^a-zA-Z0-9]+/g, '-');
+        // str = str.replace(/[^a-zA-Z0-9]+/g, '-');
         // Get the user input from "this" (yes, again) and put it in the txtClone variable
         var txtClone = $(this).val();
         // Set your other textbox to be the value in txtClone
@@ -220,19 +260,19 @@ $(document).on('change', '.uploader-wrapper .uploader-input', function (e) {
            return;
         };
 
-        // var fileType = e.target.files[0]["type"];
-        // var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
-        // if ($.inArray(fileType, ValidImageTypes) < 0) {
-        //      // invalid file type code goes here.
-        //      swal({
-        //       icon:  'error',
-        //       text: 'File must be image!' ,
-        //       timer: 1300,
-        //       buttons: false,
-        //     });
+        var fileType = e.target.files[0]["type"];
+        var ValidImageTypes = ["image/gif", "image/jpeg", "image/png"];
+        if ($.inArray(fileType, ValidImageTypes) < 0) {
+             // invalid file type code goes here.
+             swal({
+              icon:  'error',
+              text: 'File must be image!' ,
+              timer: 1300,
+              buttons: false,
+            });
 
-        //    return;
-        // }
+           return;
+        }
 
         var myformData = new FormData();        
         myformData.append('file',  e.target.files[0]  );
