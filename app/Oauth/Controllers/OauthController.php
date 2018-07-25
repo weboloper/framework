@@ -122,17 +122,17 @@ class OauthController extends Controller
                 );
             }
 
-            // queue(
-            //     // 'Components\Queue\Email@registeredSender',
-            //     \Components\Queue\Email::class,
-            //     [
-            //         'function' => 'registeredSender',
-            //         'template' => 'emails.registered-inlined',
-            //         'to' => $inputs['email'],
-            //         'url' => route('activateUser', ['token' => $token]),
-            //         'subject' => 'You are now registered, activation is required.',
-            //     ]
-            // );
+            queue(
+                // 'Components\Queue\Email@registeredSender',
+                \Components\Queue\Email::class,
+                [
+                    'function' => 'registeredSender',
+                    'template' => 'emails.registered-inlined',
+                    'to' => $inputs['email'],
+                    'url' => route('activateUser', ['token' => $token]),
+                    'subject' => 'You are now registered, activation is required.',
+                ]
+            );
 
             $connection->commit();
 
