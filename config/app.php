@@ -288,7 +288,6 @@ return [
         # register your providers below.
         App\Oauth\Providers\RouterServiceProvider::class,
         App\Main\Providers\RouterServiceProvider::class,
-        // App\Blog\Providers\RouterServiceProvider::class,
         App\Admin\Providers\RouterServiceProvider::class,
         App\Media\Providers\RouterServiceProvider::class,
 

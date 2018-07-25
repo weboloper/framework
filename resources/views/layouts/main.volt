@@ -29,10 +29,12 @@
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-
+        {{ javascript_include('resources/statics/js/app.ajax.js') }}
+        
         <!-- Plugins -->
         {{ javascript_include("resources/statics/plugins/bootstrap/dist/js/bootstrap.min.js")}}
         {{ javascript_include('https://unpkg.com/sweetalert/dist/sweetalert.min.js') }}
+        
 
 
         {% block footer %}{% endblock %}
