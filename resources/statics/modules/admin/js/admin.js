@@ -111,16 +111,22 @@ function add_meta(formData, row , textArea ){
         XMLHttpRequest:  true,
         success: function (json) {
             // json returns class
-            // console.log(json);
+            console.log(json);
             // $('#object-meta-table').append(html);
-
-            if(json == 'table-danger')
-            {
+            if (!json || typeof json.meta_id != 'string') {
+ 
               textArea.val('');
+              row.addClass( 'table-danger' );
+              setTimeout(function() {
+                  row.removeClass( 'table-danger'  );
+              }, 600);
+              return;
             }
-            row.addClass( json );
+
+            
+            row.addClass( 'table-success' );
             setTimeout(function() {
-                row.removeClass( json );
+                row.removeClass( 'table-success'  );
             }, 600);
          }
     });
@@ -184,7 +190,7 @@ $(document).on('submit', '.object-meta-form-deprecated', function (e) {
     var table = $('.dashboard-table ').DataTable( {
         colReorder: true,
         // "bLengthChange": false ,
-        "searching": false ,
+        // "searching": false ,
         "order": [[ 0, "desc" ]],
     } );
     $( table.table().container() )
@@ -205,18 +211,18 @@ $(document).on('submit', '.object-meta-form-deprecated', function (e) {
     });
 
     $('input[type=checkbox]').click(function(){
-
+      console.log('did');
         // if is checked
         if($(this).is(':checked')){
 
-            $(this).parents('li').each(function() {
+            $(this).parents('.form-check').each(function() {
                 $(this).children('input').prop('checked', true);
             });
 
         } else {
 
             // uncheck all children
-            $(this).parent().find('li input[type=checkbox]').prop('checked', false);
+            $(this).parent().find('.form-check input[type=checkbox]').prop('checked', false);
 
         }
 

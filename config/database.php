@@ -22,9 +22,10 @@ return [
             'dbname'   => env('DB_DATABASE', 'slayer'),
             'charset'  => env('DB_CHARSET', 'utf8'),
             'class'    => Phalcon\Db\Adapter\Pdo\Mysql::class,
-            // 'options'  => [
-            //     \PDO::ATTR_AUTOCOMMIT => 1
-            // ]
+            'options'  => [
+                \PDO::ATTR_AUTOCOMMIT => 1,
+                \PDO::ATTR_EMULATE_PREPARES => TRUE 
+            ]
             
             
         ],

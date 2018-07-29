@@ -216,8 +216,8 @@ return [
         'model'          => Components\Model\Users::class,
         'password_field' => 'password',
         'redirect_key'   => 'ref',
-        'login_redirect' => env('LOGIN_REDIRECT' , 'oauth/islogged')  ,
-        'usernames'      => env('USERNAMES' ,  true) 
+        'login_redirect' => env('AUTH_LOGIN_REDIRECT' , 'oauth/islogged')  ,
+        'usernames'      => env('AUTH_USERNAMES' ,  false) ,
     ],
 
     /*
@@ -294,6 +294,7 @@ return [
         # register your sandbox providers below.
         // Acme\Acme\AcmeServiceProvider::class,
         Components\Providers\ModelsManager::class,
+        Components\Providers\ViewCache::class,
         
     ],
 

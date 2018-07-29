@@ -9,38 +9,47 @@
     {{ form( 'admin/users/' ~  object.id  ~'/update', 'class' : 'form-horizontal') }}
     <div class="row">
 	    <div class="col-sm-8">
-	   
+	   		
+	   		
 	        <div class="form-group">
-	            <strong>Name</strong>
+            	<label>{{ lang.get('auth.login.name_label') }}</label>
 	            {{ form.render('name', ['class': 'form-control']) }}
 	        </div>
+	        
+	        <div class="form-group">
+	        	{% if config.app.auth.usernames == true %}
+            	<label>{{ lang.get('auth.login.username_label') }}</label>
+	            {{ form.render('username', ['class': 'form-control']) }}
+	            {% else %}
+	            <label>{{ lang.get('auth.login.username_label') }}</label>
+	            {{ form.render('username', ['class': 'form-control', 'disabled' : 'disabled']) }}
+	            {% endif %}
+	        </div>
+	        
 
 	        <div class="form-group">
-	            <strong>Email</strong>
-	            {{ form.render('email', ['class': 'form-control',  'disabled' : 'disabled']) }}
+            	<label>{{ lang.get('auth.login.email_label') }}</label>
+	            {{ form.render('email', ['class': 'form-control']) }}
 	        </div>
 		 	
 		 	<div class="form-group">
-	            <strong>Status</strong>
+            	<label>{{ lang.get('auth.login.status_label') }}</label>
 	            {{ form.render('status', ['class': 'form-control']) }}
 	        </div>
 
 	 		 
-            <strong>Roles</strong>
+            <label>{{ lang.get('auth.login.role_label') }}</label>
             {{ form.render('roles[]', ['class': 'select2-select form-control', 'multiple' : true , 'value' : user_roles]) }}
 
 		    {{ form.render('csrf', ['value': this.security.getToken()]) }}
 		    <p><small>Registered at: {{ object.created_at }}</small></p>
 	 		
-	 		<a href="{{ '/admin/users/' ~  object.id  ~ '/edit/password' }}" class="btn btn-secondary float-right">Change password</a>
+	 		
 
 	 		<button class="btn btn-success">UPDATE</button>
+	 		<a href="{{ '/admin/users/' ~  object.id  ~ '/edit/password' }}" class="btn btn-secondary ">Change password</a>
 	 		{{ endform() }}
-	 		<hr>
-
-	 		<h4>User Roles</h4>
-	 		
-	 		
+	 	 
 	  
 	   		
 		</div>

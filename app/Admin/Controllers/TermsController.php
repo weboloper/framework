@@ -74,11 +74,14 @@ class TermsController extends Controller
             return redirect()->to( url("admin/terms"))->withError("Object  not found");
         }
 
+        $objects = Terms::find(['taxonomy = :taxonomy: and parent_id = 0 ', 'bind' => [ 'taxonomy' =>   $object->taxonomy   ]]);
+
         return view('terms.edit')
             ->with('form', new TermsForm($object) )
+            ->with('object', $object )
             ->with('objects', $objects )
             ->with('tab', $object->taxonomy )
-            ->with('objectType', $this->objectType );
+            ->with('objectType', Terms::TERM_TYPES[ $object->taxonomy  ]  );
  
     }
 
@@ -145,8 +148,51 @@ class TermsController extends Controller
     public function update($id)
     {
         # process the post request
-        if (request()->isPost()) {
-            // ...
+         if (request()->isPost()) {
+            
+            $inputs = request()->get();
+
+            $validator = new TermsValidator;
+            $validation = $validator->validate($inputs);
+
+            if (count($validation)) {
+                session()->set('input', $inputs);
+
+                return redirect()->to(url('admin/terms/'. $id. '/edit'))
+                    ->withError(PostsValidator::toHtml($validation));
+            }
+
+
+            if (!$object = Terms::findFirstByTerm_id($id)) {
+                return redirect()->to( url("admin/posts"))->withError("Object  not found");
+            }
+
+            $object->assign(
+                $inputs,
+                null,
+                [
+                    "name",
+                    // "slug", // because its disabled
+                    "taxonomy",
+                    "description",
+                    "parent_id",
+                ]
+            );
+
+            $this->getUniqueSlug($object , $inputs['slug']);
+
+ 
+        
+            if ($object->save() === false) {
+                foreach ($object->getMessages() as $message) {
+                    flash()->session()->error($message);
+                }
+            } else {
+
+                return redirect()->to(url('admin/terms/'. $id. '/edit'))
+                    ->withSuccess('Object updated successfully!');
+            }
+
         }
     }
 
@@ -185,5 +231,39 @@ class TermsController extends Controller
             return $this->jsonMessages;
         }
     }
+
+
+    public function checkSlug($slug, $type )
+    {
+        return Terms::findFirst([
+            'taxonomy = :type: AND slug = :slug:',
+            'bind' => [
+                'type' => $type,
+                'slug' => $slug
+            ]
+        ]);
+    }
+
+    public function getUniqueSlug(Terms $object , $slug)
+    {   
+        $slug = Slug::generate($slug);
+
+        if($exists = $this->checkSlug($slug , $object->taxonomy ))
+        {      
+
+            if(  $exists->taxonomy == $object->taxonomy AND $exists->term_id  != $object->term_id     ) {
+
+                return $this->getUniqueSlug($object, $slug."-2");
+
+            }
+        }
+
+        $object->setSlug($slug);
+
+        return $object;
+ 
+
+    }
+
 
 }

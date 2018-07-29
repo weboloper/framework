@@ -59,7 +59,10 @@
                     </div>
                     {% endif %}
                   
- 
+                    <div class="form-group">
+                        <label>{{ lang.get('auth.login.name_label') }}</label>
+                        {{ text_field('name', 'class': 'form-control') }}
+                    </div>
 
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.email_label') }}</label>

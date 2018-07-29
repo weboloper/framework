@@ -92,14 +92,21 @@ class PostsController extends Controller
             $itemBuilder->andWhere($meta_valueConditions);
         }
 
-        if($status) {
-            $params['status']  = $status ;
-            $statusConditions = 'p.status = :status:';
-            $itemBuilder->andWhere($statusConditions);
-        }else {
+        if($this->type != 'attachment')
+        {
+            if($status) {
+                $params['status']  = $status ;
+                $statusConditions = 'p.status = :status:';
+                $itemBuilder->andWhere($statusConditions);
+            }else {
 
-            $statusConditions = ' p.status   !IN("draft", "trash")  ';
+                $statusConditions = ' p.status   !IN("draft", "trash")  ';
+                $itemBuilder->andWhere($statusConditions);
+            }
+        }else {
+            $statusConditions = ' p.status != "trash"  ';
             $itemBuilder->andWhere($statusConditions);
+             
         }
 
         $objects = $itemBuilder->getQuery()->execute($params);
@@ -141,7 +148,7 @@ class PostsController extends Controller
 
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
-            $terms  = Terms::find([   'taxonomy = :type: and parent_id = 0 ' , 'bind' => ['type' => $key ]]) ; 
+            $terms  = Terms::find([   'taxonomy = :type: ' , 'bind' => ['type' => $key ]]) ; 
             $terms_array[$key] = $terms ;
 
         }
@@ -179,7 +186,7 @@ class PostsController extends Controller
 
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
-            $terms  = Terms::find([   'taxonomy = :type: and parent_id = 0 ' , 'bind' => ['type' => $key ]]) ; 
+            $terms  = Terms::find([   'taxonomy = :type:  ' , 'bind' => ['type' => $key ]]) ; 
             $terms_array[$key] = $terms ;
 
         }
@@ -278,7 +285,7 @@ class PostsController extends Controller
 
                 if(!is_null($terms) ) { $terms_array = array_merge($terms_array, $terms); }
             }
-            
+        
         
             if ($object->save() === false) {
                 foreach ($object->getMessages() as $message) {
@@ -288,6 +295,11 @@ class PostsController extends Controller
 
                 $this->termService->saveTermsInPosts($terms_array, $object);
 
+                foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
+                    di()->get('viewCache')->delete("metabox".$key);
+                }
+
+            
                 return redirect()->to(url('admin/posts/'. $id. '/edit'))
                     ->withSuccess('Object updated successfully!');
             }
@@ -416,7 +428,15 @@ class PostsController extends Controller
                 if (filter_var( $metaValue , FILTER_VALIDATE_URL) === FALSE) {
                     $this->jsonMessages['messages'][] = [
                         'type'    => 'warning',
-                        'content' => 'File not allowed'
+                        'content' => 'Image not valid'
+                    ];
+                    return $this->jsonMessages;
+                }
+
+                if(!$this->metaService->validImage($metaValue)){
+                    $this->jsonMessages['messages'][] = [
+                        'type'    => 'warning',
+                        'content' => 'Image not valid'
                     ];
                     return $this->jsonMessages;
                 }
@@ -449,8 +469,7 @@ class PostsController extends Controller
                 $meta = $this->metaService->add_meta($objectId , $objectType ,  $metaKey, $metaValue);
                 
                 $this->response->setStatusCode(200,  "Success" );
-                // $this->response->setJsonContent( $meta );
-                $this->response->setJsonContent('table-success');
+                $this->response->setJsonContent( $meta );
                 return $this->response->send();
 
             }catch ( Exception $e) {

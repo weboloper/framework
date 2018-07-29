@@ -30,8 +30,8 @@
                     
                     <p class="mt-5"><a href="#codes">Useful codes</a></p>
 
-                    <h3>to do</h3>
-                    admin publish/save
+                     
+                     
                     
              
                 </div>

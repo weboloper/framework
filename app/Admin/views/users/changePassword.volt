@@ -5,7 +5,7 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-    <a href="{{ '/admin/users/' }}" class="btn btn-danger float-right">QUIT</a>
+   
 	<h3>Change Password</h3> 
 	<hr>
     {{ form(  'class' : 'form-horizontal') }}
@@ -20,9 +20,8 @@
             <label>{{ lang.get('auth.login.re_password_label') }}</label>
             {{ password_field('repassword', 'class': 'form-control') }}
         </div>
-        <div class="pull-right">
-            <button id="register-btn" class="btn btn-success" type="submit">SAVE </button>
-        </div>
+        <button id="register-btn" class="btn btn-success" type="submit">SAVE </button>
+         <a href="{{ '/admin/users/' }}" class="btn btn-secondary">CANCEL</a>
 
   
 		 </div>

@@ -6,7 +6,13 @@
 
 {% block content %}
 	
-    {{ form( 'admin/' ~   controller | lower ~   '/store', 'class' : 'form-horizontal') }}
+    {% if object is defined %}
+        {{ form( 'admin/' ~   controller | lower ~  '/' ~  object.term_id  ~ '/update', 'class' : 'form-horizontal ') }}
+     {% else %}
+         {{ form( 'admin/' ~   controller | lower ~  '/store', 'class' : 'form-horizontal ') }}
+     {% endif %}
+
+
     <div class="row mb-5">
 	    <div class="col-sm-8">
 	   
@@ -26,11 +32,10 @@
             {{ form.render('description', ['class': 'form-control']) }}
         </div>
 
-
         {% if objectType['hierachical']  %}
         <div class="form-group">
         	 <strong>Parent</strong>
-        	{{ select(  'parent'  , objects , 'using' : [  'term_id',  'name'  ],  'useEmpty': true ,  'class': ' form-control'  ) }}
+        	{{ select(  'parent_id'  , objects , 'using' : [  'term_id',  'name'  ],  'useEmpty': true ,  'class': ' form-control' , 'value' : object.parent_id) }}
         </div>
         {% endif %}
 

@@ -8,6 +8,8 @@ return [
         'email_label'       => 'Email',
         'password_label'    => 'Password',
         're_password_label' => 'Repeat Password',
+        'status_label'      => 'Status',
+        'role_label'        => 'Roles',
     ],
     'button' => [
         'register_button' => 'Register',

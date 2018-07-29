@@ -100,7 +100,8 @@ class OauthController extends Controller
 
         $token = bin2hex(random_bytes(100));
 
-        $connection = db()->connection();
+        // $connection = db()->connection();
+        $connection = db();
 
         try {
             $connection->begin();
@@ -113,7 +114,7 @@ class OauthController extends Controller
                 'name'     => $inputs['name'],
                 'password' => security()->hash($inputs['password']),
                 'token'    => $token,
-            ]);
+             ]);
 
             if ($success === false) {
                 throw new Exception(
@@ -191,7 +192,8 @@ class OauthController extends Controller
         $credentials = [
             'email' => $inputs['email'],
             'password' => $inputs['password'],
-            'activated' => true,
+            // 'activated' => 1,
+            // 'status' => 1,
         ];
 
         if (auth()->attempt($credentials)) {
@@ -241,10 +243,10 @@ class OauthController extends Controller
     public function activateUser($token)
     {
         $user = Users::find([
-            'token = :token: AND activated = :activated:',
+            'token = :token: AND status = :status:',
             'bind' => [
                 'token' => $token,
-                'activated' => false,
+                'status' => 0,
             ],
         ])->getFirst();
 
@@ -257,7 +259,7 @@ class OauthController extends Controller
             return view('errors.404');
         }
 
-        $user->setActivated(true);
+        $user->setStatus(1);
 
         if ($user->save() === false) {
             foreach ($user->getMessages() as $message) {

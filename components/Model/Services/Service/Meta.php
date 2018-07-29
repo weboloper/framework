@@ -157,4 +157,9 @@ class Meta extends \Components\Model\Services\Service
 
     }
 
+    public function validImage($url) {
+       $size = getimagesize($url);
+       return (strtolower(substr($size['mime'], 0, 5)) == 'image' ? true : false);  
+    }
+
 }

@@ -9,6 +9,13 @@ class MediaFiles
      */
     private $fileSystem;
 
+    const THUMBNAILS = [
+        'small' => [150, 150],
+        'medium'    => [300, 300],
+        'large'     => [600, 600] 
+    ];
+
+
     public function __construct()
     {
         $this->fileSystem = flysystem();

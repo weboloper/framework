@@ -11,6 +11,7 @@ use Components\Library\Media\MediaType;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
+use Components\Library\Media\MediaFiles;
 
 
 class IndexController extends Controller
@@ -188,7 +189,7 @@ class IndexController extends Controller
 
         $resource = new Collection($objects, function(Posts $post) {
 
-            $thumb_sizes = Posts::POST_THUMBNAILS;
+            $thumb_sizes = MediaFiles::THUMBNAILS;
             // $url =  substr(strrchr($post->slug,'.') , 1);
             $url = preg_replace('/\\.[^.\\s]{3,4}$/', '', $post->guid);
 

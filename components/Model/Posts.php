@@ -21,6 +21,7 @@ use Components\Library\Media\MediaFiles;
 use Components\Library\Media\MediaType;
 
 use Components\Model\Services\Service\Post as postService;
+use Components\Model\Services\Service\Media as mediaService;
 
 
 class Posts extends Model
@@ -31,18 +32,23 @@ class Posts extends Model
 
     public $type;
 
+    public $id;
+
     const IMAGE_TYPE = 'image';
     const VIDEO_TYPE = 'video';
     //Such as pdf, docs, xls
     const DOCUMENT_TYPE   = 'document';
 
 
+ 
+
+
     const TYPE_POST = [
         'name' => 'Posts',
         'slug'  => 'post',
-        'terms' => [ 'tag' , 'category', 'format'],
-        'metas' => [ 'seotitle'  => 'Seo title'  , 'Seodesc' => 'seo description' ],
-        'inputs' => ['title', 'slug' , 'body' , 'excerpt'],
+        'terms' => [   'location'],
+        'metas' => [ 'seotitle'  => 'Seo title'  , 'seodesc' => 'Seo Description', 'thumbnail' => 'Thumbnail'],
+        'inputs' => ['title', 'slug' , 'body' , 'excerpt' , 'thumbnail'],
         'icon' => "paper-plane",
         'thumbnail' => true
     ];
@@ -72,7 +78,7 @@ class Posts extends Model
         self::TYPE_POST['slug'] =>  self::TYPE_POST,
         self::TYPE_PAGE['slug'] =>  self::TYPE_PAGE,
         self::TYPE_ATTACHMENT['slug'] =>  self::TYPE_ATTACHMENT,
-    ];
+     ];
 
 
     const STATUS_PRIVATE    = 'private';
@@ -87,12 +93,6 @@ class Posts extends Model
         self::STATUS_PENDING    => self::STATUS_PENDING,
         self::STATUS_TRASH      => self::STATUS_TRASH,
         self::STATUS_PRIVATE    => self::STATUS_PRIVATE,
-    ];
-
-    const POST_THUMBNAILS = [
-        'small' => [150, 150],
-        'medium'    => [300, 300],
-        'large'     => [600, 600] 
     ];
 
     /**
@@ -110,6 +110,7 @@ class Posts extends Model
     {  
         $this->fileSystem = new MediaFiles();
         $this->postService = new postService;
+        $this->mediaService = new mediaService;
 
         $this->keepSnapshots(true);
         // if (auth()->isAuthorizedVisitor()) {
@@ -329,7 +330,7 @@ class Posts extends Model
         if ($mediaType->imageCheck($fileExt)) {
             $meta['type'] = self::IMAGE_TYPE;
             //@TODO add thumbnail
-             $this->postService->generate_thumbnails($key,  $fileObj->getExtension());
+             $this->mediaService->generate_thumbnails($key,  $fileObj->getExtension());
         }
         $meta['title']  = $title ? $title : $originalname;
         $meta['slug']   = $filename;

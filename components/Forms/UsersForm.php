@@ -32,6 +32,16 @@ class UsersForm extends Form
  
         $this->add($name);
 
+        $username = new Text('username',
+            array(
+            'placeholder' => "Username",
+            'class'       => 'form-control',
+            'required'    => true
+            )
+        );
+ 
+        $this->add($username);
+
         $email = new Text('email',
             array(
             'placeholder' => "Email",

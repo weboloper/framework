@@ -10,8 +10,6 @@ use Components\validation\UsersEditValidator;
 use Components\validation\ResetpassValidator; 
 use Phalcon\Mvc\Model\Transaction\Failed as TransactionFailed;
 
-use Components\Model\Services\Service\User as userService;
-
 class UsersController extends Controller
 {   
    
@@ -22,7 +20,6 @@ class UsersController extends Controller
     {   
         parent::initialize();
         $this->view->tab = 'users';
-        
 
     }
 
@@ -45,7 +42,7 @@ class UsersController extends Controller
     public function new()
     {
       
-        return view('users.new');
+        return view('users.new')->with('form', new UsersForm() );
     }
 
     /**
@@ -58,6 +55,10 @@ class UsersController extends Controller
         if (request()->isPost()) {
              // do some stuff ...
             $inputs = request()->get();
+            // this is if username is not allowed
+            if(!$this->config->app->auth->usernames){
+                $inputs['username'] = $inputs['email'];
+            }
 
             $validator = new RegistrationValidator;
             $validation = $validator->validate($inputs);
@@ -72,23 +73,23 @@ class UsersController extends Controller
 
             $token = bin2hex(random_bytes(100));
            
-                $user = new Users;
+            $user = new Users;
 
-                $success = $user->create([
-                    'name'  => $inputs['name'], 
-                    'email' => $inputs['email'],
-                    'password' => security()->hash($inputs['password']),
-                    'token' => $token,
-                    'activated' => 1,
-                ]);
+            $success = $user->create([
+                'username'  => $inputs['username'], 
+                'name'  => $inputs['name'], 
+                'email' => $inputs['email'],
+                'password' => security()->hash($inputs['password']),
+                'token' => $token,
+             ]);
 
-                if ($success === false) {
-                    throw new Exception(
-                        'It seems we can\'t create an account, '.
-                        'please check your access credentials!'
-                    );
-                }
-                
+            if ($success === false) {
+                throw new \Exception(
+                    'It seems we can\'t create an account, '.
+                    'please check your access credentials!'
+                );
+            }
+        
 
             return redirect()->to('admin/users/'. $user->id . '/edit')
                 ->withSuccess(lang()->get('responses/register.creation_success'));
@@ -136,6 +137,10 @@ class UsersController extends Controller
         if (request()->isPost()) {
             // ...
             $inputs = request()->get();
+            // this is if username is not allowed
+            if(!$this->config->app->auth->usernames){
+                $inputs['username'] = $inputs['email'];
+            }
 
             $validator = new UsersEditValidator;
             $validation = $validator->validate($inputs);
@@ -144,19 +149,38 @@ class UsersController extends Controller
                 session()->set('input', $inputs);
 
                 return redirect()->to(url()->previous())
-                    ->withError(RegistrationValidator::toHtml($validation));
+                    ->withError(UsersEditValidator::toHtml($validation));
             }
 
             if (!$object = Users::findFirstById($id)) {
                 return redirect()->to( url("admin/users"))->withError("Object  not found");
             }
 
+            if($object->getEmail() != $inputs['email'])
+            {
+                if( $this->userService->checkEmailExists( $inputs['email'] ) ) {
+                    return redirect()->to(url()->previous())
+                    ->withError('Email is in use');
+                }
+            }
+
+            // die(var_dump( $object->getUsername() != $inputs['username'] ));
+
+            if($object->getUsername() != $inputs['username'])
+            {
+                if( $this->userService->checkUsernameExists( $inputs['username'] ) ) {
+                    return redirect()->to(url()->previous())
+                    ->withError('Username is in use');
+                }
+            }
+
+
             $object->assign(
                 $inputs,
                 null,
                 [
                     "email",
-                    // "slug",
+                    "username",
                     "name",
                     "status",
                 ]

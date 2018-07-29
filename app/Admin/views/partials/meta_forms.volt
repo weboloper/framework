@@ -10,7 +10,7 @@
                 <td>{{  name }}</td>
                 <td>{{ text_area( 'meta_value' , 'class': 'form-control' , 'value' : object.get_meta(meta)  , 'form' : 'meta-form-' ~ meta  ) }}</td>
                 <td width="10%"><button href="#" class="btn btn-secondary add_meta_btn" form='meta-form-{{meta}}' value="save">Save</button></td>
-                <td width="10%"><button href="#" class="btn btn-danger add_meta_btn" form='meta-form-{{meta}}' value="delete">Update</button></td>
+                <td width="10%"><button href="#" class="btn btn-danger add_meta_btn" form='meta-form-{{meta}}' value="delete"><i class="fas fa-trash"></i></button></td>
      
             </tr>
             {{ hidden_field( 'objectId' , "value":   object.id , 'form' : 'meta-form-' ~meta  ) }}

@@ -23,14 +23,14 @@ class Users extends Model
     public $password;
     public $token;
     protected $name;
-    protected $activated;
+    public $username;
     protected $lastPasswdReset;
     public $status;
 
-    const STATUS_ACTIVE   = 1;
-    const STATUS_DISABLED = 2;
-    const STATUS_PENDING  = 3;
-    const STATUS_INACTIVE = 4;
+    const STATUS_INACTIVE  = 0;
+    const STATUS_ACTIVE    = 1;
+    const STATUS_BLOCKED   = 2;
+     
 
     const GENDER_UNKNOWN = 9;
     const GENDER_MALE    = 1;
@@ -39,14 +39,21 @@ class Users extends Model
 
     const USER_STATUS = [
 
-        self::STATUS_ACTIVE     => "active",
-        self::STATUS_DISABLED   => "disabled",
-        self::STATUS_PENDING    => "pending",
-        self::STATUS_INACTIVE   => "inactive",
-
-
+        self::STATUS_INACTIVE   => "waiting activation",
+        self::STATUS_ACTIVE     => "activated",
+        self::STATUS_BLOCKED    => "blocked",
+        
     ];
 
+    public function getUserStatus()
+    {
+        return self::USER_STATUS;
+    }
+
+     public function beforeValidationOnCreate()
+     {
+        $this->status = self::STATUS_INACTIVE;
+     }
     /**
      * By every request, phalcon will always pull this function
      * as basis to know what is the table's name.
@@ -93,6 +100,29 @@ class Users extends Model
     }
 
     /**
+     * Set the username.
+     *
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get the user's username.
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+
+    /**
      * Set the email.
      *
      * @param string $email
@@ -120,9 +150,9 @@ class Users extends Model
      * @param bool $bool a boolean value to be based if activated or not
      * @return mixed
      */
-    public function setActivated($bool)
+    public function setStatus($status)
     {
-        $this->activated = (int) $bool;
+        $this->status = (int) $status;
 
         return $this;
     }
@@ -141,13 +171,13 @@ class Users extends Model
     }
 
     /**
-     * To know if the account is activated.
+     * To know if the account is status.
      *
      * @return bool
      */
-    public function getActivated()
+    public function getStatus()
     {
-        return (bool) $this->activated;
+        return (int) $this->status;
     }
 
     public function setLastPasswdReset($lastPasswdReset)

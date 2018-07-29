@@ -97,7 +97,7 @@ class DB extends ServiceProvider
      */
     public function boot()
     {
-        if (   di()->has($this->alias)) { // bunu kaldırdık
+        if (  di()->has($this->alias)) { // bunu kaldırdık
             $db = $this->getDefaultConnection();
 
             di()->set($this->alias, function () use ($db) {

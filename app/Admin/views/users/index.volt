@@ -15,7 +15,7 @@
                 <th>Email</th>
                 <th>Name</th>
                 <th>Roles</th>
-                <th>Activated</th>
+                <th>Status</th>
                 <th></th>
                 <th></th>
  
@@ -33,7 +33,7 @@
                             {{ role.description }} , 
                         {% endfor %}
                     </td>
-                    <td>{{ object.activated }}</td>
+                    <td>{{ object.getUserStatus()[object.status] }}</td>
          	 		<td><a href="/admin/{{ controller |lower }}/{{ object.id }}/edit" class="text-success"><i class="fas fa-edit"></i></a></td>
                     <td><a href="/admin/{{ controller |lower }}/{{ object.id }}/delete"  class="text-danger delete-btn"  data-id="{{ object.id }}"><i class="fas fa-trash"></i></a></td>
             	</tr>

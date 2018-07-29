@@ -136,6 +136,21 @@ class User extends \Components\Model\Services\Service
         return $user->valid() ? $user->getFirst() : null; 
     }  
 
+    /**
+     * Finds User by ID.
+     *
+     * @param  int $id The User ID.
+     * @return Users|null
+     */
+    public function findFirstByUsername($username)
+    { 
+        $user = Users::query()
+            ->where('username = :username:', ['username' => $username])
+            ->limit(1)
+            ->execute();
+        return $user->valid() ? $user->getFirst() : null; 
+    }  
+    
     public function getFirstByEmail($email)
     {
         if (!$user = $this->findFirstByEmail($email)) {
@@ -143,6 +158,23 @@ class User extends \Components\Model\Services\Service
         }
         return $user;
     }
+
+    public function checkEmailExists($email)
+    {
+        if ( $user = $this->findFirstByEmail($email)) {
+            return true ;
+        }
+        return false;
+    }
+
+    public function checkUsernameExists($username)
+    {
+        if ( $user = $this->findFirstByUsername($username)) {
+            return true ;
+        }
+        return false;
+    }
+
 
 
     public function validateResetPasswordInterval(Users $entity)

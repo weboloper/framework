@@ -15,14 +15,12 @@
             {{ form.render('title', ['class': 'form-control slug-in', 'autocomplete' : 'off']) }}
         </div>
         
-        {% if in_array('slug',  objectType['inputs']) %}
-        <div class="form-group">
+         <div class="form-group">
           <strong>Slug</strong>
            {{ form.render('slug', ['class': 'form-control slug-out' , 'autocomplete' : 'off'  ]) }}
            <span class="help">Alphanumeric characters and "-" only</span>
         </div>
-        {% endif %}
-
+ 
 	 	
         {% if in_array('body',  objectType['inputs']) %}
 	 	    <div class="form-group">
@@ -64,30 +62,38 @@
 
 	        	</div>
         	</div>
+        {% if in_array('thumbnail',  objectType['inputs']) %}
         <div class="card bg-light mb-2">
-            <div class="card-body">
-                <div class="uploader-wrapper mb-2">
-                  <button class="btn">Select thumbnail</button>
-                  <input type="file" name="thumbnail" class="uploader-input" accept="image/png, image/jpeg"/>
-                  <input type="hidden" name="objectId"  class="uploader-object-id" value="{{object.getId()}}"  />
-                  
-                  <div class="uploader-preview thumbnail mt-1" >
-                    {% if object.get_meta('thumbnail') %}
-                      <img src="{{ object.get_meta('thumbnail')}}" class="img-thumbnail">
-                    {% endif %}
-                  </div>
+          <div class="card-body">
+              <div class="uploader-wrapper mb-2">
+                <button class="btn">Select thumbnail</button>
+                <input type="file" name="thumbnail" class="uploader-input" accept="image/png, image/jpeg"/>
+                <input type="hidden" name="objectId"  class="uploader-object-id" value="{{object.getId()}}"  />
+                
+                <div class="uploader-preview thumbnail mt-1" >
+                  {% if object.get_meta('thumbnail') %}
+                    <img src="{{ object.get_meta('thumbnail')}}" class="img-thumbnail">
+                  {% endif %}
                 </div>
               </div>
             </div>
+          </div>
+        {% endif %}
             
   			{% for term in objectType['terms'] %}
+
   				{% if termTypes[term]['hierachical']  %}
-  					<div class="card mb-2">
-						<div class="card-header bg-light">{{ termTypes[term]['name']}}</div>
-    						<div class="card-body">
-  								{% include "partials/term_tree"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}
-  							</div>
-  						</div>
+             {% set cachename =  'metabox' ~  termTypes[term]['taxonomy'] %}
+             {% cache cachename %}
+                <div class="card mb-2">
+                <div class="card-header bg-light">{{ termTypes[term]['name']}}</div>
+                <div class="card-body" style="max-height:200px; overflow-y: scroll">
+                  {% include "partials/term_tree"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}
+                </div>
+              </div>
+            {% endcache %}
+
+  					
   				{% else  %}
   					{% include "partials/term_select"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}
   				{% endif  %}

@@ -14,12 +14,14 @@ use Components\Exceptions\EntityException;
 class Term extends \Components\Model\Services\Service
 {
 	
+   
       
     public function saveTermsInPosts($terms_array, $object)
-    {
+    {   
+
         $termsId = [];
         $post_id    = $object->getId();
-         
+
         $postTerms = TermRelationships::find(
             [
                 'post_id = ?0',
@@ -38,8 +40,8 @@ class Term extends \Components\Model\Services\Service
         $rows = array_diff( $terms_array, $termsId  );
         foreach ($rows as $term_id) {
             $postTerm = new TermRelationships();
-            $postTerm->setTerm_id($term_id);
-            $postTerm->setPost_id($post_id);
+            $postTerm->setTermId($term_id);
+            $postTerm->setPostId($post_id);
 
             if (!$postTerm->save()) {
                 return false;
@@ -52,6 +54,8 @@ class Term extends \Components\Model\Services\Service
             //     $tags->save();
             // }
         }
+
+        di()->get('viewCache')->delete("metabox" .  $this->taxonomy);
 
         return true;
     }
