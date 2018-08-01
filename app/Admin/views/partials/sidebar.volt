@@ -53,7 +53,7 @@
                          </li>
 
                          <li class="nav-item">
-                                  {{ link_to('admin/terms/new?taxonomy=' ~ item['taxonomy'],  
+                                  {{ link_to('admin/terms/create?taxonomy=' ~ item['taxonomy'],  
                                     'New' , 
                                     'title': item['name'] , 
                                     'class': 'nav-link') }}
