@@ -19,8 +19,8 @@ class TermsRoutes extends RouteGroup
         ]);
 
         # url as terms/store
-        $this->addGet('/new', [
-            'action' => 'new'
+        $this->addGet('/create', [
+            'action' => 'create'
         ]);
 
         # url as terms/store

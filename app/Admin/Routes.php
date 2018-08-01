@@ -14,6 +14,11 @@ Route::addPost('/admin/posts/add_meta', [
     'controller' => 'Posts',
     'action' => 'add_meta',
 ]);
+Route::addPost('/admin/posts/{id}/delete_thumbnail', [
+    'controller' => 'Posts',
+    'action' => 'delete_thumbnail',
+]);
+
 
 
 Route::add('/admin/getterms', [

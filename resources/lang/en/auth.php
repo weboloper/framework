@@ -10,6 +10,7 @@ return [
         're_password_label' => 'Repeat Password',
         'status_label'      => 'Status',
         'role_label'        => 'Roles',
+        'activated_label'   => 'Activated',
     ],
     'button' => [
         'register_button' => 'Register',

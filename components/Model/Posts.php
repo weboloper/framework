@@ -39,15 +39,11 @@ class Posts extends Model
     //Such as pdf, docs, xls
     const DOCUMENT_TYPE   = 'document';
 
-
- 
-
-
     const TYPE_POST = [
         'name' => 'Posts',
         'slug'  => 'post',
-        'terms' => [   'location'],
-        'metas' => [ 'seotitle'  => 'Seo title'  , 'seodesc' => 'Seo Description', 'thumbnail' => 'Thumbnail'],
+        'terms' => [ 'tag'],
+        'metas' => [ 'seotitle'  => 'Seo title'  , 'seodesc' => 'Seo Description' ],
         'inputs' => ['title', 'slug' , 'body' , 'excerpt' , 'thumbnail'],
         'icon' => "paper-plane",
         'thumbnail' => true
@@ -57,14 +53,14 @@ class Posts extends Model
         'name' => 'Pages',
         'slug' => 'page',
         'terms' => [],
-        'metas' => [ 'seo_title'  => 'seo_title'  , 'seo_desc' => 'seo_desc'],
+        'metas' => [ 'seotitle'  => 'Seo title'  , 'seodesc' => 'Seo Description' ],
         'inputs' => ['title', 'slug' , 'body' , 'excerpt'],
         'icon' => "newspaper",
         'thumbnail' => false
     ];
 
     const TYPE_ATTACHMENT = [
-        'name' => 'Attachments',
+        'name' => 'Media',
         'slug' => 'attachment',
         'terms' => [],
         'metas' => [],
@@ -257,21 +253,48 @@ class Posts extends Model
         return $this->status;
     }
 
-    public function setParent_id($parent_id)
+    public function setParentId($parent_id)
     {
         $this->parent_id = $parent_id;
         return $this;
     }
 
-    public function getParent_id()
+    public function setCommentStatus($comment_status)
+    {
+        $this->comment_status = $comment_status;
+        return $this;
+    }
+
+    public function getCommentStatus()
+    {
+        return $this->comment_status;
+    }
+
+    public function setCommentCount($comment_count)
+    {
+        $this->comment_count = $comment_count;
+        return $this;
+    }
+
+    public function getCommentCount()
+    {
+        return $this->comment_count;
+    }
+
+
+    public function getParentId()
     {
         return $this->parent_id;
     }
 
-    public function setMime_type($mime_type)
+    public function setMimeType($mime_type)
     {
         $this->mime_type = $mime_type;
         return $this;
+    }
+    public function getMimeType()
+    {
+        return $this->mime_type;
     }
 
     /**
@@ -363,7 +386,7 @@ class Posts extends Model
         $media->setType('attachment');
         $media->setUserId(  auth()->getUserId()  );
         $media->setStatus('inherit');
-        $media->setMime_type($file['type']);
+        $media->setMimeType($file['type']);
         if (!$media->save()) {
             return false;
             foreach ($media->getMessages() as $message) {

@@ -6,7 +6,7 @@
 
 {% block content %}
 
-	<a href="/admin/{{ controller |lower }}/new?type={{ objectType['slug'] }}" class="float-right btn btn-primary">Add New</a>
+	<a href="/admin/{{ controller |lower }}/create?type={{ objectType['slug'] }}" class="float-right btn btn-primary">Add New</a>
     <h3>All {{ objectType['name'] }}</h3>
     {% if objectType['slug'] != 'attachment' %}
     <a href="{{ url('admin/' ~ controller |lower  ~ "?type=" ~ objectType['slug'])}}">All</a> | 

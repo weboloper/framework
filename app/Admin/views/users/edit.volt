@@ -37,6 +37,10 @@
 	            {{ form.render('status', ['class': 'form-control']) }}
 	        </div>
 
+	        <div class="form-group">
+            	<label>{{ lang.get('auth.login.activated_label') }}</label>
+	            {{ form.render('activated', ['class': 'form-control']) }}
+	        </div>
 	 		 
             <label>{{ lang.get('auth.login.role_label') }}</label>
             {{ form.render('roles[]', ['class': 'select2-select form-control', 'multiple' : true , 'value' : user_roles]) }}

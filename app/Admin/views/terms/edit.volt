@@ -46,16 +46,16 @@
 		</div>
 	 	
 	 	<div class="col-sm-4">
-		 	<div class="card bg-light">
-		 		<div class="card-body">
-				 	<div class="d-flex justify-content-between">
-					 	<button class="btn btn-primary mr-1" style="width:100%;" name="savePost" value="1">SAVE</button>
- 					 </div>
 
-				 	<hr>
-				 	 
-	        	</div>
-        	</div> 
+            <div class="card mb-2">
+                <div class="card-header bg-light">Save</div>
+                    <div class="card-body">                 
+                                 
+                        <button class="btn btn-secondary mr-1" value="1">SAVE</button>
+
+                    </div>
+                </div>
+ 
         </div>
 		</div>
     {{ endform() }}

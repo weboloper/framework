@@ -51,7 +51,7 @@ class TermsController extends Controller
      *
      * @return void
      */
-    public function new()
+    public function create()
     {   
         $objects = Terms::find(['taxonomy = :taxonomy: and parent_id = 0 ', 'bind' => [ 'taxonomy' =>  $this->taxonomy  ]]);
 

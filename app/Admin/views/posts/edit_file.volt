@@ -12,8 +12,11 @@
 	   
        <div class="form-group">
             <strong>Title</strong>
-            <input class="form-control title-input" name="title" value="{{object.title}}"></input>
-        </div> 
+            {{ form.render('title', ['class': 'form-control slug-in', 'autocomplete' : 'off']) }}
+        </div>
+
+        {{ hidden_field('slug') }}
+        {{ hidden_field('status') }}
 
         <button class="btn btn-success">UPDATE</button>
 
@@ -21,29 +24,7 @@
  
 		 </div>
 
-		 <div class="col-sm-4">
-		 	<div class="card bg-light">
-		 		<div class="card-body">
-			 
  
-
-				 	<ul class="list-group mt-4">
-		                <li class="list-group-item list-group-item-light">
-		                    <i class="fas fa-calendar"></i> Created At:
-		                    {{ object.created_at }}
-		                </li>
-		                <li class="list-group-item list-group-item-light">
-		                    <i class="fas fa-calendar"></i> Updated At
-		                    {{ object.updated_at }}
-		                </li>
-		         
-		            </ul>
-	        	</div>
-        	</div> 
-  
- 
-     
-  		 </div>
 		</div>
     {{ endform() }}
  

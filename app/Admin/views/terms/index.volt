@@ -5,7 +5,7 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-	<a href="/admin/{{ controller |lower }}/new?taxonomy={{ objectType['taxonomy'] }}" class="float-right btn btn-primary">Add New</a>
+	<a href="/admin/{{ controller |lower }}/create?taxonomy={{ objectType['taxonomy'] }}" class="float-right btn btn-primary">Add New</a>
     <h3>All {{ objectType['name'] }}</h3>
     <hr>
 	<table id="posts" class="table table-striped table-bordered dashboard-table">

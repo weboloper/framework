@@ -124,18 +124,18 @@ class PostsController extends Controller
      *
      * @return mixed
      */
-    public function new()
+    public function create()
     {   
 
         if($this->type == 'attachment')
         {
             return view('posts.browser');
         }
-        
+
         $object = new Posts();
         $object->setTitle(' ');
-        $object->setSlug(' ');
-        $object->setBody(' ');
+        $object->setSlug('');
+        $object->setBody('');
         $object->setType($this->type);
         $object->setExcerpt(' ');
         $object->setStatus( Posts::STATUS_DRAFT );
@@ -146,30 +146,13 @@ class PostsController extends Controller
             }
         }
 
-        $terms_array = [];
-        foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
-            $terms  = Terms::find([   'taxonomy = :type: ' , 'bind' => ['type' => $key ]]) ; 
-            $terms_array[$key] = $terms ;
+        return redirect()->to(url('admin/posts/'. $object->id. '/edit'));
 
-        }
-        
-        // $text =  lang()->get('responses/alert.sure_to_leave')
-
-        // $this->assets->addInlineJs('$(window).bind("beforeunload",function(){return"Are you sure you want to leave?"});');
-        // $this->assets->addInlineJs('swal("Good job!", "You clicked the button!", "success");');
-
-        
-
-        return view('posts.edit')
-            ->with('form', new PostsForm($object) )
-            ->with( 'objectType', Posts::POST_TYPES[$object->getType()] )
-            ->with( 'terms_array', $terms_array )
-            ->with( 'post_terms', array() )
-            ->with( 'is_new', true )
-            ->withObject($object);
+  
     }
+ 
 
-
+ 
     /**
      * To show an output based on the requested ID
      *
@@ -182,7 +165,7 @@ class PostsController extends Controller
         if (!$object = Posts::findFirstById($id)) {
             return redirect()->to( url("admin/posts"))->withError("Object  not found");
         }
- 
+  
 
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
@@ -220,6 +203,7 @@ class PostsController extends Controller
     }
 
 
+
     /**
      * To update a record based on the requested ID
      *
@@ -235,8 +219,6 @@ class PostsController extends Controller
             
             $inputs = request()->get();
 
-
-
             $validator = new PostsValidator;
             $validation = $validator->validate($inputs);
 
@@ -247,8 +229,6 @@ class PostsController extends Controller
                     ->withError(PostsValidator::toHtml($validation));
             }
 
-
-
             if (!$object = Posts::findFirstById($id)) {
                 return redirect()->to( url("admin/posts"))->withError("Object  not found");
             }
@@ -258,15 +238,13 @@ class PostsController extends Controller
                 null,
                 [
                     "title",
-                    // "slug", // because its disabled
                     "body",
                     "status",
                 ]
             );
 
-            $this->getUniqueSlug($object , $inputs['slug']);
-
-            // $object->setGuid(  url()->get((  $slug ))   );
+            $slug = $this->getUniqueSlug($object->type , $inputs['slug'] , $object );
+            $object->setSlug($slug);
 
             if ( request()->getPost('publish')) {
                 if( !$inputs['title'] ) {
@@ -310,6 +288,7 @@ class PostsController extends Controller
         }
     }
 
+     
     public function checkSlug($slug, $type )
     {
         return Posts::findFirst([
@@ -321,32 +300,22 @@ class PostsController extends Controller
         ]);
     }
 
-    public function getUniqueSlug(Posts $object , $slug)
+    public function getUniqueSlug($type , $slug, Posts $object = null )
     {   
         $slug = Slug::generate($slug);
 
-        if($exists = $this->checkSlug($slug , $object->getType() ))
+        if($exists = $this->checkSlug($slug ,  $type  ))
         {      
-            // $options = [];
-            // $options['exists']['id'] = $exists->getId();
-            // $options['exists']['type'] = $exists->getType();
-
-            // $options['object']['id'] = $object->getId();
-            // $options['object']['type'] = $object->getType();
-
-            // die(var_dump(  $options ));
-
-            if(  $exists->getType() == $object->getType() AND $exists->getId() != $object->getId()     ) {
-
-                return $this->getUniqueSlug($object, $slug."-2");
-
-            }
+            if($object) {
+                if( $exists->getId() != $object->getId() ){
+                    return $this->getUniqueSlug( $type  , $slug."-2" , $object );
+                }
+            }else {
+                return $this->getUniqueSlug( $type  , $slug."-2" );
+            }       
         }
 
-        $object->setSlug($slug);
-
-        return $object;
- 
+        return $slug;
 
     }
 
@@ -376,7 +345,7 @@ class PostsController extends Controller
 
             $this->jsonMessages['messages'][] = [
                 'type'    => 'success',
-                'content' => 'Object has been deleted!'
+                'content' => 'Object sent to trash!'
             ];
             return $this->jsonMessages;
              
@@ -384,7 +353,7 @@ class PostsController extends Controller
         }
     }
 
-
+   
 
     public function add_meta()
     {   
@@ -485,6 +454,30 @@ class PostsController extends Controller
 
     }
 
+    /**
+     * To delete a record
+     *
+     * @param $id The id to be deleted
+     *
+     * @return void
+     */
+    public function delete_thumbnail($id)
+    {
+        if (request()->isPost()  && request()->isAjax()) {
+           if (!$object = Posts::findFirstById($id)) {
+                $this->jsonMessages['messages'][] = [
+                    'type'    => 'warning',
+                    'content' => 'Entity not found'
+                ];
+                return $this->jsonMessages;
+            }
+        }
+        $this->metaService->deleteByMetaKey( $id , 'thumbnail');
+        $this->response->setStatusCode(200,  "Success" );
+        $this->response->setJsonContent( "done!" );
+        return $this->response->send();
+
+    }
 
     /**
      * To delete a record

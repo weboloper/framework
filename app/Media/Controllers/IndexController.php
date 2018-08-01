@@ -80,20 +80,6 @@ class IndexController extends Controller
             }
             return $this->response->send();
 
-            // $this->response->setStatusCode(404);
-            // $this->jsonMessages['messages'][] = [
-            //     'type'    => 'warning',
-            //     'content' => 'Object not found!'
-            // ];
-            // return $this->jsonMessages;
-            // if (!$uploaded) {
-            //     $error = implode("\n", $media->getError());
-            //     $this->response->setStatusCode(406, $error);
-            //     response()->setContent($error);
-            // } else {
-            //     $this->response->setStatusCode(200, t("Success"));
-            // }
-            // return $this->response->send();
         } else {
             $this->response->setStatusCode(406,  "Error" );
             $this->jsonMessages['messages'][] = [
@@ -107,9 +93,6 @@ class IndexController extends Controller
 
     public function browser()
     {   
-
-     
-
 
         $this->assets->addJs("https://unpkg.com/react@16/umd/react.development.js");
         $this->assets->addJs("https://unpkg.com/react-dom@16/umd/react-dom.development.js");

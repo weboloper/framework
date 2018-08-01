@@ -17,9 +17,14 @@ class PostsRoutes extends RouteGroup
             'action' => 'index'
         ]);
 
-         # url as posts/store
-        $this->addGet('/new', [
-            'action' => 'new'
+         # url as post/create
+        $this->addGet('/create', [
+            'action' => 'create'
+        ]);
+
+        # url as posts/1/publish
+        $this->add('/{id}/publish', [
+            'action' => 'publish'
         ]);
 
         # url as posts/store
@@ -31,7 +36,6 @@ class PostsRoutes extends RouteGroup
         $this->addGet('/{id}/view', [
             'action' => 'view'
         ]);
-
 
         # url as posts/1/show
         $this->addGet('/{id}/edit', [
@@ -46,6 +50,11 @@ class PostsRoutes extends RouteGroup
         # url as posts/1/delete
         $this->addPost('/{id}/delete', [
             'action' => 'delete'
+        ]);
+
+         # url as posts/1/delete
+        $this->addPost('/{id}/delete_file', [
+            'action' => 'delete_file'
         ]);
 
        

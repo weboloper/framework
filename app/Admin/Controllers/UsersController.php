@@ -79,6 +79,7 @@ class UsersController extends Controller
                 'username'  => $inputs['username'], 
                 'name'  => $inputs['name'], 
                 'email' => $inputs['email'],
+                'activated' => $inputs['activated'],
                 'password' => security()->hash($inputs['password']),
                 'token' => $token,
              ]);
@@ -183,6 +184,7 @@ class UsersController extends Controller
                     "username",
                     "name",
                     "status",
+                    "activated",
                 ]
             );
 

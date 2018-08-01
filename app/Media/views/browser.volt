@@ -21,12 +21,12 @@
         {{ assets.outputInlineCss() }}
     </head>
     <body class="bg-light h-100">
-    	 
-	    <div id="root" class="container-fluid  p-4"></div>
+    	<div class="container"> 
+	    	<div id="root" class="container-fluid  p-4"></div>
+		</div>
 	     
 	    {{ assets.outputJs() }}
-
-     
+    	
 		<script
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -62,23 +62,26 @@
 			    super(props);
 			    this.state ={
 			      file:null,
+			      title: '',
 			      progress : 0 
 			    }
-			    this.onFormSubmit = this.onFormSubmit.bind(this)
+			    // this.onFormSubmit = this.onFormSubmit.bind(this)
 			    this.onChange = this.onChange.bind(this)
+			    this.onChangeText = this.onChangeText.bind(this)
 			    this.fileUpload = this.fileUpload.bind(this)
 			  }
-			  onFormSubmit(e){
-			    e.preventDefault() // Stop form submit
-			    var _this = this;
-			    this.fileUpload(this.state.file).then((response)=>{
-			      console.log(response.data);
-			       _this.props.addFileToList(response.data); 
-			    })
-			  }
+			  // onFormSubmit(e){
+			  //   e.preventDefault() // Stop form submit
+			  //   var _this = this;
+			  //   this.fileUpload(this.state.file).then((response)=>{
+			  //     console.log(response.data);
+			  //      _this.props.addFileToList(response.data); 
+			  //   })
+			  // }
 			  onChange(e) {
 			    // this.setState({file:e.target.files[0]});
 			    this.setState({ progress: 0 });
+			    console.log(e.target);
  			    if(e.target.files[0].size > 2000000){
 	               swal({
 	                  icon:  'error',
@@ -105,16 +108,17 @@
 			    });
 
 			  }
-			  updateProgressBarValue(val) {
-
-			  	this.setState({ progress : val });
-			  	
+			  onChangeText(e){
+			  	this.setState({ title : e.target.value });
 			  }
-
+			  updateProgressBarValue(val) {
+			  	this.setState({ progress : val });
+			  }
 			  fileUpload(file){
 			    const url = '/media/upload';
 			    const formData = new FormData();
 			    formData.append('file',file)
+			    formData.append('title', this.state.title )
 			    const config = {
 			        headers: {
 			            'content-type': 'multipart/form-data'
@@ -131,10 +135,12 @@
 	                       	var _this = this;
 	                       		setTimeout(function(){
 	                        		_this.updateProgressBarValue(0);
+	                        		_this.setState({ title : '' , file: null  });
 	                   			},1000);
+
+
 	                       }
 	                       
-
 	                    }
            			},
            			catch: function() {
@@ -153,16 +159,20 @@
 			    return (
 			     <div>
 			     	<div className="row">
-				     <div className="col-md-2 col-5">
-				      <form onSubmit={this.onFormSubmit} className="pb-1">
+				     <div className="col-12 col-lg-5">
+				      <form onSubmit={this.onFormSubmit} className="pb-1 form-inline">
+				      	<div className="form-group mx-sm-3">
+				      		<input type="text" name="title" className="form-control" placeholder="{{ lang.get('media.file.placeholder') }}" onChange={this.onChangeText} value={this.state.title} autoComplete="off"/>
+				      	</div>
 				        <div className="upload-btn-wrapper">
-					        <button className="btn btn-primary">Upload a file</button>
+					        <button className="btn btn-primary"> {{ lang.get('media.file.upload_text') }} </button>
 					        <input type="file" onChange={this.onChange} />
+					        
 				        </div>
 				        
 	 			      </form>
 	 			      </div>
-	 			      <div className="col-md-10 col-7 pt-2">
+	 			      <div className="col-lg-7 col-12 pt-2">
 	 			      	{ (this.state.progress > 0  )  &&  
 				        <div className="progress">
 							<div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={  progressStyle}  aria-valuenow={this.state.progress} aria-valuemin="0" aria-valuemax="100"></div>
@@ -211,19 +221,39 @@
 		   class Filebrowser extends React.Component {
 		   		constructor(props) {
 				    super(props);
-				    this.state = { posts: [] , selected : null  };
+				    this.state = { posts: [] , selected : null , page : 1 , attachmentType : attachmentType  };
 
 				    this.setSelected = this.setSelected.bind(this);
 				    this.addFileToList = this.addFileToList.bind(this);
+				    this.handleOnScroll = this.handleOnScroll.bind(this);
 
 		 		}
 		   		componentDidMount() {
+		   			window.addEventListener('scroll', this.handleOnScroll);
 				    axios.get("/media/list?type=" + attachmentType )
 				      .then(res => {
-				      	// console.log(res);
-		 		        // console.log(res.data.data);
 				        this.setState({ posts :   res.data.data  });
-				      })
+				    })
+				} 
+
+				componentWillUnmount() {
+				    window.removeEventListener('scroll', this.handleOnScroll);
+				}
+
+				 handleOnScroll() {
+				    // http://stackoverflow.com/questions/9439725/javascript-how-to-detect-if-browser-window-is-scrolled-to-bottom
+				    var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+				    var scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
+				    var clientHeight = document.documentElement.clientHeight || window.innerHeight;
+				    var scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+				    var _this = this; 
+				    if (scrolledToBottom) {
+  				      axios.get("/media/list?type=" + attachmentType  + "&page=" + (this.state.page +1 ))
+					      .then(res => {
+					      	console.log(res.data.data);
+					        _this.setState({ posts :  [...this.state.posts, ...res.data.data ]  , page : (this.state.page + 1)  });
+					    })
+				    }
 				  } 
 
 		 	 
@@ -234,7 +264,7 @@
 
 				addFileToList(data) {
 
-					axios.get("/media/list")
+				    axios.get("/media/list?type=" + attachmentType )
 				      .then(res => {
 				      	// console.log(res);
 		 		        // console.log();

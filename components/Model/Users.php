@@ -27,9 +27,8 @@ class Users extends Model
     protected $lastPasswdReset;
     public $status;
 
-    const STATUS_INACTIVE  = 0;
-    const STATUS_ACTIVE    = 1;
-    const STATUS_BLOCKED   = 2;
+    const STATUS_DEFAULT  = 0;
+ 
      
 
     const GENDER_UNKNOWN = 9;
@@ -39,10 +38,8 @@ class Users extends Model
 
     const USER_STATUS = [
 
-        self::STATUS_INACTIVE   => "waiting activation",
-        self::STATUS_ACTIVE     => "activated",
-        self::STATUS_BLOCKED    => "blocked",
-        
+        self::STATUS_DEFAULT   => "DEFAULT",
+          
     ];
 
     public function getUserStatus()
@@ -50,10 +47,7 @@ class Users extends Model
         return self::USER_STATUS;
     }
 
-     public function beforeValidationOnCreate()
-     {
-        $this->status = self::STATUS_INACTIVE;
-     }
+ 
     /**
      * By every request, phalcon will always pull this function
      * as basis to know what is the table's name.

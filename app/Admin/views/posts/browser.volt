@@ -23,12 +23,13 @@
 
 {% block content %}
 
-<div class="fluidMedia">
-    <iframe frameborder="0" height="600px" scrolling="auto" src="/media/browser" width="100%"></iframe>
-</div>
+ 
+<iframe frameborder="0"  scrolling="auto" src="/media/browser" width="100%" height="900px"></iframe>
+ 
      
 
 {% endblock %}
 
-{% block footer %} 
+{% block footer %}
+ 
 {% endblock %}

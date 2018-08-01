@@ -9,6 +9,7 @@
             </li>
 
             {% for item in postTypes %}
+                {% set create_text = ( item['slug'] == 'attachment' ) ? 'Browser' :  'New ' ~ item['name']  %}
                 <li class="nav-item nav-dropdown {{ tab  == item['slug'] ? 'open' : '' }}">
                     <a href="#" class="nav-link nav-dropdown-toggle">
                         <i class="fas fa-{{item['icon']}} text-light"> </i> {{ item['name']}} <i class="fas fa-caret-left"></i>
@@ -23,8 +24,8 @@
                          </li>
 
                          <li class="nav-item">
-                                  {{ link_to('admin/posts/new?type=' ~ item['slug'],  
-                                    'New' , 
+                                  {{ link_to('admin/posts/create?type=' ~ item['slug'],  
+                                    create_text , 
                                     'title': item['name'] , 
                                     'class': 'nav-link') }}
                          </li>
@@ -32,12 +33,7 @@
                     </ul>
                 </li>
             {% endfor %}
-
-       <!--      <li class="nav-item nav-dropdown">
-                <a href="/admin/filemanager" class="nav-link">
-                    <i class="fas fa-file text-light"> </i> File manager <i class=""></i>
-                </a>              
-            </li> -->
+ 
 
 
             <li class="nav-title">Terms</li>

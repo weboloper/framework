@@ -33,7 +33,7 @@ $(document).on('click', '.delete-btn', function (e) {
 
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this object!",
+      text: "Object will be sent to trash!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -248,6 +248,27 @@ $(document).on('submit', '.object-meta-form-deprecated', function (e) {
    
 
 
+$(document).on('click', '.uploader-wrapper .uploader-delete', function (e) {
+   e.preventDefault();
+   var id = $(this).data('id');
+   var previewer = $(this).parent().find('.uploader-preview');
+
+   $(".uploader-preview").empty();
+   $.ajax({
+          url: "/admin/posts/" + id + "/delete_thumbnail",
+          type: "POST",
+          dataType: 'json',
+          success: function (json) {
+   $(previewer).html("Hello World");
+          },
+          error: function (data) {
+              console.log(data);
+              return data;
+          }
+
+      });
+
+});
     
 
 $(document).on('change', '.uploader-wrapper .uploader-input', function (e) {
@@ -283,7 +304,7 @@ $(document).on('change', '.uploader-wrapper .uploader-input', function (e) {
         var myformData = new FormData();        
         myformData.append('file',  e.target.files[0]  );
 
-        $.ajax({
+          $.ajax({
                   url: "/media/upload?accept=image",
                   type: "POST",
                   data: myformData,
@@ -302,7 +323,7 @@ $(document).on('change', '.uploader-wrapper .uploader-input', function (e) {
                           return;
                       }
 
-                      $(previewer).html('<img class="img-thumbnail" src="'+ json.key +'"/>');
+                      $(previewer).html('<img class="img-thumbnail" src="'+ json.key +'"/> <a href="#" class="btn btn-danger uploader-delete" data-id="'+ objectId +'"><i class="fas fa-trash"></i></a>');
 
                       $.ajax({
                             type: "POST",

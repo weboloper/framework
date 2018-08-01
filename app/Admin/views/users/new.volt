@@ -37,6 +37,12 @@
             <label>{{ lang.get('auth.login.status_label') }}</label>
             {{ form.render('status', ['class': 'form-control']) }}
         </div>
+
+        <div class="form-group">
+            <label>{{ lang.get('auth.login.activated_label') }}</label>
+            {{ form.render('activated', ['class': 'form-control']) }}
+        </div>
+            
         <div class="pull-right">
             <button id="register-btn" class="btn btn-success" type="submit">SAVE </button>
         </div>

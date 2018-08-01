@@ -64,6 +64,17 @@ class UsersForm extends Form
         );
         $this->add($status);
 
+         $activated = new Select(
+            "activated",
+            [
+                0 => "No",
+                1 => "Yes",
+            ]
+        );
+
+        $this->add($activated);
+
+
         $roles = new Select('roles[]',
                 Roles::find()
             ,

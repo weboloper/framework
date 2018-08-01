@@ -243,10 +243,10 @@ class OauthController extends Controller
     public function activateUser($token)
     {
         $user = Users::find([
-            'token = :token: AND status = :status:',
+            'token = :token: AND activated = :activated:',
             'bind' => [
                 'token' => $token,
-                'status' => 0,
+                'activated' => 0,
             ],
         ])->getFirst();
 
@@ -259,7 +259,7 @@ class OauthController extends Controller
             return view('errors.404');
         }
 
-        $user->setStatus(1);
+        $user->setActivated(true);
 
         if ($user->save() === false) {
             foreach ($user->getMessages() as $message) {

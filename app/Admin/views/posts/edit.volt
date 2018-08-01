@@ -9,7 +9,7 @@
     {{ form( 'admin/' ~   controller | lower ~  '/' ~  object.id  ~ '/update', 'class' : 'form-horizontal ') }}
     <div class="row">
 	    <div class="col-sm-8">
-	   
+	     
         <div class="form-group">
             <strong>Title</strong>
             {{ form.render('title', ['class': 'form-control slug-in', 'autocomplete' : 'off']) }}
@@ -37,42 +37,46 @@
         {% endif %}
  
 	    {{ form.render('csrf', ['value': this.security.getToken()]) }}
- 
+      
+   
 		 </div>
 
 
 		 <div class="col-sm-4">
-		 	<div class="card bg-light mb-2">
-		 		<div class="card-body">
-				 
-				 	
-				 	  <div class="form-group d-flex flex-row">
- 			            {{ form.render('status', ['class': 'form-control']) }}
- 			       </div>
+      
+		 	<div class="card mb-2">
+        <div class="card-header bg-light">Status</div>
+  	 		<div class="card-body">				 	
+			 	  <div class="form-group d-flex flex-row">
+			            {{ form.render('status', ['class': 'form-control']) }}
+			       </div>
 
-                <p> <small> Created At: {{ object.created_at }} </small></br>
-                  <small> Updated At: {{ object.updated_at }} </small></p>
-                </hr>
-  		 
-        
-                <div class="text-right">
+              <p> <small> Created At: {{ object.created_at }} </small></br>
+                <small> Updated At: {{ object.updated_at }} </small></p>
+              </hr>
+		 
+      
+              <div class="text-right">
                 <button class="btn btn-secondary mr-1" value="1">SAVE</button>
                 <button class="btn btn-primary float-right" name="publish" value="publish">PUBLISH</button>
-               </div>
+              </div>
 
-	        	</div>
         	</div>
+      	</div>
+  
+
         {% if in_array('thumbnail',  objectType['inputs']) %}
         <div class="card bg-light mb-2">
           <div class="card-body">
               <div class="uploader-wrapper mb-2">
-                <button class="btn">Select thumbnail</button>
+                <button class="btn mb-1">Select thumbnail</button>
                 <input type="file" name="thumbnail" class="uploader-input" accept="image/png, image/jpeg"/>
                 <input type="hidden" name="objectId"  class="uploader-object-id" value="{{object.getId()}}"  />
                 
                 <div class="uploader-preview thumbnail mt-1" >
                   {% if object.get_meta('thumbnail') %}
                     <img src="{{ object.get_meta('thumbnail')}}" class="img-thumbnail">
+                    <a href="#" class="btn btn-danger uploader-delete" data-id="{{object.id}}"><i class="fas fa-trash"></i></a>
                   {% endif %}
                 </div>
               </div>
@@ -99,6 +103,8 @@
   				{% endif  %}
  					
  			{% endfor %}
+
+      
      
   		 </div>
 		</div>

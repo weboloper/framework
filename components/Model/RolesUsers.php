@@ -23,13 +23,13 @@ class RolesUsers extends Model
         $this->belongsTo('role_id', Roles::class, 'id', ['alias' => 'role', 'reusable' => true]);
     }
 
-    public function setUser_id($user_id)
+    public function setUserId($user_id)
     {
         $this->user_id = $user_id;
         return $this;
     }
 
-    public function setRole_id($role_id)
+    public function setRoleId($role_id)
     {
         $this->role_id = $role_id;
         return $this;

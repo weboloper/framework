@@ -260,8 +260,8 @@ class User extends \Components\Model\Services\Service
         $rows = array_diff( $roles_array, $rolesId  );
         foreach ($rows as $role_id) {
             $userRole = new RolesUsers();
-            $userRole->setUser_id($user_id);
-            $userRole->setRole_id($role_id);
+            $userRole->setUserId($user_id);
+            $userRole->setRoleId($role_id);
 
             if (!$userRole->save()) {
                 return false;

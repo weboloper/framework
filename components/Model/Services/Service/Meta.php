@@ -157,6 +157,14 @@ class Meta extends \Components\Model\Services\Service
 
     }
 
+    public function deleteByMetaKey($id, $meta_key) {
+
+        if($meta = $this->has_meta($id, $meta_key ))
+        {
+            $meta->delete();
+        }
+    }
+
     public function validImage($url) {
        $size = getimagesize($url);
        return (strtolower(substr($size['mime'], 0, 5)) == 'image' ? true : false);  

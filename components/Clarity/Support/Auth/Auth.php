@@ -80,7 +80,7 @@ class Auth
         }
 
         // Check if the user was flagged
-        if ( $records->status != 1 ) {
+        if ( $records->activated != 1 ) {
             flash()->session()->warning(
                 'User is not active' 
             );

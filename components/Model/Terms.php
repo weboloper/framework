@@ -16,6 +16,8 @@ class Terms extends Model
     use Timestampable;
     use SoftDeletable;
 
+    public $taxonomy;
+    public $description;
   
 
     // const TYPE_CATEGORY = [
@@ -53,23 +55,23 @@ class Terms extends Model
     //     'tagging'  => false
     // ];
 
-    const TYPE_LOCATION = [
-        'name' => 'Cities',
-        'taxonomy' => 'location',
-        // 'posts' => [ 'post'  ],
-        'metas' => [ ],
-        'icon' => "folder",
-        'multiple' => true,
-        'hierachical' => true,
-        'tagging'  => false
-    ];
+    // const TYPE_LOCATION = [
+    //     'name' => 'Cities',
+    //     'taxonomy' => 'location',
+    //     // 'posts' => [ 'post'  ],
+    //     'metas' => [ ],
+    //     'icon' => "folder",
+    //     'multiple' => true,
+    //     'hierachical' => true,
+    //     'tagging'  => false
+    // ];
 
     #register post types
     const TERM_TYPES = [
         // self::TYPE_CATEGORY['taxonomy'] =>  self::TYPE_CATEGORY,
         self::TYPE_TAG['taxonomy'] =>  self::TYPE_TAG,
         // self::TYPE_FORMAT['taxonomy'] =>  self::TYPE_FORMAT,
-        self::TYPE_LOCATION['taxonomy'] =>  self::TYPE_LOCATION,
+        // self::TYPE_LOCATION['taxonomy'] =>  self::TYPE_LOCATION,
      ];
 
 
@@ -99,14 +101,60 @@ class Terms extends Model
 
     }
 
+    public function getTermId(){
+        return $this->id;
+    }
+
     public function getName(){
         return $this->name;
     }
 
-    public function setSlug($slug)
+    public function setName($name){
+        $this->name = $name;
+        return $name;
+    }
+
+    public function getTaxonomy()
     {
-        $this->slug = $slug;
+        return $this->taxonomy;
+    }
+
+    public function setTaxonomy($taxonomy)
+    {
+        $this->taxonomy = $taxonomy;
         return $this;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function setCount($count)
+    {
+        $this->count = $count;
+        return $count;
+    }
+
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    public function setParentId($parent_id)
+    {
+        $this->parent_id = $parent_id;
+        return $this;
+    }
+    public function getParentId()
+    {
+        return $this->parent_id;
     }
     
     public function afterSave()
