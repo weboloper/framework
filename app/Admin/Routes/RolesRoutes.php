@@ -18,14 +18,19 @@ class RolesRoutes extends RouteGroup
             'action' => 'index'
         ]);
 
+         # url as roles/create
+        $this->addGet('/create', [
+            'action' => 'create'
+        ]);
+
         # url as roles/store
         $this->addPost('/store', [
             'action' => 'store'
         ]);
 
         # url as roles/1/show
-        $this->addGet('/{id}/show', [
-            'action' => 'show'
+        $this->addGet('/{id}/edit', [
+            'action' => 'edit'
         ]);
 
         # url as roles/1/update

@@ -21,8 +21,14 @@ class Access extends AbstractSeed
                 'role_id'   =>  1,
                 'value'     =>  'allow'
             ],
+            [
+                'object'    =>  'ModArea',
+                'action'    =>  'access',
+                'role_id'   =>  1,
+                'value'     =>  'allow'
+            ],
              [
-                'object'    =>  'AdminArea',
+                'object'    =>  'ModArea',
                 'action'    =>  'access',
                 'role_id'   =>  2,
                 'value'     =>  'allow'

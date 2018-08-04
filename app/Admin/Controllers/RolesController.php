@@ -2,6 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use Components\Model\Roles;
+use Components\Forms\RolesForm;
+use Components\validation\RolesValidator;
+
+
 class RolesController extends Controller
 {
     /**
@@ -10,10 +15,18 @@ class RolesController extends Controller
      * @return mixed
      */
     public function index()
-    {
-        return view('{path.to.resources.view}.index');
+    {   
+        $objects = Roles::find();
+        return view('roles.index')->withObjects($objects);
     }
 
+    public function create()
+    {
+        return view('roles.edit')
+            ->with('form', new RolesForm() );
+    }
+
+     
     /**
      * To store a new record
      *
@@ -22,7 +35,38 @@ class RolesController extends Controller
     public function store()
     {
         if (request()->isPost()) {
-            // do some stuff ...
+             // do some stuff ...
+            $inputs = request()->get();
+
+            $validator = new RolesValidator;
+            $validation = $validator->validate($inputs);
+
+            if (count($validation)) {
+                session()->set('input', $inputs);
+
+                return redirect()->to(url()->previous())
+                    ->withError(TermsValidator::toHtml($validation));
+            }
+
+ 
+            $role = new Roles;
+
+            $success = $role->create([
+                'name'  => $inputs['name'], 
+                'description' => $inputs['description'] ,
+            ]);
+
+            if ($success === false) {
+                throw new Exception(
+                    'It seems we can\'t create a role, '.
+                    'please check your access credentials!'
+                );
+            }
+                
+
+            return redirect()->to('admin/roles' )
+                ->withSuccess("Role has been created");
+
         }
     }
 
@@ -33,14 +77,17 @@ class RolesController extends Controller
      *
      * @return mixed
      */
-    public function show($id)
+    public function edit($id)
     {
-        return view('{path.to.resources.view}.show')
-            ->with('id', $id)
-            ->batch([
-                'var1' => true,
-                'var2' => 'this is another value for $var2',
-            ]);
+         if (!$object = Roles::findFirstById($id)) {
+            return redirect()->to( url("admin/roles"))->withError("Object  not found");
+        }
+
+ 
+        return view('roles.edit')
+            ->with('form', new RolesForm($object) )
+            ->with('object', $object );
+   
     }
 
     /**
@@ -53,8 +100,45 @@ class RolesController extends Controller
     public function update($id)
     {
         # process the post request
-        if (request()->isPost()) {
-            // ...
+         if (request()->isPost()) {
+            
+            $inputs = request()->get();
+
+            $validator = new RolesValidator;
+            $validation = $validator->validate($inputs);
+
+            if (count($validation)) {
+                session()->set('input', $inputs);
+
+                return redirect()->to(url('admin/roles/'. $id. '/edit'))
+                    ->withError(PostsValidator::toHtml($validation));
+            }
+
+
+            if (!$object = Roles::findFirstById($id)) {
+                return redirect()->to( url("admin/roles"))->withError("Object  not found");
+            }
+
+            $object->assign(
+                $inputs,
+                null,
+                [
+                    "name",
+                    "description",
+                ]
+            );
+ 
+        
+            if ($object->save() === false) {
+                foreach ($object->getMessages() as $message) {
+                    flash()->session()->error($message);
+                }
+            } else {
+
+                return redirect()->to(url('admin/roles/'. $id. '/edit'))
+                    ->withSuccess('Object updated successfully!');
+            }
+
         }
     }
 

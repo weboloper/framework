@@ -45,9 +45,9 @@ class Cities extends AbstractSeed
             $i++;
         }
         
-        $user = $this->table('terms');
-        $user->insert($data)
-              ->save();
+        // $user = $this->table('terms');
+        // $user->insert($data)
+        //       ->save();
 
     }
 }

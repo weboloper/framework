@@ -14,6 +14,7 @@ use DirectoryIterator;
 
 use Components\Model\Roles;
 use Components\Model\Access;
+use Components\Model\Resources;
 
  /**
  * Class OAuth
@@ -24,9 +25,10 @@ class Manager extends Injectable
 {
 
 
-    const ADMIN_AREA = 'AdminArea';
-	const ADMIN_TEST = 'AdminTest';
+    const ADMIN_AREA    = 'AdminArea';
+	const MOD_AREA     =  'ModArea';
     const ADMIN_AREA_DESCRIPTION = 'Admin area';
+    const MOD_AREA_DESCRIPTION = 'Mod area';
 
     /**
      * @var AdapterInterface
@@ -150,6 +152,8 @@ class Manager extends Injectable
 
 
         if (file_exists($modelsDir)) {
+
+
             $dir = new DirectoryIterator($modelsDir);
 
             foreach ($dir as $fileInfo) {
@@ -163,7 +167,22 @@ class Manager extends Injectable
 
                 $objects[$object->name] = $object;
             }
-        }
+        }  
+ 
+
+        // foreach (Resources::find() as $resource) {
+        //      $objects[$resource->name] = (object)[
+
+        //         'name'        => $resource->name,
+        //         'shortName'   => $resource->name,
+        //         'actions'     => ['access'],
+        //         'description' => $resource->description,
+        //         'options'     => [],
+        //         'path'        => null,
+
+        //      ];
+        // }
+
 
         $objects[self::ADMIN_AREA] = (object) [
             'name'        => self::ADMIN_AREA,
@@ -174,11 +193,11 @@ class Manager extends Injectable
             'path'        => null,
         ];
 
-        $objects[self::ADMIN_TEST] = (object) [
-            'name'        => self::ADMIN_TEST,
-            'shortName'   => self::ADMIN_TEST,
+        $objects[self::MOD_AREA] = (object) [
+            'name'        => self::MOD_AREA,
+            'shortName'   => self::MOD_AREA,
             'actions'     => ['access'],
-            'description' => self::ADMIN_TEST,
+            'description' => self::MOD_AREA_DESCRIPTION,
             'options'     => [],
             'path'        => null,
         ];

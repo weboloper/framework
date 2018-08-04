@@ -164,7 +164,7 @@ class TermsController extends Controller
 
 
             if (!$object = Terms::findFirstByTerm_id($id)) {
-                return redirect()->to( url("admin/posts"))->withError("Object  not found");
+                return redirect()->to( url("admin/terms"))->withError("Object  not found");
             }
 
             $object->assign(
