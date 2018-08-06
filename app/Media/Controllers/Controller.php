@@ -22,6 +22,8 @@ class Controller extends BaseController
         $base_path = __DIR__.'/../';
          
         $this->view->setViewsDir($base_path.'/views');
+
+        $this->middleware('auth');
         
     }
 
