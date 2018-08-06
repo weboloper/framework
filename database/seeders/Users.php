@@ -22,7 +22,7 @@ class Users extends AbstractSeed
                 'name'        => 'admin',
                 'token'       =>  bin2hex(random_bytes(100)),
                 'activated'   => (int) true,
-                'status'      => 1,
+                'status'      => 0,
                 'created_at'  => date('Y-m-d H:i:s'),
             ], 
             [
@@ -32,7 +32,7 @@ class Users extends AbstractSeed
                 'name'        => 'mod',
                 'token'       =>  bin2hex(random_bytes(100)),
                 'activated'   => (int) true,
-                'status'      => 1,
+                'status'      => 0,
                 'created_at'  => date('Y-m-d H:i:s'),
             ],
             [
@@ -42,7 +42,7 @@ class Users extends AbstractSeed
                 'name'        => 'user',
                 'token'       =>  bin2hex(random_bytes(100)),
                 'activated'   => (int) true,
-                'status'      => 1,
+                'status'      => 0,
                 'created_at'  => date('Y-m-d H:i:s'),
             ] 
         ];
