@@ -14,6 +14,7 @@ namespace Components\Clarity\Support\Auth;
 use InvalidArgumentException;
 use Components\Exceptions\EntityException;
 
+use Components\Model\Services\Service\User as userService;
 
 class Auth
 {
@@ -28,6 +29,7 @@ class Auth
         $this->session = di()->get('session');
         $this->response = di()->get('response');
         $this->security = di()->get('security');
+        $this->userService = new userService ;
     }
 
     /**
@@ -164,6 +166,37 @@ class Auth
         return $this->check();
     }
     
+ 
+    public function isAdmin()
+    {
+        if (!$this->isAuthorizedVisitor()) {
+            return false;
+        }
+        return $this->userService->isAdmin();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isModerator()
+    {
+        if (!$this->isAuthorizedVisitor()) {
+            return false;
+        }
+        return $this->userService->isModerator();
+    }
+
+     /**
+      * Checking user is have permission admin
+      *
+      * @return boolean
+      */
+    public function isTrustModeration()
+    {
+        return $this->isAdmin() || $this->isModerator();
+    }
+
+
     public function getUserId()
     {
         if (!$this->isAuthorizedVisitor()) {

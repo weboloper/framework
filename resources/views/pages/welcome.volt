@@ -32,7 +32,12 @@
 
                      
                      
-                    
+                    <h6>to do</h6>
+                    <ul>
+                        <li>Admin term controllers </li>
+                        <li>unique slug for terms doesnt work </li>
+                        <li>change password oauth içine al</li>
+                    </ul>
              
                 </div>
             </div>
