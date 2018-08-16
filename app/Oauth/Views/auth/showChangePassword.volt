@@ -52,16 +52,16 @@
                     <input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
                     <div class="form-group">
                         <label>Current Password</label>
-                        {{ password_field('current', 'class': 'form-control') }}
+                        {{ password_field('current', 'class': 'form-control',  "data-validation" : "length" , "data-validation-length" : "min6" ) }}
                     </div>
                     <hr>
                     <div class="form-group">
                         <label>New {{ lang.get('auth.login.password_label') }}</label>
-                        {{ password_field('password', 'class': 'form-control') }}
+                        {{ password_field('password', 'class': 'form-control',  "data-validation" : "length" , "data-validation-length" : "min6" ) }}
                     </div>
                     <div class="form-group">
                         <label>New {{ lang.get('auth.login.re_password_label') }}</label>
-                        {{ password_field('repassword', 'class': 'form-control') }}
+                        {{ password_field('repassword', 'class': 'form-control' ,  "data-validation":"confirmation" , "data-validation-confirm" : "newpassword" ) }}
                     </div>
                     <div class="pull-right">
                         <button id="register-btn" class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span> Change Password </button>

@@ -27,6 +27,7 @@ $(document).ready(function () {
 });
 
 
+
 $(document).on('click', '.delete-btn', function (e) {
     e.preventDefault();
     var row =  $(this).closest('tr');
@@ -131,7 +132,7 @@ $(document).on('click', '.add_meta_btn', function (e) {
          }
     } );
 
- 
+    
 
     // DataTable
     var table = $('.dashboard-table ').DataTable( {
@@ -150,7 +151,7 @@ $(document).on('click', '.add_meta_btn', function (e) {
             .draw();
     } );
 
-
+    
     $('.select2-select').select2();
     $('.select2-select.tagging-true').select2({
         tags: true,

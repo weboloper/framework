@@ -388,7 +388,9 @@ class OauthController extends Controller
                 'try again, or contact us.'
             );
 
-            return view('errors.404');
+            return redirect()->to(route('showLoginForm'))
+                ->withError(lang()->get('responses/forgetpass.unknown_error'));
+
         }
 
         // $user->setToken('');

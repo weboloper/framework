@@ -124,7 +124,8 @@
     {{ javascript_include('resources/statics/plugins/tinymce/tinymce.min.js') }}
     {{ javascript_include("resources/statics/plugins/DataTables/datatables.min.js")}}
     {{ javascript_include('https://unpkg.com/sweetalert/dist/sweetalert.min.js') }}
-    
+    {{ javascript_include("resources/statics/plugins/form-validator/jquery.form-validator.min.js")}}
+    <script type="text/javascript">$.validate();</script>
      <!-- custom -->
      <script
         src="/resources/statics/js/app.functions.js?v=<?php print rand(1,9999999); ?>"

@@ -34,8 +34,8 @@
         <!-- Plugins -->
         {{ javascript_include("resources/statics/plugins/bootstrap/dist/js/bootstrap.min.js")}}
         {{ javascript_include('https://unpkg.com/sweetalert/dist/sweetalert.min.js') }}
-        
-
+        {{ javascript_include("resources/statics/plugins/form-validator/jquery.form-validator.min.js")}}
+        <script type="text/javascript">$.validate({ modules : 'security'});</script>
 
         {% block footer %}{% endblock %}
     </body>

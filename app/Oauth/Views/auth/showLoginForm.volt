@@ -53,12 +53,12 @@
 
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.email_label') }}</label>
-                        {{ text_field('email', 'class': 'form-control') }}
+                        {{ text_field('email', 'class': 'form-control', "data-validation" :"email") }}
                     </div>
 
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.password_label') }}</label>
-                        {{ password_field('password', 'class': 'form-control' ) }}
+                        {{ password_field('password', 'class': 'form-control' , "data-validation" : "length" , "data-validation-length": "min6"  ) }}
                     </div>
 
                     <div class="form-group">

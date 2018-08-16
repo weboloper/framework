@@ -53,7 +53,7 @@
 
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.email_label') }}</label>
-                        {{ text_field('email', 'class': 'form-control') }}
+                        {{ text_field('email', 'class': 'form-control' ,"data-validation" :"email") }}
                     </div>
  
 

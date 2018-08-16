@@ -207,7 +207,7 @@ class User extends \Components\Model\Services\Service
         $this->validateResetPasswordInterval($entity);
         $newAttributes = [
             'token' => $token,
-            'forgetpass' => true, 
+            'forgetpass' => 1, 
             'lastPasswdReset'  => time(),
         ];
         $entity->assign($newAttributes);

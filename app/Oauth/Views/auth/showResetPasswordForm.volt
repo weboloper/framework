@@ -52,11 +52,11 @@
                     <input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.password_label') }}</label>
-                        {{ password_field('password', 'class': 'form-control') }}
+                        {{ password_field('password', 'class': 'form-control',  "data-validation" : "length" , "data-validation-length" : "min6" ) }}
                     </div>
                     <div class="form-group">
                         <label>{{ lang.get('auth.login.re_password_label') }}</label>
-                        {{ password_field('repassword', 'class': 'form-control') }}
+                        {{ password_field('repassword', 'class': 'form-control', "data-validation":"confirmation" , "data-validation-confirm" : "password") }}
                     </div>
                     <div class="pull-right">
                         <button id="register-btn" class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok"></span> Reset Password </button>
