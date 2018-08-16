@@ -34,15 +34,7 @@
                      
                     <h6>to do</h6>
                     <ul>
-                        <li>Admin term controllers </li>
-                        <li>unique slug for terms doesnt work </li>
-                        <li>change password oauth içine al</li>
-                        <li>terms edit falan hiç biri çalışmıor doğru sankş</li>
-                        <li>term meta post meta düzelt</li>
-                        <li>change password oauth controller içine al</li>
-                        <li>oauth view main vieeten ayır</li>
-                        <li>update meta kalkmış sanırım. has meta add meta olayını term user post için çalışacak şekilde düzelt</li>
-                        <li>thumb ekleme admin/posts/add_meta gidior. admin yetkisi olmayan yükleyemez sorunu çıkar. bunu clarity controller içne aldır. heryerden yetişelim</li>
+                      <li></li>
                     </ul>
              
                 </div>
