@@ -23,7 +23,9 @@ class OauthController extends Controller
      * {@inheritdoc}
      */
     public function initialize()
-    {
+    {   
+        parent::initialize();
+        
         $this->middleware('csrf', [
             'only' => [
                 'attemptToLogin',
@@ -33,6 +35,7 @@ class OauthController extends Controller
         $this->middleware('auth', [
             'only' => [
                 'isLogged',
+                'showChangePassword'
             ],
         ]);
 
@@ -156,11 +159,6 @@ class OauthController extends Controller
      */
     public function showLoginForm()
     {      
-        // if(auth()->check())
-        // {   
-        //     // auth()->destroy();
-        //     return redirect()->to(url()->to('/'));
-        // }
         return view('auth.showLoginForm');
     }
 
@@ -304,12 +302,7 @@ class OauthController extends Controller
      */
     public function showForgetPasswordForm()
     {   
-        // if(auth()->check())
-        // {   
-        //     // auth()->destroy();
-        //     return redirect()->to(url()->to('/'));
-        // }
-
+         
         if(request()->isPost()) {
             
             $inputs = request()->get();
@@ -379,12 +372,7 @@ class OauthController extends Controller
      */
     public function showResetPasswordForm($token, $id)
     {   
-        if(auth()->check())
-        {   
-            // auth()->destroy();
-            return redirect()->to(url()->to('/'));
-        }
-
+    
         $user = Users::find([
             'token = :token: AND forgetpass = :forgetpass: AND id = :id: ',
             'bind' => [
@@ -447,6 +435,48 @@ class OauthController extends Controller
         }
 
         return view('auth.showResetPasswordForm');
+    }
+
+
+    public function showChangePassword()
+    {   
+    
+        if (request()->isPost()) {
+
+            $userId = auth()->getUserId() ;
+
+            if (!$object = Users::findFirstById($userId) ) {
+                return redirect()->to( url(""))->withError("Nesne bulunamadı");
+            }
+             
+            $inputs = request()->get();
+
+            if( $inputs['password'] != $inputs['repassword'])
+            {
+                return redirect()->to( url("oauth/change-password/"))->withError("Passwords dont match!");
+            }
+
+            $password_field = config()->app->auth->password_field;
+
+            if (!$this->security->checkHash($inputs['current'], $object->{$password_field})) {
+                return redirect()->to( url("oauth/change-password/"))->withError("Wrong password!");
+            }
+
+            try {
+                $this->userService->assignNewPassword($object,$inputs['password'] );
+               return redirect()->to( url("oauth/change-password/"))
+                ->withSuccess("Password changed successfully");
+
+                 
+            } catch (EntityException $e) {
+                 return redirect()->to(url()->previous())
+                ->withError( $e);
+            }  
+
+
+        }
+
+        return view('auth.showChangePassword');
     }
 
     

@@ -205,7 +205,7 @@ $(document).ready(function() {
     tinymce.PluginManager.add('select_uploaded',function(editor,url){
 
           var cmsURL = '/media/browser';
-          var type= '' ;
+          var type= 'all' ;
           if (cmsURL.indexOf("?") < 0) {
               //add the type as the only query parameter
               cmsURL = cmsURL + "?type=" + type;

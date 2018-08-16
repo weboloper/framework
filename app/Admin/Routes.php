@@ -32,6 +32,12 @@ Route::add('/admin/filemanager', [
     'action' => 'filemanager',
 ]);
 
+Route::addGet('/admin/createGetSetsForModel/{slug}', [
+    'controller' => 'Index',
+    'action' => 'createGetSetsForModel'
+]);
+
+   
 
 Route::mount(new App\Admin\Routes\PostsRoutes);
 Route::mount(new App\Admin\Routes\UsersRoutes);

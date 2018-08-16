@@ -17,4 +17,22 @@ Route::add( '/media/list', [
     'action' => 'list',
 ]);
 
+
+
+//
+// Route::add('/media/delete_meta', [
+//     'controller' => 'Index',
+//     'action' => 'delete_meta',
+// ]);
+
+Route::addPost('/media/add_meta', [
+    'controller' => 'Index',
+    'action' => 'add_meta',
+]);
+Route::addPost('/media/delete_thumbnail', [
+    'controller' => 'Index',
+    'action' => 'delete_thumbnail',
+]);
+
+
  

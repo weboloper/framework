@@ -19,7 +19,7 @@ class TermsController extends Controller
     {   
         parent::initialize();
         
-        $taxonomy =  request()->getQuery('taxonomy',  ['striptags', 'trim' , 'alphanum']  , 'tag');
+        $taxonomy =  request()->getQuery('taxonomy',  ['striptags', 'trim' , 'alphanum']  ,  Terms::DEFAULT_TERM_TYPE['taxonomy'] );
 
         if( !array_key_exists( $taxonomy , Terms::TERM_TYPES)){
             return redirect()
@@ -108,19 +108,21 @@ class TermsController extends Controller
                     ->withError(TermsValidator::toHtml($validation));
             }
 
-            if(! $inputs['parent']  ){
-                $inputs['parent'] = 0 ;
+            if(! $inputs['parent_id']  ){
+                $inputs['parent_id'] = 0 ;
             }
             
+            $slug_root = ( $inputs['slug'] == '' ) ?  $inputs['name'] : $inputs['slug'];
+            $uniqueSlugForObject = $this->termService->getUniqueSlug( $slug_root , $this->taxonomy , $object = null );
 
             $term = new Terms;
 
             $success = $term->create([
                 'name'  => $inputs['name'], 
-                'slug' => $inputs['slug'] ,
+                'slug' => $uniqueSlugForObject ,
                 'taxonomy' => $inputs['taxonomy'] ,
                 'description' => $inputs['description'] ,
-                'parent' => $inputs['parent'] ,
+                'parent_id' => $inputs['parent_id'] ,
             ]);
 
             if ($success === false) {
@@ -162,10 +164,10 @@ class TermsController extends Controller
                     ->withError(PostsValidator::toHtml($validation));
             }
 
-
             if (!$object = Terms::findFirstByTerm_id($id)) {
                 return redirect()->to( url("admin/terms"))->withError("Object  not found");
             }
+
 
             $object->assign(
                 $inputs,
@@ -175,11 +177,15 @@ class TermsController extends Controller
                     // "slug", // because its disabled
                     "taxonomy",
                     "description",
-                    "parent_id",
+                    "parent_id" 
                 ]
             );
 
-            $this->getUniqueSlug($object , $inputs['slug']);
+
+            $slug_root = ( $inputs['slug'] == '' ) ?  $inputs['name'] : $inputs['slug'];
+            $uniqueSlugForObject = $this->termService->getUniqueSlug( $slug_root , $object->taxonomy ,   null );
+
+            $object->setSlug($uniqueSlugForObject);
 
  
         
@@ -231,39 +237,5 @@ class TermsController extends Controller
             return $this->jsonMessages;
         }
     }
-
-
-    public function checkSlug($slug, $type )
-    {
-        return Terms::findFirst([
-            'taxonomy = :type: AND slug = :slug:',
-            'bind' => [
-                'type' => $type,
-                'slug' => $slug
-            ]
-        ]);
-    }
-
-    public function getUniqueSlug(Terms $object , $slug)
-    {   
-        $slug = Slug::generate($slug);
-
-        if($exists = $this->checkSlug($slug , $object->taxonomy ))
-        {      
-
-            if(  $exists->taxonomy == $object->taxonomy AND $exists->term_id  != $object->term_id     ) {
-
-                return $this->getUniqueSlug($object, $slug."-2");
-
-            }
-        }
-
-        $object->setSlug($slug);
-
-        return $object;
- 
-
-    }
-
 
 }

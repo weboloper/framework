@@ -74,7 +74,17 @@ class Terms extends Model
         // self::TYPE_LOCATION['taxonomy'] =>  self::TYPE_LOCATION,
      ];
 
-
+    const COLUMN_MAP = [ 
+            "term_id",
+            "name",
+            "slug",
+            "taxonomy",
+            "description",
+            "count",
+            "parent_id" 
+            ];
+    
+    const DEFAULT_TERM_TYPE = self::TYPE_TAG;
 
     public function getSource()
     {
@@ -94,69 +104,94 @@ class Terms extends Model
         );
 
         $this->hasMany('term_id', TermMeta::class, 'term_id', ['alias' => 'meta', 'reusable' => true]);
-
-
         $this->hasMany('term_id', Terms::class, 'parent_id', ['alias' => 'children' ]);
         $this->belongsTo('parent_id', Terms::class, 'term_id', ['alias' => 'parent', 'reusable' => true]);
 
     }
+ 
+    
 
-    public function getTermId(){
-        return $this->id;
+
+    public function getTermId()
+    {
+      return $this->term_id;
     }
 
-    public function getName(){
-        return $this->name;
+    public function setTermId($term_id)
+    {
+      $this->term_id = $term_id;
+      return $this ;
     }
 
-    public function setName($name){
-        $this->name = $name;
-        return $name;
+    public function getName()
+    {
+      return $this->name;
+    }
+
+    public function setName($name)
+    {
+      $this->name = $name;
+      return $this ;
+    }
+
+    public function getSlug()
+    {
+      return $this->slug;
+    }
+
+    public function setSlug($slug)
+    {
+      $this->slug = $slug;
+      return $this ;
     }
 
     public function getTaxonomy()
     {
-        return $this->taxonomy;
+      return $this->taxonomy;
     }
 
     public function setTaxonomy($taxonomy)
     {
-        $this->taxonomy = $taxonomy;
-        return $this;
+      $this->taxonomy = $taxonomy;
+      return $this ;
     }
 
     public function getDescription()
     {
-        return $this->description;
+      return $this->description;
     }
 
     public function setDescription($description)
     {
-        $this->description = $description;
-        return $this;
-    }
-
-    public function setCount($count)
-    {
-        $this->count = $count;
-        return $count;
+      $this->description = $description;
+      return $this ;
     }
 
     public function getCount()
     {
-        return $this->count;
+      return $this->count;
+    }
+
+    public function setCount($count)
+    {
+      $this->count = $count;
+      return $this ;
+    }
+
+    public function getParentId()
+    {
+      return $this->parent_id;
     }
 
     public function setParentId($parent_id)
     {
-        $this->parent_id = $parent_id;
-        return $this;
+      $this->parent_id = $parent_id;
+      return $this ;
     }
-    public function getParentId()
-    {
-        return $this->parent_id;
-    }
-    
+
+
+
+
     public function afterSave()
     {
         // Convert the string to an array

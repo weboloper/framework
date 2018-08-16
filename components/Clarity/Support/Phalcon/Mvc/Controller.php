@@ -12,14 +12,30 @@
 namespace Components\Clarity\Support\Phalcon\Mvc;
 
 use Phalcon\Config;
+use Phalcon\Mvc\Dispatcher;
 use League\Tactician\CommandBus;
 use Components\Clarity\Support\Phalcon\Http\Middleware;
 use Phalcon\Mvc\Controller as BaseController;
 use Components\Model\PostMeta;
 
 
+use Components\Model\Services\Service\User as userService;
+use Components\Model\Services\Service\Post as postService;
+use Components\Model\Services\Service\Term as termService;
+use Components\Model\Services\Service\Meta as metaService;
+use Components\Model\Services\Service\Common as commonService;
+
 class Controller extends BaseController
 {   
+
+    protected $jsonResponse = false;
+   
+    public $jsonMessages = [];
+
+    protected $statusCode = 200;
+
+
+
     public function onConstruct()
     {   
         $this->tag->setTitle( $this->config->app->app->name );
@@ -30,6 +46,13 @@ class Controller extends BaseController
             'controller'    => di()->get('router')->getControllerName(),
             // 'googleAnalytic'=> $this->config->googleAnalytic
         ]);
+
+        $this->userService = new userService;
+        $this->termService = new termService;
+        $this->postService = new postService;
+        $this->metaService = new metaService;
+        $this->commonService = new commonService;
+
     }
 
     public function middleware($alias, $options = [])
@@ -98,6 +121,45 @@ class Controller extends BaseController
     }
 
 
+    /**
+     * Check if we need to throw a json response. For ajax calls.
+     *
+     * @return bool
+     */
+    public function isJsonResponse()
+    {
+        return $this->jsonResponse;
+    }
+    /**
+     * Set a flag in order to know if we need to throw a json response.
+     *
+     * @return $this
+     */
+    public function setJsonResponse()
+    {
+        $this->jsonResponse = true;
+        return $this;
+    }
+    /**
+     * After execute route event
+     *
+     * @param Dispatcher $dispatcher
+     */
+    public function afterExecuteRoute(Dispatcher $dispatcher)
+    {
+        if ($this->request->isAjax() && $this->isJsonResponse()) {
+            $this->view->disable();
+            $this->response->setContentType('application/json', 'UTF-8');
+            $data = $dispatcher->getReturnedValue();
+            if (is_array($data)) {
+                $this->response->setJsonContent($data);
+            }
+            echo $this->response->getContent();
+        }
+    }
+
+    
+     
 
     /**
      * To has a record

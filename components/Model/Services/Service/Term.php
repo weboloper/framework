@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 use Components\Model\Terms;
 use Components\Model\TermRelationships;
+use Components\Utils\Slug;
 
 use Components\Exceptions\EntityNotFoundException;
 use Components\Exceptions\EntityException;
@@ -77,5 +78,37 @@ class Term extends \Components\Model\Services\Service
             }
         }
     }
+
+     public function checkSlug($slug, $taxonomy )
+    {
+        return Terms::findFirst([
+            'taxonomy = :taxonomy: AND slug = :slug:',
+            'bind' => [
+                'taxonomy' => $taxonomy,
+                'slug' => $slug
+            ]
+        ]);
+    }
+
+    public function getUniqueSlug($slug_root , $taxonomy, Terms $object = null )
+    {   
+        $slug = Slug::generate($slug_root);
+
+        if($exists = $this->checkSlug($slug ,   $taxonomy  ))
+        {      
+            if($object) {
+                if( $exists->getTermId() != $object->getTermId() ){
+                    return $this->getUniqueSlug(  $slug."-2" ,  $taxonomy ,  $object );
+                }
+            }else {
+                return $this->getUniqueSlug(   $slug."-2" ,  $taxonomy );
+            }       
+        }
+
+        return $slug;
+ 
+
+    }
+
 
 }

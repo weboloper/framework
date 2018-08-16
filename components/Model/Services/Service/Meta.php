@@ -4,6 +4,11 @@ namespace Components\Model\Services\Service;
 
 use Components\Model\PostMeta;
 use Components\Model\TermMeta;
+use Components\Model\UserMeta;
+
+use Components\Model\Posts;
+use Components\Model\Users;
+use Components\Model\Terms;
 
 use Components\Exceptions\EntityNotFoundException;
 use Components\Exceptions\EntityException;
@@ -40,22 +45,39 @@ class Meta extends \Components\Model\Services\Service
         return $post;
     }
 
-    
-     /**
+    /**
      * To has a record
      *
      * @param $id The id to be deleted
      *
      * @return void
      */
-    public function has_meta($objectId, $meta_key)
+    public function has_meta($objectId, $meta_key,  $objectType = 'post')
     {   
-        $meta = PostMeta::find(
+        switch ($objectType) {
+            case 'term':
+                # code...
+                $className = new TermMeta;
+                $key = 'term_id';
+                break;
+            case 'user':
+                # code...
+                $className = new UserMeta;
+                $key = 'user_id';
+                break;
+            default:
+                # code...
+                $className =  new PostMeta;
+                $key = 'post_id';
+                break;
+        }
+
+        $meta =  $className::find(
             [
-                'meta_key = :meta_key: AND  post_id = :post_id: ',
+                'meta_key = :meta_key: AND  '. $key . ' = :objectId: ',
                 'bind'       => [
                     'meta_key' => $meta_key,
-                    'post_id' => $objectId
+                    'objectId' => $objectId
                 ]
             ]
         );
@@ -63,16 +85,32 @@ class Meta extends \Components\Model\Services\Service
         return $meta->valid() ? $meta : false; 
     }
 
-     /**
+
+/**
      * To delete a record
      *
      * @param $id The id to be deleted
      *
      * @return void
      */
-    public function delete_meta($metaId)
-    {
-        $meta = PostMeta::findFirstByMeta_id($metaId);
+    public function delete_meta($metaId ,  $objectType = 'post' )
+    {   
+        switch ($objectType) {
+            case 'term':
+                # code...
+                $className = new TermMeta;
+                break;
+            case 'user':
+                # code...
+                $className = new UserMeta;
+                break;
+            default:
+                # code...
+                $className =  new PostMeta;
+                break;
+        }
+
+        $meta = "Components\Model\\" . $className::findFirstByMeta_id($metaId);
 
         if( ! $meta ) {
             throw new Exception(
@@ -85,8 +123,9 @@ class Meta extends \Components\Model\Services\Service
         }
         return true;
 
-
     }
+
+
 
     /**
      * To add a record
@@ -98,10 +137,13 @@ class Meta extends \Components\Model\Services\Service
     public function add_meta($objectId , $objectType,  $metaKey, $metaValue)
     {   
  
-        if( $objectType == 'taxonomy' ){
+        if( $objectType == 'term' ){
             $meta = new TermMeta();
             $meta->setTermId($objectId); 
-        }else {
+        }elseif( $objectType == 'user' ){
+            $meta = new UserMeta();
+            $meta->setUserId($objectId); 
+        }else { 
             $meta = new PostMeta();
             $meta->setPostId($objectId); 
         }
@@ -125,45 +167,36 @@ class Meta extends \Components\Model\Services\Service
 
     }
 
-
-    /**
-     * To add a record
-     *
-     * @param $id The id to be add
-     *
-     * @return void
-     */
-    public function update_meta($metaId ,   $metaValue)
-    {   
-        $meta = PostMeta::findFirstByMeta_id($metaId);
-
-        if( !$meta ) {
-            throw new Exception(
-                    "Object not found!" 
-                );
-        }
-        $meta->setMetaValue($metaValue);
-        
-        if (!$meta->save()) {
-            
-            foreach ($meta->getMessages() as $m) {
-                throw new Exception(
-                    "There is an error: ".$m->getMessage() 
-                );
-             }
-        }
-
-        return $meta; 
-
-    }
-
-    public function deleteByMetaKey($id, $meta_key) {
-
-        if($meta = $this->has_meta($id, $meta_key ))
+    public function delete_by_meta_key($objectId, $objectType , $meta_key   ) {
+        if($meta = $this->has_meta($objectId, $meta_key , $objectType ))
         {
             $meta->delete();
         }
     }
+
+
+    public function findObject($objectId, $objectType ) {
+
+        switch ($objectType) {
+                case 'term':
+                    # code...
+                    return Terms::findFirstByTermId($objectId);
+                    break;
+                case 'user':
+                    # code...
+                    return Users::findFirstById($objectId);
+                    break;
+                case 'post':
+                    # code...
+                    return Posts::findFirstById($objectId);
+                    break;
+                default:
+                    return null;
+                    break;
+            }
+    }
+
+
 
     public function validImage($url) {
        $size = getimagesize($url);

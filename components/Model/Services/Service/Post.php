@@ -5,6 +5,7 @@ namespace Components\Model\Services\Service;
 use DateTime;
 use DateTimeZone;
 use Components\Model\Posts;
+use Components\Utils\Slug;
 
 use Components\Exceptions\EntityNotFoundException;
 use Components\Exceptions\EntityException;
@@ -15,7 +16,10 @@ use claviska\SimpleImage;
 class Post extends \Components\Model\Services\Service
 {
 	
-      
+      public function demo()
+      {
+        return "works";
+      }
     /**
      * Finds User by ID.
      *
@@ -73,5 +77,38 @@ class Post extends \Components\Model\Services\Service
         }
         return $post;
     }
+
+
+
+    public function checkSlug($slug, $type )
+    {
+        return Posts::findFirst([
+            'type= :type: AND slug = :slug:',
+            'bind' => [
+                'type' => $type,
+                'slug' => $slug
+            ]
+        ]);
+    }
+
+    public function getUniqueSlug($slug_root , $objectType, Posts $object = null )
+    {   
+        $slug = Slug::generate($slug_root);
+
+        if($exists = $this->checkSlug($slug ,   $objectType  ))
+        {      
+            if($object) {
+                if( $exists->getId() != $object->getId() ){
+                    return $this->getUniqueSlug(  $slug."-2" ,  $objectType ,  $object );
+                }
+            }else {
+                return $this->getUniqueSlug(   $slug."-2" ,  $objectType );
+            }       
+        }
+
+        return $slug;
+
+    }
+
  
 }

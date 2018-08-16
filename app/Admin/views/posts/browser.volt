@@ -24,10 +24,8 @@
 {% block content %}
 
  
-<iframe frameborder="0"  scrolling="auto" src="/media/browser" width="100%" height="900px"></iframe>
+<iframe frameborder="0"  scrolling="auto" src="/media/browser?type=all" width="100%" height="900px"></iframe>
  
-     
-
 {% endblock %}
 
 {% block footer %}

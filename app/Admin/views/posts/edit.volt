@@ -66,22 +66,7 @@
   
 
         {% if in_array('thumbnail',  objectType['inputs']) %}
-        <div class="card bg-light mb-2">
-          <div class="card-body">
-              <div class="uploader-wrapper mb-2">
-                <button class="btn mb-1">Select thumbnail</button>
-                <input type="file" name="thumbnail" class="uploader-input" accept="image/png, image/jpeg"/>
-                <input type="hidden" name="objectId"  class="uploader-object-id" value="{{object.getId()}}"  />
-                
-                <div class="uploader-preview thumbnail mt-1" >
-                  {% if object.get_meta('thumbnail') %}
-                    <img src="{{ object.get_meta('thumbnail')}}" class="img-thumbnail">
-                    <a href="#" class="btn btn-danger uploader-delete" data-id="{{object.id}}"><i class="fas fa-trash"></i></a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          </div>
+          {% include "partials/uploader" with [ 'object' : object , 'objectid' :  object.id   , 'objectype' : 'post' ] %}
         {% endif %}
             
   			{% for term in objectType['terms'] %}
@@ -111,7 +96,7 @@
     {{ endform() }}
     
     {% if objectType['metas'] %}
-    	{% include "partials/meta_forms.volt" %}
+    	{% include "partials/meta_forms"  with ['metas' : objectType['metas'] ] %}
     {% endif %}
     
 

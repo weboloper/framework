@@ -4,6 +4,8 @@ namespace App\Media\Controllers;
 
 // use FroalaEditor\FroalaEditor_Image;
 use Components\Model\Posts;
+use Components\Model\Users;
+use Components\Model\Terms;
 use Components\Model\Model;
 use Components\Library\Media\MediaType;
 
@@ -134,8 +136,22 @@ class IndexController extends Controller
         ");
 
         $attachmentType   = request()->getQuery('type', 'string');
+        $userId   = request()->getQuery('userId', 'int');
+        $taxonomy   = request()->getQuery('taxonomy', 'int');
 
-        return view('browser')->with('attachmentType',  $attachmentType);
+        // kategor seçtir
+        $terms_array = null;
+        // $terms_array[] =  [ 'term_id'=> '45' , 'name' => "Demo Hastanesi"]; 
+        
+        $terms_array = Terms::find(['taxonomy = "tag"' , 'columns' => ['name', 'term_id']])->toArray() ;
+
+        // die(var_dump($terms_array));
+
+        return view('browser')
+            ->with('attachmentType',  $attachmentType)
+            ->with('userId',  $userId)
+            ->with('taxOptions', json_encode( $terms_array ))
+            ->with('taxonomy',  $taxonomy );
     }
 
     public function list()
@@ -146,10 +162,33 @@ class IndexController extends Controller
         $offset     = ($page - 1) * $perPage + 1;
 
         $attachmentType   = request()->getQuery('type', 'string');
-        
+        $userId   = request()->getQuery('userId', 'int');
+        $taxonomy   = request()->getQuery('taxonomy', 'int');
 
-        list($itemBuilder, $totalBuilder) =
+        $params = [];
+        if($taxonomy)
+        {   
+            $join = [
+                'type'  => 'join',
+                'model' => 'TermRelationships',
+                'on'    => 'tr.post_id = p.id',
+                'alias' => 'tr'
+            ];
+            list($itemBuilder, $totalBuilder) =
+                Model::prepareQueriesPosts($join, "p.type = 'attachment'", $perPage);
+            $itemBuilder->groupBy(array('p.id'));
+
+            $params['taxonomy']  = $taxonomy ;
+            $taxonomyConditions = 'tr.term_id = :taxonomy:';
+            $itemBuilder->andWhere($taxonomyConditions);
+            $totalBuilder->andWhere($taxonomyConditions);
+             
+        }else {
+            list($itemBuilder, $totalBuilder) =
                 Model::prepareQueriesPosts( false , "p.type = 'attachment'", $perPage);
+        }
+
+  
 
         if($attachmentType =='image'){
             $type_keyConditions = 'p.mime_type = "image"';
@@ -163,12 +202,14 @@ class IndexController extends Controller
         }
         
 
-        $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute();
+
+
+        $totalPosts = $totalBuilder->getQuery()->setUniqueRow(true)->execute($params);
 
         if ($page > 1) {
             $itemBuilder->offset($offset);
         }
-        $objects = $itemBuilder->getQuery()->execute();
+        $objects = $itemBuilder->getQuery()->execute($params);
 
         $resource = new Collection($objects, function(Posts $post) {
 
@@ -205,24 +246,153 @@ class IndexController extends Controller
 
     }
 
-    public function listjs()
+
+
+
+
+    //META
+    public function add_meta()
+        {   
+            if (request()->isPost()  && request()->isAjax()) {
+                
+                $this->setJsonResponse();
+
+                $objectId = request()->getPost('objectId', ['striptags', 'trim' , 'int'] );
+                $objectType = request()->getPost('objectType', ['striptags', 'trim' , 'alphanum'] );
+                $metaId = request()->getPost('metaId', ['striptags', 'trim' , 'int'] );
+                $metaKey = request()->getPost('meta_key', ['striptags', 'trim' , 'alphanum'] );
+                $metaValue  = request()->getPost('meta_value', ['striptags', 'trim' , 'string']  );
+                $btn_clicked  = request()->getPost('btn_clicked', ['striptags', 'trim' , 'string']  );
+
+
+                if($btn_clicked =='delete' && $metaKey &&  $objectId && $objectType   )
+                {
+                    if($oldmetas = $this->metaService->has_meta($objectId , $metaKey , $objectType  ))
+                    {
+                        foreach ( $oldmetas as $meta) {
+                            $meta->delete();
+                        }
+
+                    }
+                    $this->response->setStatusCode(200,  "Success" );
+                    $this->response->setJsonContent('table-danger');
+                    return $this->response->send();
+
+                }
+                if( !$metaKey || !$metaValue || !$objectId || !$objectType ){
+                        $this->jsonMessages['messages'][] = [
+                                'type'    => 'warning',
+                                'content' => 'Meta key and value required'
+                            ];
+                        return $this->jsonMessages;
+                }
+
+
+                if($metaKey == 'thumbnail'){
+
+                    if (filter_var( $metaValue , FILTER_VALIDATE_URL) === FALSE) {
+                        $this->jsonMessages['messages'][] = [
+                            'type'    => 'warning',
+                            'content' => 'Image not valid'
+                        ];
+                        return $this->jsonMessages;
+                    }
+
+                    if(!$this->metaService->validImage($metaValue)){
+                        $this->jsonMessages['messages'][] = [
+                            'type'    => 'warning',
+                            'content' => 'Image not valid'
+                        ];
+                        return $this->jsonMessages;
+                    }
+           
+                }
+
+                $object =  $this->metaService->findObject($objectId ,$objectType);
+                
+
+                if (!$object) {
+                    $this->jsonMessages['messages'][] = [
+                        'type'    => 'warning',
+                        'content' => 'Entity not found'
+                    ];
+                    return $this->jsonMessages;
+                }
+
+                 
+                try{
+
+                    if($oldmetas = $this->metaService->has_meta($objectId , $metaKey , $objectType ))
+                    {
+                        foreach ( $oldmetas as $meta) {
+                            $meta->delete();
+                        }
+
+                    }
+                    $meta = $this->metaService->add_meta( $objectId , $objectType ,  $metaKey, $metaValue);
+                    
+                    $this->response->setStatusCode(200,  "Success" );
+                    $this->response->setJsonContent( $meta );
+                    return $this->response->send();
+
+                }catch ( Exception $e) {
+                    $this->response->setStatusCode(406 ,  $e );
+                    $this->jsonMessages['messages'][] = [
+                        'type'    => 'warning',
+                        'content' =>  $e 
+                    ];
+                    return $this->jsonMessages;
+                }
+     
+            }
+
+        }
+
+
+
+
+    /**
+     * To delete a record
+     *
+     * @param $id The id to be deleted
+     *
+     * @return void
+     */
+    public function delete_thumbnail()
     {
-        // die(var_dump(222));
-        $this->view->disable();
+        if (request()->isPost()  && request()->isAjax()) {
 
-        $output =  'var tinyMCEImageList = new Array(';
-            // Name, URL
-        $output .=    '["Logo 1", "logo.swf"],';
-        $output .=      '["Logo 2 Over", "logo_over.fla"]';
-        $output .=  ');';
 
-        $this->response->setStatusCode(200,  "Success" );
-        $this->response->setHeader("Content-Type","text/javascript");
-        $this->response->setHeader("pragma","no-cache");
-        $this->response->setHeader("expires","0'");
-        $this->response->setContent( $output );
- 
-        return $this->response->send();
- 
+            $this->setJsonResponse();
+
+            $objectId = request()->getPost('objectId', ['striptags', 'trim' , 'int'] );
+            $objectType = request()->getPost('objectType', ['striptags', 'trim' , 'alphanum'] );
+
+            $object =  $this->metaService->findObject($objectId ,$objectType);
+                
+
+            if (!$object) {
+                $this->jsonMessages['messages'][] = [
+                    'type'    => 'warning',
+                    'content' => 'Entity not found'
+                ];
+                return $this->jsonMessages;
+            }
+
+            
+            $this->metaService->delete_by_meta_key( $objectId , $objectType , 'thumbnail' );
+            $this->response->setStatusCode(200,  "Success" );
+            $this->response->setJsonContent( "done!" );
+            return $this->response->send();
+
+        }
+       
+
     }
+
+
+
+
+
+
 }

@@ -3,7 +3,7 @@
 <div class="bg-light  border">
 <table class="table">
     <tbody>
-         {% for meta,name  in objectType['metas']  %}
+         {% for meta,name  in metas  %}
 
             {{ form( 'id' : 'meta-form-' ~ meta ,   'admin/' ~   controller | lower ~  '/add_meta', 'class' : 'object-meta-form') }}{{ endform() }}
             <tr>

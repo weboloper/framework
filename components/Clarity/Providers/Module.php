@@ -61,6 +61,7 @@ class Module extends ServiceProvider
         $modules = [];
         $modules[$name] = $closure;
 
+      
         config(['modules' => $modules]);
 
         return $this;

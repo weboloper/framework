@@ -78,7 +78,7 @@ class User extends \Components\Model\Services\Service
      *
      * @return bool
      */
-    public function isAdmin()
+    public function checkIsAdmin()
     {
         return in_array(Role::ADMIN_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
     }
@@ -87,7 +87,7 @@ class User extends \Components\Model\Services\Service
      *
      * @return bool
      */
-    public function isModerator()
+    public function checkIsModerator()
     {
         return in_array(Role::MODERATOR_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
     }
@@ -225,7 +225,7 @@ class User extends \Components\Model\Services\Service
         $token = bin2hex(random_bytes(100));
 
         $newAttributes = [
-            'forgetpass' => false, 
+            'forgetpass' => 0, 
             'password'  => security()->hash( $password ),
         ];
         $entity->assign($newAttributes);

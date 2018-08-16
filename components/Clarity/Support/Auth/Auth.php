@@ -172,7 +172,7 @@ class Auth
         if (!$this->isAuthorizedVisitor()) {
             return false;
         }
-        return $this->userService->isAdmin();
+        return $this->userService->checkIsAdmin();
     }
 
     /**
@@ -183,7 +183,7 @@ class Auth
         if (!$this->isAuthorizedVisitor()) {
             return false;
         }
-        return $this->userService->isModerator();
+        return $this->userService->checkIsModerator();
     }
 
      /**

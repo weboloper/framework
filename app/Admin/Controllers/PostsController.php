@@ -32,20 +32,23 @@ class PostsController extends Controller
     {   
         parent::initialize();
 
-        $type =  request()->getQuery('type',  ['striptags', 'trim' , 'alphanum']  , 'post');
-
+        $type =  request()->getQuery('type',  ['striptags', 'trim' , 'alphanum']   , Posts::DEFAULT_POST_TYPE['slug'] );
 
         if( !array_key_exists( $type , Posts::POST_TYPES)){
             return redirect()->to( url("admin"))->withError("Object type [" . $type ."] not found");
         }
 
-        $this->view->tab = $type;        
         $this->type = $type;
-        $this->objectType = Posts::POST_TYPES[$type];
-        $this->metaService = new metaService;
-        
+        $this->view->tab = $this->type;        
+        $this->objectType = Posts::POST_TYPES[ $this->type ];        
+        $this->view->objectType = $this->objectType;  
+
+        $this->default_model = \Components\Model\Posts::class;      
+        $this->view->terms_array = [];      
+        $this->view->post_terms = [];
 
     }
+    
  
     /**
      * View the starting index of this resource
@@ -54,6 +57,7 @@ class PostsController extends Controller
      */
     public function index()
     {   
+
         // $type = request()->getQuery('type');
         $status = request()->getQuery("status", ['striptags', 'trim' , 'alphanum'] );
         $meta_key = request()->getQuery("meta_key", ['striptags', 'trim' , 'alphanum'] );
@@ -100,7 +104,8 @@ class PostsController extends Controller
                 $itemBuilder->andWhere($statusConditions);
             }else {
 
-                $statusConditions = ' p.status   !IN("draft", "trash")  ';
+                $statusConditions = ' p.status  != "trash" ';
+                // $statusConditions = ' p.status   !IN("draft", "trash")  ';
                 $itemBuilder->andWhere($statusConditions);
             }
         }else {
@@ -114,7 +119,7 @@ class PostsController extends Controller
         // if($this->type == 'attachment') {
         //     return view('attachments.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
         // }
-        return view('posts.index')->withObjects( $objects )->with( 'objectType', $this->objectType );
+        return view('posts.index')->withObjects( $objects );
     }
 
     /**
@@ -130,6 +135,8 @@ class PostsController extends Controller
         if($this->type == 'attachment')
         {
             return view('posts.browser');
+        }else {
+            return view('posts.create')->with('form', new PostsForm() );
         }
 
         $object = new Posts();
@@ -152,6 +159,61 @@ class PostsController extends Controller
     }
  
 
+    /**
+     * To store a new record
+     *
+     * @return void
+     */
+    public function store()
+    {
+        if (request()->isPost()) {
+             // do some stuff ...
+            $inputs = request()->get();
+
+            $validator = new PostsValidator;
+            $validation = $validator->validate($inputs);
+
+            if (count($validation)) {
+                session()->set('input', $inputs);
+
+                return redirect()->to(url()->previous())
+                    ->withError(PostsValidator::toHtml($validation));
+            }
+
+            foreach ($this->default_model::COLUMN_MAP as $key ) {
+                if(!array_key_exists( $key, $inputs )) {
+                    $inputs[$key] = '';
+                }
+            }
+
+            $slug_root = ( $inputs['slug'] == '' ) ?  $inputs['title'] : $inputs['slug'];
+            $uniqueSlugForObject = $this->postService->getUniqueSlug( $slug_root , $this->type , $object = null );
+
+            $object = new Posts;
+
+            $success = $object->create([
+                'title'    => $inputs['title'], 
+                'slug'     => $uniqueSlugForObject ,
+                'body'     => $inputs['body'] ,
+                'excerpt'  => $inputs['excerpt'] ,
+                'status'   => $inputs['status'] ,
+
+             ]);
+
+            if ($success === false) {
+
+                throw new Exception(
+                    $object->getMessages()[0]
+                );
+            }
+                
+
+            return redirect()->to('admin/posts/' . $object->id  . "/edit" )
+                ->withSuccess("Post has been created. You may publish it");
+
+        }
+    }
+
  
     /**
      * To show an output based on the requested ID
@@ -165,8 +227,7 @@ class PostsController extends Controller
         if (!$object = Posts::findFirstById($id)) {
             return redirect()->to( url("admin/posts"))->withError("Object  not found");
         }
-  
-
+    
         $terms_array = [];
         foreach ( Posts::POST_TYPES[$object->getType()]['terms'] as $key   ) {
             $terms  = Terms::find([   'taxonomy = :type:  ' , 'bind' => ['type' => $key ]]) ; 
@@ -243,8 +304,10 @@ class PostsController extends Controller
                 ]
             );
 
-            $slug = $this->getUniqueSlug($object->type , $inputs['slug'] , $object );
-            $object->setSlug($slug);
+            $slug_root = ( $inputs['slug'] == '' ) ?  $inputs['title'] : $inputs['slug'];
+            $uniqueSlugForObject = $this->postService->getUniqueSlug( $slug_root , $this->type , null );
+
+            $object->setSlug($uniqueSlugForObject);
 
             if ( request()->getPost('publish')) {
                 if( !$inputs['title'] ) {
@@ -289,35 +352,7 @@ class PostsController extends Controller
     }
 
      
-    public function checkSlug($slug, $type )
-    {
-        return Posts::findFirst([
-            'type= :type: AND slug = :slug:',
-            'bind' => [
-                'type' => $type,
-                'slug' => $slug
-            ]
-        ]);
-    }
-
-    public function getUniqueSlug($type , $slug, Posts $object = null )
-    {   
-        $slug = Slug::generate($slug);
-
-        if($exists = $this->checkSlug($slug ,  $type  ))
-        {      
-            if($object) {
-                if( $exists->getId() != $object->getId() ){
-                    return $this->getUniqueSlug( $type  , $slug."-2" , $object );
-                }
-            }else {
-                return $this->getUniqueSlug( $type  , $slug."-2" );
-            }       
-        }
-
-        return $slug;
-
-    }
+    
 
     /**
      * To delete a record
@@ -353,165 +388,8 @@ class PostsController extends Controller
         }
     }
 
-   
 
-    public function add_meta()
-    {   
-        if (request()->isPost()  && request()->isAjax()) {
-            
-            $this->setJsonResponse();
-
-            $objectId = request()->getPost('objectId', ['striptags', 'trim' , 'int'] );
-            $metaId = request()->getPost('metaId', ['striptags', 'trim' , 'int'] );
-            $objectType = request()->getPost('meta_key', ['striptags', 'trim' , 'alphanum'] );
-            $metaKey = request()->getPost('meta_key', ['striptags', 'trim' , 'alphanum'] );
-            $metaValue  = request()->getPost('meta_value', ['striptags', 'trim' , 'string']  );
-            $btn_clicked  = request()->getPost('btn_clicked', ['striptags', 'trim' , 'string']  );
-
-
-            if($btn_clicked =='delete' && $metaKey &&  $objectId )
-            {
-                if($oldmetas = $this->metaService->has_meta($objectId , $metaKey ))
-                {
-                    foreach ( $oldmetas as $meta) {
-                        $meta->delete();
-                    }
-
-                }
-                $this->response->setStatusCode(200,  "Success" );
-                $this->response->setJsonContent('table-danger');
-                return $this->response->send();
-
-            }
-            if( !$metaKey || !$metaValue || !$objectId || !$objectType ){
-                    $this->jsonMessages['messages'][] = [
-                            'type'    => 'warning',
-                            'content' => 'Meta key and value required'
-                        ];
-                    return $this->jsonMessages;
-            }
-
-
-            if($metaKey == 'thumbnail'){
-
-                if (filter_var( $metaValue , FILTER_VALIDATE_URL) === FALSE) {
-                    $this->jsonMessages['messages'][] = [
-                        'type'    => 'warning',
-                        'content' => 'Image not valid'
-                    ];
-                    return $this->jsonMessages;
-                }
-
-                if(!$this->metaService->validImage($metaValue)){
-                    $this->jsonMessages['messages'][] = [
-                        'type'    => 'warning',
-                        'content' => 'Image not valid'
-                    ];
-                    return $this->jsonMessages;
-                }
-       
-            }
-
-            if (!$object = Posts::findFirstById($objectId)) {
-                $this->jsonMessages['messages'][] = [
-                    'type'    => 'warning',
-                    'content' => 'Entity not found'
-                ];
-                return $this->jsonMessages;
-            }
-
-             
-            try{
-                // if($metaId) {
-                //     $meta = $this->metaService->update_meta($metaId , $metaValue);
-                // }else {
-                //     $meta = $this->metaService->add_meta($objectId , $objectType ,  $metaKey, $metaValue);
-                // }
-
-                if($oldmetas = $this->metaService->has_meta($objectId , $metaKey ))
-                {
-                    foreach ( $oldmetas as $meta) {
-                        $meta->delete();
-                    }
-
-                }
-                $meta = $this->metaService->add_meta($objectId , $objectType ,  $metaKey, $metaValue);
-                
-                $this->response->setStatusCode(200,  "Success" );
-                $this->response->setJsonContent( $meta );
-                return $this->response->send();
-
-            }catch ( Exception $e) {
-                $this->response->setStatusCode(406 ,  $e );
-                $this->jsonMessages['messages'][] = [
-                    'type'    => 'warning',
-                    'content' =>  $e 
-                ];
-                return $this->jsonMessages;
-            }
- 
-        }
-
-    }
-
-    /**
-     * To delete a record
-     *
-     * @param $id The id to be deleted
-     *
-     * @return void
-     */
-    public function delete_thumbnail($id)
-    {
-        if (request()->isPost()  && request()->isAjax()) {
-           if (!$object = Posts::findFirstById($id)) {
-                $this->jsonMessages['messages'][] = [
-                    'type'    => 'warning',
-                    'content' => 'Entity not found'
-                ];
-                return $this->jsonMessages;
-            }
-        }
-        $this->metaService->deleteByMetaKey( $id , 'thumbnail');
-        $this->response->setStatusCode(200,  "Success" );
-        $this->response->setJsonContent( "done!" );
-        return $this->response->send();
-
-    }
-
-    /**
-     * To delete a record
-     *
-     * @param $id The id to be deleted
-     *
-     * @return void
-     */
-    public function delete_meta()
-    {
-        # process the request which it must be post and ajax request
-        if (request()->isPost()  && request()->isAjax()) {
-            
-            $metaId   = request()->getPost('object-id', 'int');
-            $object   = request()->getPost('object', 'alphanum');
-            
-            $this->setJsonResponse();
-
-            try {
-                $status = $this->metaService->delete_meta($metaId);
-                $this->response->setStatusCode(200,  "Success" );
-                $this->response->setJsonContent( $status );
-                return $this->response->send();
-            }catch ( Exception $e) {
-                $this->response->setStatusCode(406 ,  $e );
-                $this->jsonMessages['messages'][] = [
-                    'type'    => 'warning',
-                    'content' =>  $e 
-                ];
-                return $this->jsonMessages;
-            }             
-
-        }
-    }
+    
 
 
 }

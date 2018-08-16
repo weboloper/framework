@@ -6,7 +6,7 @@
 
 {% block content %}
 	
-    {{ form( 'admin/users/' ~  object.id  ~'/update', 'class' : 'form-horizontal') }}
+    {{ form( 'admin/users/' ~  object.id  ~'/update', 'class' : 'form-horizontal mb-5') }}
     <div class="row">
 	    <div class="col-sm-8">
 	   		
@@ -53,12 +53,15 @@
 	 		<button class="btn btn-success">UPDATE</button>
 	 		<a href="{{ '/admin/users/' ~  object.id  ~ '/edit/password' }}" class="btn btn-secondary ">Change password</a>
 	 		{{ endform() }}
-	 	 
-	  
-	   		
+	 	 	   		
 		</div>
-	 
+	 	
+	 	<div class="col-md-4">
+           	{% include "partials/uploader" with [ 'object' : object , 'objectid' :  object.id   , 'objectype' : 'user' ] %}
+	    </div>
 		</div>
+
+		{% include "partials/meta_forms"  with ['metas' :avaibleMetas ] %}
  
 {% endblock %}
 

@@ -21,6 +21,7 @@
         {{ assets.outputInlineCss() }}
     </head>
     <body class="bg-light h-100">
+
     	<div class="container"> 
 	    	<div id="root" class="container-fluid  p-4"></div>
 		</div>
@@ -40,7 +41,7 @@
 		  var args = top.tinymce.activeEditor.windowManager.getParams();
 		  win = (args.window);
 		  input = (args.input);
-		  win.document.getElementById(input).value = item_url;
+ 		  win.document.getElementById(input).value = item_url;
 		  top.tinymce.activeEditor.windowManager.close();
 		});
 		$(document).on("click","div.media-item",function(){
@@ -51,7 +52,11 @@
 		  win.document.getElementById(input).value = item_url;
 		});
 
-		var attachmentType = '{{attachmentType}}'
+
+		var attachmentType 	= '{{attachmentType}}';
+		var taxonomy 		= '{{taxonomy}}';
+		var userId 			= '{{userId}}';
+		var taxOptions = '{{  taxOptions }}';
 		</script>
 
 		<script type="text/babel">
@@ -221,16 +226,17 @@
 		   class Filebrowser extends React.Component {
 		   		constructor(props) {
 				    super(props);
-				    this.state = { posts: [] , selected : null , page : 1 , attachmentType : attachmentType  };
+				    this.state = { posts: [] , selected : null , page : 1 , attachmentType : attachmentType  , taxonomy: taxonomy };
 
 				    this.setSelected = this.setSelected.bind(this);
 				    this.addFileToList = this.addFileToList.bind(this);
 				    this.handleOnScroll = this.handleOnScroll.bind(this);
+				    this.change = this.change.bind(this);
 
 		 		}
 		   		componentDidMount() {
 		   			window.addEventListener('scroll', this.handleOnScroll);
-				    axios.get("/media/list?type=" + attachmentType )
+				    axios.get("/media/list?type=" + this.state.attachmentType + "&taxonomy=" + this.state.taxonomy  )
 				      .then(res => {
 				        this.setState({ posts :   res.data.data  });
 				    })
@@ -240,7 +246,7 @@
 				    window.removeEventListener('scroll', this.handleOnScroll);
 				}
 
-				 handleOnScroll() {
+				handleOnScroll() {
 				    // http://stackoverflow.com/questions/9439725/javascript-how-to-detect-if-browser-window-is-scrolled-to-bottom
 				    var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
 				    var scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
@@ -248,7 +254,7 @@
 				    var scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
 				    var _this = this; 
 				    if (scrolledToBottom) {
-  				      axios.get("/media/list?type=" + attachmentType  + "&page=" + (this.state.page +1 ))
+  				      axios.get("/media/list?type=" + this.state.attachmentType  + "&taxonomy=" + this.state.taxonomy +  "&page=" + (this.state.page +1 ))
 					      .then(res => {
 					      	console.log(res.data.data);
 					        _this.setState({ posts :  [...this.state.posts, ...res.data.data ]  , page : (this.state.page + 1)  });
@@ -264,22 +270,88 @@
 
 				addFileToList(data) {
 
-				    axios.get("/media/list?type=" + attachmentType )
+				    axios.get("/media/list?type=" + this.state.attachmentType + "&taxonomy=" + this.state.taxonomy  )
 				      .then(res => {
 				      	// console.log(res);
 		 		        // console.log();
-				        this.setState({ posts :   res.data.data  , selected: res.data.data[0].id });
+				        this.setState({ posts :   res.data.data  });
 				      })
 				    // this.setState({ posts: [ this.state.posts, data ] });
 				}
+
+		 
+				change(event)
+				{	
+					// console.log(event.target.value);
+  					this.setState({taxonomy : event.target.value });
+					axios.get("/media/list?type=" + this.state.attachmentType + "&taxonomy=" + event.target.value   )
+				      .then(res => {
+				      	// console.log(res.data);
+				      	// console.log(Object.keys(res.data.data).length);
+		 		        // console.log();
+		 		        if( Object.keys(res.data.data).length > 0){
+				        	this.setState({ posts :   res.data.data  , selected: res.data.data[0].id });
+		 		        }
+				        else {
+				        	this.setState({ posts :   []   , selected:  null });
+				        }
+				      })
+				}
+
+
+				changeType(a,b)
+				{	
+ 					this.setState({attachmentType : a });
+					axios.get("/media/list?type=" + a + "&taxonomy=" + this.state.taxonomy  )
+				      .then(res => {
+				      	// console.log(res);
+		 		        // console.log();
+				        if( Object.keys(res.data.data).length > 0){
+				        	this.setState({ posts :   res.data.data  , selected: res.data.data[0].id });
+		 		        }
+				        else {
+				        	this.setState({ posts :   []   , selected:  null });
+				        }
+
+				      })
+				}
 		 	 
 		   		render() {
+
 		   			var _this = this;
 				    return (
 				    	<div>
 					    	<SimpleReactFileUpload addFileToList={this.addFileToList}></SimpleReactFileUpload>
-					    	
-					       <div id="media-list" className="row d-flex align-items-stretch" >
+
+					    	<div className="row">
+						    	
+				               <div className="col-md-4 col-6">
+				               		{ attachmentType == 'all' &&
+							    	<nav className="nav nav-pills ">
+									  <li className="nav-item">
+									  	<a onClick={this.changeType.bind(this, "image")} className={ this.state.attachmentType == 'image' ? "nav-link active" : "nav-link"} href="#">Images</a>
+									  </li>
+									  <li className="nav-item">
+									  	<a onClick={this.changeType.bind(this, "file")} className={ this.state.attachmentType != 'image' ? "nav-link active" : "nav-link"}  href="#">Files</a>
+									  </li>
+									</nav>}
+								</div>
+								{ taxOptions != 'null' &&
+									<div className="col-md-4 col-6 offset-md-4">
+								    	<select id="lang" className="form-control" onChange={this.change} value={this.state.taxonomy}>
+								    		<option value="">Kategori seç</option>
+								    	 	{ JSON.parse(taxOptions).map(function(item, i){
+ 						                      return <option key={i} value={item.term_id} > {item.name}  </option>
+						                  })}
+						               </select>
+					               </div>
+					           }
+
+							</div>
+							 
+
+					       <div id="media-list" className="row d-flex align-items-stretch mt-3" >
+
 					     	{this.state.posts.map(function(item, i){
 			                     // console.log(item);
 			                     return <Mediaitem item={item} key={i} i={i}  setSelected={_this.setSelected }  selected={_this.state.selected } />

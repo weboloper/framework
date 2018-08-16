@@ -19,17 +19,17 @@ class Role extends \Components\Model\Services\Service
      *
      * @return bool
      */
-    public function isAdmin()
-    {
-        return in_array(Role::ADMINS_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
-    }
+    // public function isAdmin()
+    // {
+    //     return in_array(Role::ADMINS_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
+    // }
     /**
      * Checks whether the User is moderator.
      *
      * @return bool
      */
-    public function isModerator()
-    {
-        return in_array(Role::MODERATORS_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
-    }
+    // public function isModerator()
+    // {
+    //     return in_array(Role::MODERATORS_SYSTEM_ROLE, $this->getRoleNamesForCurrentViewer());
+    // }
 }

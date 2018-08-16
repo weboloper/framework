@@ -48,21 +48,22 @@
   
             
   			{% for term in objectType['terms'] %}
-
+          {% set terms_array_for_term =  (array_key_exists(term, terms_array)) ?  terms_array[term] : [] %}
   				{% if termTypes[term]['hierachical']  %}
+             
              {% set cachename =  'metabox' ~  termTypes[term]['taxonomy'] %}
              {% cache cachename %}
                 <div class="card mb-2">
                 <div class="card-header bg-light">{{ termTypes[term]['name']}}</div>
                 <div class="card-body" style="max-height:200px; overflow-y: scroll">
-                  {% include "partials/term_tree"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}
+                  {% include "partials/term_tree"  with ['term' : termTypes[term] , 'terms' : terms_array_for_term ] %}
                 </div>
               </div>
             {% endcache %}
 
   					
   				{% else  %}
-  					{% include "partials/term_select"  with ['term' : termTypes[term] , 'terms' : terms_array[term] ] %}
+  					{% include "partials/term_select"  with ['term' : termTypes[term] , 'terms' : terms_array_for_term  ] %}
   				{% endif  %}
  					
  			  {% endfor %}

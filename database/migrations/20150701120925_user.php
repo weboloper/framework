@@ -17,7 +17,7 @@ class User extends AbstractMigration
             ->addColumn('token', 'string')
             ->addColumn('activated', 'boolean', ['default' => false])
             ->addColumn('forgetpass', 'boolean', ['default' => false])
-            ->addColumn('status', 'boolean' , [ 'default' => 0 ] )
+            ->addColumn('status', 'boolean' , [ 'default' => 1 ] )
 
             # indexes
             ->addIndex(['email'], ['unique' => true])

@@ -20,6 +20,7 @@ class UsersController extends Controller
     {   
         parent::initialize();
         $this->view->tab = 'users';
+        $this->view->avaibleMetas = Users::USER_METAS;
 
     }
 
@@ -241,16 +242,27 @@ class UsersController extends Controller
                 return $this->jsonMessages;
             }
 
-            $userposts = $this->postService->findByUser_id($id);
+            // $userposts = $this->postService->findByUser_id($id);
 
-            if($userposts) {
-                $this->response->setStatusCode(404);
+            // if($userposts) {
+            //     $this->response->setStatusCode(404);
+            //     $this->jsonMessages['messages'][] = [
+            //         'type'    => 'warning',
+            //         'content' => 'Delete posts by user first!'
+            //     ];
+            //     return $this->jsonMessages;
+            // }
+
+            if($object->countRoles() >  0  ){
+                 $this->response->setStatusCode(404);
                 $this->jsonMessages['messages'][] = [
                     'type'    => 'warning',
-                    'content' => 'Delete posts by user first!'
+                    'content' => 'Remove user roles first!'
                 ];
                 return $this->jsonMessages;
             }
+
+
             $object->delete();
 
  

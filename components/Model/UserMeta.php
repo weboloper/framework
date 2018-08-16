@@ -4,20 +4,20 @@ namespace Components\Model;
 use Components\Model\Traits\Timestampable;
 use Components\Model\Traits\SoftDeletable;
 
-use Components\Model\Terms;
+use Components\Model\Users;
 
-class TermMeta extends Model
+class UserMeta extends Model
 {
     use Timestampable;
     use SoftDeletable;
 
     public function getSource()
     {
-        return 'term_meta';
+        return 'user_meta';
     }
 
-    public function setTermId($term_id) {
-        $this->term_id = $term_id;
+    public function setUserId($user_id) {
+        $this->user_id = $user_id;
         return $this;
     }
 
@@ -33,8 +33,6 @@ class TermMeta extends Model
 
     public function initialize()
     {
-        $this->hasOne('term_id', Terms::class, 'id', ['alias' => 'term', 'reusable' => true]);
+        $this->hasOne('user_id', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
     }
-
-
 }

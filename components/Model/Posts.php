@@ -39,6 +39,9 @@ class Posts extends Model
     //Such as pdf, docs, xls
     const DOCUMENT_TYPE   = 'document';
 
+
+
+
     const TYPE_POST = [
         'name' => 'Posts',
         'slug'  => 'post',
@@ -91,6 +94,30 @@ class Posts extends Model
         self::STATUS_PRIVATE    => self::STATUS_PRIVATE,
     ];
 
+
+    // This is column map and default post type
+    const COLUMN_MAP = [ 
+            "id",
+            "title",
+            "slug",
+            "guid",
+            "type",
+            "body",
+            "excerpt",
+            "user_id",
+            "status",
+            "comment_statıs",
+            "comment_count",
+            "parent_id",
+            "mime_type",
+            "created_at",
+            "updated_at",
+            "deleted_at" 
+            ];
+    const DEFAULT_POST_TYPE = self::TYPE_POST;
+    const DEFAULT_POST_STATUS = self::STATUS_DRAFT;
+
+
     /**
      * store error
      * @var array
@@ -141,162 +168,199 @@ class Posts extends Model
 
         $this->hasMany('id', PostMeta::class, 'post_id', ['alias' => 'meta', 'reusable' => true]);
         $this->belongsTo('user_id', Users::class, 'id', ['alias' => 'user', 'reusable' => true]);
+        $this->hasMany('id', Posts::class, 'parent_id', ['alias' => 'children' ]);
+        $this->belongsTo('parent_id', Posts::class, 'id', ['alias' => 'parent', 'reusable' => true]);
+
+        
     }
 
+ 
     public function beforeValidationOnCreate()
     {
         // $this->status      = self::STATUS_DRAFT;
+        $this->user_id = auth()->getUserId();
 
     }
-    /**
-     * Implement hook beforeCreate
-     *
-     * Create a posts-views logging the ipaddress where the post was created
-     * This avoids that the same session counts as post view
-     */
-    public function beforeCreate()
-    {
-
-    }
+     
 
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
-    public function setTitle($title)
+    public function setId($id)
     {
-        $this->title = $title;
-        return $this;
+      $this->id = $id;
+      return $this ;
     }
 
     public function getTitle()
     {
-        return $this->title;
+      return $this->title;
     }
 
-    public function setSlug($slug)
+    public function setTitle($title)
     {
-        $this->slug = $slug;
-        return $this;
+      $this->title = $title;
+      return $this ;
     }
 
     public function getSlug()
     {
-        return $this->slug;
+      return $this->slug;
     }
 
-    public function setGuid($guid)
+    public function setSlug($slug)
     {
-        $this->guid = $guid;
-        return $this;
+      $this->slug = $slug;
+      return $this ;
     }
 
     public function getGuid()
     {
-        return $this->guid;
+      return $this->guid;
     }
 
-
-    public function setType($type)
+    public function setGuid($guid)
     {
-        $this->type = $type;
-        return $this;
+      $this->guid = $guid;
+      return $this ;
     }
 
     public function getType()
     {
-        return $this->type;
+      return $this->type;
     }
 
-    public function setBody($body)
+    public function setType($type)
     {
-        $this->body = $body;
-        return $this;
+      $this->type = $type;
+      return $this ;
     }
 
     public function getBody()
     {
-        return $this->body;
+      return $this->body;
     }
 
-    public function setExcerpt($excerpt)
+    public function setBody($body)
     {
-        $this->excerpt = $excerpt;
-        return $this;
+      $this->body = $body;
+      return $this ;
     }
 
     public function getExcerpt()
     {
-        return $this->excerpt;
+      return $this->excerpt;
     }
 
-    public function setUserId($user_id)
+    public function setExcerpt($excerpt)
     {
-        $this->user_id = $user_id;
-        return $this;
+      $this->excerpt = $excerpt;
+      return $this ;
     }
 
     public function getUserId()
     {
-        return $this->user_id;
+      return $this->user_id;
     }
 
-    public function setStatus($status)
+    public function setUserId($user_id)
     {
-        $this->status = $status;
-        return $this;
+      $this->user_id = $user_id;
+      return $this ;
     }
 
     public function getStatus()
     {
-        return $this->status;
+      return $this->status;
     }
 
-    public function setParentId($parent_id)
+    public function setStatus($status)
     {
-        $this->parent_id = $parent_id;
-        return $this;
+      $this->status = $status;
+      return $this ;
     }
 
-    public function setCommentStatus($comment_status)
+    public function getCommentStatıs()
     {
-        $this->comment_status = $comment_status;
-        return $this;
+      return $this->comment_statıs;
     }
 
-    public function getCommentStatus()
+    public function setCommentStatıs($comment_statıs)
     {
-        return $this->comment_status;
-    }
-
-    public function setCommentCount($comment_count)
-    {
-        $this->comment_count = $comment_count;
-        return $this;
+      $this->comment_statıs = $comment_statıs;
+      return $this ;
     }
 
     public function getCommentCount()
     {
-        return $this->comment_count;
+      return $this->comment_count;
     }
 
+    public function setCommentCount($comment_count)
+    {
+      $this->comment_count = $comment_count;
+      return $this ;
+    }
 
     public function getParentId()
     {
-        return $this->parent_id;
+      return $this->parent_id;
+    }
+
+    public function setParentId($parent_id)
+    {
+      $this->parent_id = $parent_id;
+      return $this ;
+    }
+
+    public function getMimeType()
+    {
+      return $this->mime_type;
     }
 
     public function setMimeType($mime_type)
     {
-        $this->mime_type = $mime_type;
-        return $this;
-    }
-    public function getMimeType()
-    {
-        return $this->mime_type;
+      $this->mime_type = $mime_type;
+      return $this ;
     }
 
+    public function getCreatedAt()
+    {
+      return $this->created_at;
+    }
+
+    public function setCreatedAt($created_at)
+    {
+      $this->created_at = $created_at;
+      return $this ;
+    }
+
+    public function getUpdatedAt()
+    {
+      return $this->updated_at;
+    }
+
+    public function setUpdatedAt($updated_at)
+    {
+      $this->updated_at = $updated_at;
+      return $this ;
+    }
+
+    public function getDeletedAt()
+    {
+      return $this->deleted_at;
+    }
+
+    public function setDeletedAt($deleted_at)
+    {
+      $this->deleted_at = $deleted_at;
+      return $this ;
+    }
+
+
+     
     /**
      * Get an error if occurred
      * @return array

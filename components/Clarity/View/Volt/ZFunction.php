@@ -5,7 +5,9 @@ namespace Components\Clarity\View\Volt;
 use Phalcon\Di\Injectable;
 
 use Components\Model\Posts;
+use Components\Model\Users;
 
+use Components\Library\Media\MediaFiles;
 
 class ZFunction extends Injectable
 {
@@ -51,12 +53,39 @@ class ZFunction extends Injectable
     }
 
 
-    public static function get_the_post_thumbnail( Posts $object ,  $size = 'post-thumbnail',   $attr = '' )
-    {   
+    public static function get_the_post_thumbnail( Posts $object ,  $size = 'small',   $attr = '' )
+    {  
 
-        return  $object->get_meta('thumbnail');
-         
+        $url = $object->get_meta('thumbnail');
+
+        if (filter_var($url , FILTER_VALIDATE_URL) === FALSE) {
+            return "/resources/statics/img/blank.png";
+        }
+
+        $thumb_sizes = MediaFiles::THUMBNAILS;
+        // $url =  substr(strrchr($post->slug,'.') , 1);
+        $url = preg_replace('/\\.[^.\\s]{3,4}$/', '', $url);
+
+        return $url . "-".$thumb_sizes[$size][0]."x".$thumb_sizes[$size][1] . '.jpg';
+
     }
+    public static function get_the_user_avatar( Users $object ,  $size = 'small',   $attr = '' )
+    {  
+
+        $url = $object->get_meta('thumbnail');
+
+        if (filter_var($url , FILTER_VALIDATE_URL) === FALSE) {
+            return "/resources/statics/img/avatar.png";
+        }
+
+        $thumb_sizes = MediaFiles::THUMBNAILS;
+        // $url =  substr(strrchr($post->slug,'.') , 1);
+        $url = preg_replace('/\\.[^.\\s]{3,4}$/', '', $url);
+
+        return $url . "-".$thumb_sizes[$size][0]."x".$thumb_sizes[$size][1] . '.jpg';
+
+    } 
+    
 
     public static function get_file_icon( Posts $object   )
     {

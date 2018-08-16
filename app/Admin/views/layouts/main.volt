@@ -60,7 +60,7 @@
                       <span class="small ml-1 d-md-down-none"> {{ user.name }} </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="/admin/users/{{ user.id}}/edit/password"> <i class="fa fa-user"></i> Change Password</a>
+                  <a class="dropdown-item" href="/oauth/change-password"> <i class="fa fa-user"></i> Change Password</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/oauth/logout"><i class="fa fa-lock"></i> Logout</a>
                 </div>
@@ -98,6 +98,7 @@
                 </div>
                 <div>
                   {% block content %} {% endblock %}
+                 
                 </div>
             </div>
         </div>
