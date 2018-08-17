@@ -34,7 +34,7 @@
                      
                     <h6>to do</h6>
                     <ul>
-                      <li></li>
+                      <li>resim video isert src olarak guid kullan</li>
                     </ul>
              
                 </div>

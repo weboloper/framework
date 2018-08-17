@@ -114,7 +114,7 @@ class Posts extends Model
             "updated_at",
             "deleted_at" 
             ];
-    const DEFAULT_POST_TYPE = self::TYPE_POST;
+    const DEFAULT_POST_TYPE = self::TYPE_PAGE;
     const DEFAULT_POST_STATUS = self::STATUS_DRAFT;
 
 
