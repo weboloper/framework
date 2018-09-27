@@ -189,10 +189,12 @@ class Terms extends Model
       return $this ;
     }
 
-
-
-
     public function afterSave()
+    {
+        // Convert the string to an array
+        di()->get('viewCache')->delete("metabox" .  $this->taxonomy);
+    }  
+    public function afterUpdate()
     {
         // Convert the string to an array
         di()->get('viewCache')->delete("metabox" .  $this->taxonomy);

@@ -136,7 +136,13 @@ class PostsController extends Controller
         {
             return view('posts.browser');
         }else {
-            return view('posts.create')->with('form', new PostsForm() );
+            $terms_array = [];
+            foreach ( Posts::POST_TYPES[$this->type]['terms'] as $key   ) {
+                $terms  = Terms::find([   'taxonomy = :type:  ' , 'bind' => ['type' => $key ]]) ; 
+                $terms_array[$key] = $terms ;
+
+            }
+            return view('posts.create')->with('form', new PostsForm() )->with( 'terms_array', $terms_array );
         }
 
         $object = new Posts();
