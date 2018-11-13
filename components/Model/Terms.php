@@ -94,7 +94,7 @@ class Terms extends Model
     public function initialize()
     {
         $this->hasManyToMany(
-            'id',
+            'term_id',
             TermRelationships::class,
             'term_id',
             'post_id',

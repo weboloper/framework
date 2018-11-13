@@ -203,7 +203,12 @@ class OauthController extends Controller
             return redirect()->to(url()->to( $this->config->app->auth->login_redirect ));
         }
 
-        $user = $this->userService->getFirstByEmail($credentials['email']);
+        try {
+            $user = $this->userService->getFirstByEmail($credentials['email']);
+        } catch (EntityNotFoundException $e) {
+            return redirect()->to(url()->previous())
+            ->withError(lang()->get('responses/login.no_user'));
+        }
 
         $userData = [
             'user_id'   =>  $user->getId(),
